@@ -27,7 +27,7 @@ public class Step {
   private List<CollisionPoint> collisionBox = null;
 
   @Getter
-  private double cost = 0.0;
+  private long cost = 0L;
 
   @Getter
   private Immutable3dPoint lastPosition = null;
@@ -39,7 +39,7 @@ public class Step {
    * @param collisionBox
    * @param cost
    */
-  public Step(List<Immutable3dPoint> movingWay, AMotionState fromState, AMotionState lastState, List<CollisionPoint> collisionBox, double cost) {
+  public Step(List<Immutable3dPoint> movingWay, AMotionState fromState, AMotionState lastState, List<CollisionPoint> collisionBox, long cost) {
     this.movingWay = Collections.unmodifiableList(List.copyOf(movingWay));
     this.collisionBox = Collections.unmodifiableList(List.copyOf(collisionBox));
     this.fromState = fromState;

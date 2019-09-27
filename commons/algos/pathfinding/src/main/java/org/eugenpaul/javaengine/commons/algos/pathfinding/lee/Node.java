@@ -60,7 +60,7 @@ public class Node {
    * @return not null - new state is better or not in the node<br>
    *         null - new state is worse
    */
-  public SearchStep chechAndAddNode(AMotionState state, double cost, Step stepFrom, int x, int y, int z) {
+  public SearchStep chechAndAddNode(AMotionState state, long cost, Step stepFrom, int x, int y, int z) {
     // search the state in the node
     Iterator<SearchStep> iterator = states.iterator();
     while (iterator.hasNext()) {

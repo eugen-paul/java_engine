@@ -94,7 +94,7 @@ public class SimpleVector2dMover extends AMover {
     CollisionPoint cPointEnd = new CollisionPoint(new Immutable3dPoint(x, y, 0), stdCondition);
     collisionList.add(cPointEnd);
 
-    double cost = 1.0;
+    long cost = 10L;
     Step responseWay = new Step(movingWay, firstPoint, lastPoint, collisionList, cost);
     return responseWay;
   }
@@ -161,7 +161,7 @@ public class SimpleVector2dMover extends AMover {
     CollisionPoint cPointEnd = new CollisionPoint(new Immutable3dPoint(x, y, 0), stdCondition);
     collisionList.add(cPointEnd);
 
-    double cost = 1.5;
+    long cost = 15L;
     Step responseWay = new Step(movingWay, firstPoint, lastPoint, collisionList, cost);
     return responseWay;
   }
@@ -228,7 +228,7 @@ public class SimpleVector2dMover extends AMover {
     CollisionPoint cPointEnd = new CollisionPoint(new Immutable3dPoint(x, y, 0), stdCondition);
     collisionList.add(cPointEnd);
 
-    double cost = 1.5;
+    long cost = 15L;
     Step responseWay = new Step(movingWay, firstPoint, lastPoint, collisionList, cost);
     return responseWay;
   }

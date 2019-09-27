@@ -16,7 +16,7 @@ import lombok.Getter;
 @Getter
 public class SearchStep implements Comparable<SearchStep> {
   /** current cost */
-  private double cost = 0;
+  private long cost = 0;
   /** current Motion step */
   private AMotionState state = null;
   /** Parent step */

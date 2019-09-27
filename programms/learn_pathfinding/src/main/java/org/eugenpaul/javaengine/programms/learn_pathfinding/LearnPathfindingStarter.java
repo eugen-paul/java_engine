@@ -13,13 +13,13 @@ public class LearnPathfindingStarter {
     int maxSizeX = 50;
     int maxSizeY = 50;
 
+    World model = new World(maxSizeX, maxSizeY);
+    controller.setWorld(model);
+    
     MainFrame mFrame = new MainFrame(controller, maxSizeX, maxSizeY);
 
     controller.addView(mFrame);
 
-    World model = new World(maxSizeX, maxSizeY);
-
-    controller.setWorld(model);
 //    controller.addModel(model);
 
     mFrame.setVisible(true);

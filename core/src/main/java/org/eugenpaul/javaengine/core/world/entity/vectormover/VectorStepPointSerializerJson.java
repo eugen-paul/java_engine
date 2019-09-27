@@ -1,14 +1,5 @@
 package org.eugenpaul.javaengine.core.world.entity.vectormover;
 
-import java.io.IOException;
-import java.util.List;
-
-import org.eugenpaul.javaengine.core.world.entity.Step;
-
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-
 public class VectorStepPointSerializerJson {
 
 }

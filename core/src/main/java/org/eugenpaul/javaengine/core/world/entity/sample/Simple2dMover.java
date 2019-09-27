@@ -63,10 +63,10 @@ public class Simple2dMover extends AMover {
   private Step createStep(int x, int y) {
     List<Immutable3dPoint> movingWay = new ArrayList<>();
     AMotionState lastPoint = new SimpleMotionState();
-    double cost = 1.0;
+    long cost = 10L;
 
     if (x != 0 && y != 0) {
-      cost = 1.3;
+      cost = 13L;
     }
 
     movingWay.add(new Immutable3dPoint(0, 0, 0));

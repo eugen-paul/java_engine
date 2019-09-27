@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 public class PanelMap extends JPanel {
 
@@ -17,8 +18,14 @@ public class PanelMap extends JPanel {
   public void setGrid(int grid[][]) {
     this.grid = grid;
 
-    revalidate();
-    repaint();
+    SwingUtilities.invokeLater(new Runnable() {
+
+      @Override
+      public void run() {
+        revalidate();
+        repaint();
+      }
+    });
   }
 
   @Override
@@ -38,13 +45,13 @@ public class PanelMap extends JPanel {
       for (int y = 0; y < grid[0].length; y++) {
         switch (MapElements.fromInt(grid[x][y])) {
         case NOPE:
-          color = Color.LIGHT_GRAY;
+          color = Color.WHITE;
           break;
         case END:
           color = Color.BLUE;
           break;
         case MUD:
-          color = Color.ORANGE;
+          color = Color.DARK_GRAY;
           break;
         case WALL:
           color = Color.BLACK;
@@ -52,8 +59,20 @@ public class PanelMap extends JPanel {
         case START:
           color = Color.GREEN;
           break;
-        case STEP:
+        case WAY:
           color = Color.CYAN;
+          break;
+        case STEP_OLD:
+          color = Color.LIGHT_GRAY;
+          break;
+        case STEP_NEW:
+          color = Color.ORANGE;
+          break;
+        case STEP_CHECKPOINT:
+          color = Color.RED;
+          break;
+        case STEP_TO_CHECK:
+          color = Color.GRAY;
           break;
         }
 

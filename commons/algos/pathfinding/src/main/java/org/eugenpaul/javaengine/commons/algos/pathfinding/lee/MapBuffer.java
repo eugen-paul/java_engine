@@ -6,6 +6,8 @@ import org.eugenpaul.javaengine.core.world.entity.AMotionState;
 import org.eugenpaul.javaengine.core.world.entity.Step;
 import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
 
+import lombok.Getter;
+
 /**
  * The set of nodes across the map.
  * 
@@ -15,8 +17,12 @@ import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
 public class MapBuffer {
 
   Node[][][] nodes = null;
+  
+  @Getter
   int sizeX;
+  @Getter
   int sizeY;
+  @Getter
   int sizeZ;
 
   /**
@@ -36,12 +42,7 @@ public class MapBuffer {
     this.sizeY = y;
     this.sizeZ = z;
 
-    // necessary?
-    for (int xSize = 0; xSize <= 0; xSize++) {
-      for (int ySize = 0; ySize <= 0; ySize++) {
-        Arrays.fill(nodes[xSize][ySize], null);
-      }
-    }
+    reset();
   }
 
   public Node getNode(int x, int y, int z) {
@@ -66,10 +67,18 @@ public class MapBuffer {
     return checkNode;
   }
 
-  public SearchStep addStepToNode(AMotionState state, double cost, Step stepFrom, int x, int y, int z) {
+  public SearchStep addStepToNode(AMotionState state, long cost, Step stepFrom, int x, int y, int z) {
     Node checkNode = getOrCreateNode(x, y, z);
 
     return checkNode.chechAndAddNode(state, cost, stepFrom, x, y, z);
+  }
+  
+  public void reset() {
+    for (int x = 0; x < sizeX; x++) {
+      for (int y = 0; y < sizeY; y++) {
+        Arrays.fill(nodes[x][y], null);
+      }
+    }
   }
 
 }

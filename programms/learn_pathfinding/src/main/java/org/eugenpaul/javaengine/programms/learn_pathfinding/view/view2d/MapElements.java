@@ -12,7 +12,11 @@ public enum MapElements {
   MUD(2), //
   START(3), //
   END(4), //
-  STEP(5) //
+  WAY(5), //
+  STEP_OLD(6), //
+  STEP_NEW(7), //
+  STEP_TO_CHECK(8), //
+  STEP_CHECKPOINT(9) //
   ;
 
   private static final List<MapElements> somethingList = Arrays.asList(MapElements.values());
