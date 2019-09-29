@@ -18,6 +18,10 @@ public class InfoPathfinding {
   @Setter
   private String stepDescription = null;
 
+  @Getter
+  @Setter
+  private long stepsCount = 0;
+
   private InfoPathfindingMapStatus stepsmap[][][] = null;
 
   /**
@@ -48,6 +52,8 @@ public class InfoPathfinding {
     if (stepsmap == null) {
       return;
     }
+
+    stepsCount = 0;
 
     int xSize = stepsmap.length;
     int ySize = stepsmap[0].length;
@@ -126,6 +132,10 @@ public class InfoPathfinding {
         }
       }
     }
+  }
+
+  public void incStepsCount() {
+    stepsCount++;
   }
 
 }

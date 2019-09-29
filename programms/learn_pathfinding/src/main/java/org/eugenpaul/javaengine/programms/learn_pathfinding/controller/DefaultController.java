@@ -1,6 +1,7 @@
 package org.eugenpaul.javaengine.programms.learn_pathfinding.controller;
 
 import org.eugenpaul.javaengine.core.multithreading.scheduler.Job;
+import org.eugenpaul.javaengine.core.multithreading.scheduler.JobElement;
 import org.eugenpaul.javaengine.core.multithreading.scheduler.JobScheduler;
 import org.eugenpaul.javaengine.programms.learn_pathfinding.model.MoverTyp;
 import org.eugenpaul.javaengine.programms.learn_pathfinding.model.PathfinderJob;
@@ -11,6 +12,8 @@ import org.eugenpaul.javaengine.programms.learn_pathfinding.view.view2d.MapEleme
 public class DefaultController extends AbstractController {
 
   public static final String ELEMENT_MAP = "MAP";
+  public static final String ELEMENT_DEBUG_INFO = "DEBUG_INFO";
+  public static final String ELEMENT_PATHWAYFINDING_RUNNING = "PATHWAYFINDING_RUNNING";
 
   private JobScheduler scheduler;
 
@@ -19,13 +22,7 @@ public class DefaultController extends AbstractController {
     scheduler = new JobScheduler();
   }
 
-  public void changeElementMap(int map[][]) {
-    setModelProperty(ELEMENT_MAP, map);
-  }
-
   public void setPointOnMap(int x, int y, MapElements value) {
-    resetPathfinding();
-    
     switch (value) {
     case START:
       world.setStart(x, y);
@@ -46,7 +43,6 @@ public class DefaultController extends AbstractController {
       break;
     }
 
-    resetPathfinding();
   }
 
   public void setMover(MoverTyp mover) {
@@ -59,6 +55,8 @@ public class DefaultController extends AbstractController {
 
   public void setAutoPathfinding(boolean autoPathfinding) {
     world.setAutoPathfinding(autoPathfinding);
+    scheduler.removeJob(PathfinderJob.NAME);
+    scheduler.stopScheduler();
   }
 
   public void doPathfindingStep() {
@@ -70,14 +68,22 @@ public class DefaultController extends AbstractController {
   }
 
   public void startPathfinding(int millisProStep) {
-    Job pathfinderJob = new PathfinderJob(world);
+    PathfinderJob pathfinderJob = new PathfinderJob(world);
 
+    pathfinderJob.addPropertyChangeListener(this);
     scheduler.addJob(pathfinderJob, System.nanoTime(), millisProStep * 1_000_000L);
     scheduler.startScheduler();
   }
 
   public void stopPathfinding() {
-    scheduler.removeJob(PathfinderJob.NAME);
+    JobElement element = scheduler.removeJob(PathfinderJob.NAME);
+    if(null != element) {
+      Job job = element.getJob();
+      if(null != job && (job instanceof PathfinderJob)) {
+        PathfinderJob pJob = (PathfinderJob) job;
+        pJob.removePropertyChangeListener(this);
+      }
+    }
     scheduler.stopScheduler();
   }
 

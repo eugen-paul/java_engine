@@ -1,8 +1,14 @@
 package org.eugenpaul.javaengine.programms.learn_pathfinding.model;
 
-import org.eugenpaul.javaengine.core.multithreading.scheduler.Job;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
-public class PathfinderJob implements Job {
+import org.eugenpaul.javaengine.core.multithreading.scheduler.Job;
+import org.eugenpaul.javaengine.programms.learn_pathfinding.controller.DefaultController;
+
+public class PathfinderJob implements Job, AbstractModel {
+
+  private PropertyChangeSupport propertyChangeSupport;
 
   public static final String NAME = "AutoPathfinder";
 
@@ -10,16 +16,39 @@ public class PathfinderJob implements Job {
 
   public PathfinderJob(World world) {
     this.world = world;
+    propertyChangeSupport = new PropertyChangeSupport(this);
   }
 
   @Override
   public boolean execute() {
-    return !world.doPathfindingStep();
+    boolean wayFound = world.doPathfindingStep();
+
+    if (wayFound) {
+      propertyChangeSupport.firePropertyChange(DefaultController.ELEMENT_PATHWAYFINDING_RUNNING, null, Boolean.FALSE);
+    } else {
+      propertyChangeSupport.firePropertyChange(DefaultController.ELEMENT_PATHWAYFINDING_RUNNING, null, Boolean.TRUE);
+      PropertyChangeListener[] listeners = propertyChangeSupport.getPropertyChangeListeners();
+      for (PropertyChangeListener oneListener : listeners) {
+        propertyChangeSupport.removePropertyChangeListener(oneListener);
+      }
+    }
+
+    return !wayFound;
   }
 
   @Override
   public String getName() {
     return NAME;
+  }
+
+  @Override
+  public void addPropertyChangeListener(PropertyChangeListener listener) {
+    propertyChangeSupport.addPropertyChangeListener(listener);
+  }
+
+  @Override
+  public void removePropertyChangeListener(PropertyChangeListener listener) {
+    propertyChangeSupport.removePropertyChangeListener(listener);
   }
 
 }

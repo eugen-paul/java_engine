@@ -18,7 +18,7 @@ public class JobScheduler {
 
   private Object syncObj = new Object();
 
-  private JobExecuter jobObject = null;
+  private JobExecuter executer = null;
   private Thread jobThread = null;
 
   /**
@@ -28,8 +28,6 @@ public class JobScheduler {
     jobs = new HashMap<>();
 
     timeLine = new SimpleSortedList<>();
-
-    jobObject = new JobExecuter(this);
   }
 
   /**
@@ -39,10 +37,13 @@ public class JobScheduler {
    *         false - already started or not stopped
    */
   public boolean startScheduler() {
-    if (null != jobThread) {
-      return false;
+    synchronized (syncObj) {
+      if (null != jobThread) {
+        return false;
+      }
+      executer = new JobExecuter(this);
+      jobThread = new Thread(executer);
     }
-    jobThread = new Thread(jobObject);
     jobThread.start();
     return true;
   }
@@ -51,29 +52,33 @@ public class JobScheduler {
    * Stop scheduler and without wait for scheduler to die.
    */
   public void stopScheduler() {
-    if (null == jobThread) {
-      return;
+    synchronized (syncObj) {
+      if (null == jobThread) {
+        return;
+      }
+      executer.stop();
+      jobThread.interrupt();
+      jobThread = null;
     }
-    jobObject.stop();
-    jobThread.interrupt();
-    jobThread = null;
   }
 
   /**
    * Stop scheduler and wait for scheduler to die.
    */
   public void stopAndWaitScheduler() {
-    if (null == jobThread) {
-      return;
+    synchronized (syncObj) {
+      if (null == jobThread) {
+        return;
+      }
+      executer.stop();
+      jobThread.interrupt();
+      try {
+        jobThread.join();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+      jobThread = null;
     }
-    jobObject.stop();
-    jobThread.interrupt();
-    try {
-      jobThread.join();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
-    jobThread = null;
   }
 
   /**
@@ -82,17 +87,19 @@ public class JobScheduler {
    * @param millis
    */
   public void stopAndWaitScheduler(int millis) {
-    if (null == jobThread) {
-      return;
+    synchronized (syncObj) {
+      if (null == jobThread) {
+        return;
+      }
+      executer.stop();
+      jobThread.interrupt();
+      try {
+        jobThread.join(millis);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+      jobThread = null;
     }
-    jobObject.stop();
-    jobThread.interrupt();
-    try {
-      jobThread.join(millis);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
-    jobThread = null;
   }
 
   /**
@@ -114,9 +121,12 @@ public class JobScheduler {
       jobs.put(job.getName(), newJob);
 
       timeLine.add(newJob);
+
+      if (null != executer) {
+        executer.update();
+      }
     }
 
-    jobObject.update();
     return true;
   }
 
@@ -136,9 +146,12 @@ public class JobScheduler {
       jobs.put(newJob.getJob().getName(), newJob);
 
       timeLine.add(newJob);
+
+      if (null != executer) {
+        executer.update();
+      }
     }
 
-    jobObject.update();
     return true;
   }
 
@@ -159,9 +172,12 @@ public class JobScheduler {
       response = jobs.remove(name);
 
       timeLine.remove(response);
+
+      if (null != executer) {
+        executer.update();
+      }
     }
 
-    jobObject.update();
     return response;
   }
 

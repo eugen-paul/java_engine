@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-class JobElement implements Comparable<JobElement> {
+public class JobElement implements Comparable<JobElement> {
 
   private Long timeOfNextStart;
   private Long timeBetweenStart;

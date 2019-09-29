@@ -58,4 +58,5 @@ public interface PathfindingDebug {
    * @return
    */
   public InfoPathfinding getCurrentPathfindingInfo();
+  
 }

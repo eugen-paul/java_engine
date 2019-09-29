@@ -28,6 +28,7 @@ import javax.swing.JSpinner;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.JTextArea;
 
 public class MainFrame extends JFrame implements AbstractViewPanel {
 
@@ -51,6 +52,7 @@ public class MainFrame extends JFrame implements AbstractViewPanel {
   private JSpinner spnMsProStep;
   private JButton btnResetSearch;
   private JCheckBox chckbxAutoSearching;
+  private JTextArea textAreaDebugInfo;
 
   /**
    * Create the frame.
@@ -65,7 +67,7 @@ public class MainFrame extends JFrame implements AbstractViewPanel {
     setResizable(false);
     setTitle("Pathfinding");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setBounds(100, 100, 860, 700);
+    setBounds(100, 100, 833, 748);
     contentPane = new JPanel();
     contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
     contentPane.setLayout(new BorderLayout(0, 0));
@@ -292,6 +294,8 @@ public class MainFrame extends JFrame implements AbstractViewPanel {
       }
     });
 
+    PanelMap panelHelper = new PanelMap();
+    
     panelMap = new PanelMap();
     panelMap.addMouseListener(new MouseAdapter() {
       @Override
@@ -307,11 +311,41 @@ public class MainFrame extends JFrame implements AbstractViewPanel {
 //        System.out.println(e.getX() + " " + e.getY());
       }
     });
-    splitPane.setRightComponent(panelMap);
-    GroupLayout gl_panelMap = new GroupLayout(panelMap);
-    gl_panelMap.setHorizontalGroup(gl_panelMap.createParallelGroup(Alignment.LEADING).addGap(0, 711, Short.MAX_VALUE));
-    gl_panelMap.setVerticalGroup(gl_panelMap.createParallelGroup(Alignment.LEADING).addGap(0, 599, Short.MAX_VALUE));
-    panelMap.setLayout(gl_panelMap);
+    splitPane.setRightComponent(panelHelper);
+    
+    JSplitPane splitPane_2 = new JSplitPane();
+    splitPane_2.setPreferredSize(new Dimension(183, 100));
+    splitPane_2.setEnabled(false);
+    splitPane_2.setOrientation(JSplitPane.VERTICAL_SPLIT);
+    GroupLayout gl_panelMap = new GroupLayout(panelHelper);
+    gl_panelMap.setHorizontalGroup(
+      gl_panelMap.createParallelGroup(Alignment.LEADING)
+        .addComponent(splitPane_2, GroupLayout.DEFAULT_SIZE, 681, Short.MAX_VALUE)
+    );
+    gl_panelMap.setVerticalGroup(
+      gl_panelMap.createParallelGroup(Alignment.LEADING)
+        .addComponent(splitPane_2, GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE)
+    );
+    panelHelper.setLayout(gl_panelMap);
+    
+    splitPane_2.setLeftComponent(panelMap);
+    
+    JPanel panelDebug = new JPanel();
+    splitPane_2.setRightComponent(panelDebug);
+    
+    textAreaDebugInfo = new JTextArea();
+    textAreaDebugInfo.setEditable(false);
+    GroupLayout gl_panelDebug = new GroupLayout(panelDebug);
+    gl_panelDebug.setHorizontalGroup(
+      gl_panelDebug.createParallelGroup(Alignment.LEADING)
+        .addComponent(textAreaDebugInfo, GroupLayout.DEFAULT_SIZE, 679, Short.MAX_VALUE)
+    );
+    gl_panelDebug.setVerticalGroup(
+      gl_panelDebug.createParallelGroup(Alignment.LEADING)
+        .addComponent(textAreaDebugInfo, GroupLayout.DEFAULT_SIZE, 703, Short.MAX_VALUE)
+    );
+    panelDebug.setLayout(gl_panelDebug);
+    splitPane_2.setDividerLocation(601);
     splitPane.setDividerLocation(150);
   }
 
@@ -327,6 +361,18 @@ public class MainFrame extends JFrame implements AbstractViewPanel {
     if (evt.getPropertyName().equals(DefaultController.ELEMENT_MAP)) {
       int[][] newStringValue = (int[][]) evt.getNewValue();
       paintMap(newStringValue);
+    } else if(evt.getPropertyName().equals(DefaultController.ELEMENT_DEBUG_INFO)) {
+      String debugInfo = (String) evt.getNewValue();
+      textAreaDebugInfo.setText(debugInfo);
+    } else if(evt.getPropertyName().equals(DefaultController.ELEMENT_PATHWAYFINDING_RUNNING)) {
+      if(!chckbxAutoSearching.isSelected()) {
+        Boolean runnung = (Boolean) evt.getNewValue();
+        if(runnung.booleanValue()) {
+          spnMsProStep.setEnabled(false);
+        }else {
+          spnMsProStep.setEnabled(true);
+        }
+      }
     }
   }
 
@@ -394,5 +440,4 @@ public class MainFrame extends JFrame implements AbstractViewPanel {
     controller.stopPathfinding();
     spnMsProStep.setEnabled(true);
   }
-  
 }

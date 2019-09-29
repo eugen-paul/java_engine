@@ -72,6 +72,8 @@ public class World implements ITileBasedMap, AbstractModel {
   public boolean setPosition(int x, int y, WorldElements element) {
     grid[x][y] = element;
 
+    reset();
+
     propertyChangeSupport.firePropertyChange(DefaultController.ELEMENT_MAP, null, getMap());
 
     return true;
@@ -96,7 +98,7 @@ public class World implements ITileBasedMap, AbstractModel {
       List<Immutable3dPoint> way = doPathfinding();
       addWaypointsToMax(result, way);
     }
-    
+
     if (start != null) {
       result[start.getX()][start.getY()] = MapElements.START.getValue();
     }
@@ -154,12 +156,16 @@ public class World implements ITileBasedMap, AbstractModel {
   public boolean setStart(int x, int y) {
     start = new Immutable3dPoint(x, y, 0);
 
+    reset();
+
     propertyChangeSupport.firePropertyChange(DefaultController.ELEMENT_MAP, null, getMap());
     return true;
   }
 
   public boolean setEnd(int x, int y) {
     end = new Immutable3dPoint(x, y, 0);
+
+    reset();
 
     propertyChangeSupport.firePropertyChange(DefaultController.ELEMENT_MAP, null, getMap());
     return true;
@@ -260,48 +266,56 @@ public class World implements ITileBasedMap, AbstractModel {
 
   public void setMover(MoverTyp mover) {
     this.mover = mover;
-    resetPathfinding();
+    reset();
 
     propertyChangeSupport.firePropertyChange(DefaultController.ELEMENT_MAP, null, getMap());
   }
 
   public void setPathfindingAlgo(PathfindingAlgo algo) {
     pathfinding = algo.getNewPathfinding();
-    resetPathfinding();
+    reset();
 
     propertyChangeSupport.firePropertyChange(DefaultController.ELEMENT_MAP, null, getMap());
   }
 
   public void setAutoPathfinding(boolean autoPathfinding) {
     this.autoPathfinding = autoPathfinding;
-    resetPathfinding();
-    
+    reset();
+
     propertyChangeSupport.firePropertyChange(DefaultController.ELEMENT_MAP, null, getMap());
   }
 
   public boolean doPathfindingStep() {
-    debugWayFound = pathfinding.getDebugInfo().doOneStep();
+    if (!debugWayFound) {
+      debugWayFound = pathfinding.getDebugInfo().doOneStep();
+      propertyChangeSupport.firePropertyChange(DefaultController.ELEMENT_MAP, null, getMap());
+      
+      propertyChangeSupport.firePropertyChange(DefaultController.ELEMENT_DEBUG_INFO, null, pathfinding.getDebugInfo().getCurrentPathfindingInfo().getStepDescription());
+    }
 
-    propertyChangeSupport.firePropertyChange(DefaultController.ELEMENT_MAP, null, getMap());
-    
     return debugWayFound;
   }
 
   public void resetPathfinding() {
+    reset();
+
+    propertyChangeSupport.firePropertyChange(DefaultController.ELEMENT_MAP, null, getMap());
+  }
+
+  private void reset() {
     debugWayFound = false;
-    if(!autoPathfinding) {
+
+    if (!autoPathfinding) {
       pathfinding.getDebugInfo().setDebugMode(true);
-      
+
       AMotionState fromStep = mover.getStartState();
       Immutable3dPoint fromPoint = new Immutable3dPoint(start);
 
       AMotionState toStep = mover.getEndState();
       Immutable3dPoint toPoint = new Immutable3dPoint(end);
-      
+
       pathfinding.getDebugInfo().restartPathfinding(mover.getMover(), fromStep, fromPoint, toStep, toPoint);
     }
-    
-    propertyChangeSupport.firePropertyChange(DefaultController.ELEMENT_MAP, null, getMap());
   }
 
 }

@@ -42,11 +42,6 @@ class JobExecuter implements Runnable {
 
   @Override
   public void run() {
-    stopped = false;
-    if (Thread.interrupted()) {
-      stopped = true;
-      return;
-    }
     while (!stopped) {
       JobElement nextJob = waitOfJob();
       if (null != nextJob) {
@@ -73,6 +68,7 @@ class JobExecuter implements Runnable {
         nanosRemaining = condition.awaitNanos(nanosRemaining);
       } catch (InterruptedException e) {
         e.printStackTrace();
+        System.out.println("Interrup JobExecuter");
         return null;
       } finally {
         lock.unlock();
@@ -90,7 +86,7 @@ class JobExecuter implements Runnable {
   }
 
   /**
-   * Set thread to stop
+   * Set thread to stop. Executer cann't be started again.
    */
   public void stop() {
     stopped = true;

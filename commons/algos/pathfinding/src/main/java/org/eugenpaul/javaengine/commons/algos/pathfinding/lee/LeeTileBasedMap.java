@@ -119,6 +119,9 @@ public class LeeTileBasedMap implements Pathfinding, PathfindingDebug {
         }
       }
     }
+    if (debugMode && null != debugData) {
+      debugData.incStepsCount();
+    }
     return false;
   }
 
@@ -218,7 +221,8 @@ public class LeeTileBasedMap implements Pathfinding, PathfindingDebug {
       return false;
     }
 
-    debugData.setStepDescription("Checking x = " + checkNode.getX() + ", y = " + checkNode.getY() + ", z = " + checkNode.getZ() + ". Cost = " + checkNode.getCost());
+    debugData.setStepDescription("Step nummber " + debugData.getStepsCount() + ": Checking x = " + checkNode.getX() + ", y = " + checkNode.getY() + ", z = " + checkNode.getZ()
+        + ". Cost = " + checkNode.getCost());
     System.out.println(debugData.getStepDescription());
 
     debugData.nextStep();
