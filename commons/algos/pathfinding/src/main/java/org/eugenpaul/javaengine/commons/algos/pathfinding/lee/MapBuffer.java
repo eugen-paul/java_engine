@@ -16,8 +16,8 @@ import lombok.Getter;
  */
 public class MapBuffer {
 
-  Node[][][] nodes = null;
-  
+  Node[] nodes = null;
+
   @Getter
   int sizeX;
   @Getter
@@ -37,7 +37,7 @@ public class MapBuffer {
       throw new IllegalArgumentException("x, y or z <= 0");
     }
 
-    nodes = new Node[x][y][z];
+    nodes = new Node[x * y * z];
     this.sizeX = x;
     this.sizeY = y;
     this.sizeZ = z;
@@ -45,8 +45,12 @@ public class MapBuffer {
     reset();
   }
 
+  private int coordToElem(int x, int y, int z) {
+    return (sizeY * x) + (sizeZ * y) + z;
+  }
+
   public Node getNode(int x, int y, int z) {
-    return nodes[x][y][z];
+    return nodes[coordToElem(x, y, z)];
   }
 
   public Node getNode(Immutable3dPoint point) {
@@ -55,7 +59,7 @@ public class MapBuffer {
 
   private Node initNode(int x, int y, int z) {
     Node response = new Node();
-    nodes[x][y][z] = response;
+    nodes[coordToElem(x, y, z)] = response;
     return response;
   }
 
@@ -72,13 +76,9 @@ public class MapBuffer {
 
     return checkNode.chechAndAddNode(state, cost, stepFrom, x, y, z);
   }
-  
+
   public void reset() {
-    for (int x = 0; x < sizeX; x++) {
-      for (int y = 0; y < sizeY; y++) {
-        Arrays.fill(nodes[x][y], null);
-      }
-    }
+    Arrays.fill(nodes, null);
   }
 
 }

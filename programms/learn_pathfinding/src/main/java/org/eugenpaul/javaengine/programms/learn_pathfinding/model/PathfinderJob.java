@@ -24,13 +24,9 @@ public class PathfinderJob implements Job, AbstractModel {
     boolean wayFound = world.doPathfindingStep();
 
     if (wayFound) {
-      propertyChangeSupport.firePropertyChange(DefaultController.ELEMENT_PATHWAYFINDING_RUNNING, null, Boolean.FALSE);
+      stopped();
     } else {
       propertyChangeSupport.firePropertyChange(DefaultController.ELEMENT_PATHWAYFINDING_RUNNING, null, Boolean.TRUE);
-      PropertyChangeListener[] listeners = propertyChangeSupport.getPropertyChangeListeners();
-      for (PropertyChangeListener oneListener : listeners) {
-        propertyChangeSupport.removePropertyChangeListener(oneListener);
-      }
     }
 
     return !wayFound;
@@ -49,6 +45,17 @@ public class PathfinderJob implements Job, AbstractModel {
   @Override
   public void removePropertyChangeListener(PropertyChangeListener listener) {
     propertyChangeSupport.removePropertyChangeListener(listener);
+  }
+
+  /**
+   * set Job stopped
+   */
+  public void stopped() {
+    propertyChangeSupport.firePropertyChange(DefaultController.ELEMENT_PATHWAYFINDING_RUNNING, null, Boolean.FALSE);
+    PropertyChangeListener[] listeners = propertyChangeSupport.getPropertyChangeListeners();
+    for (PropertyChangeListener oneListener : listeners) {
+      propertyChangeSupport.removePropertyChangeListener(oneListener);
+    }
   }
 
 }

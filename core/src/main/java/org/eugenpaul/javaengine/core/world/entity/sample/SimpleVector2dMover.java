@@ -111,7 +111,7 @@ public class SimpleVector2dMover extends AMover {
 
     switch (startDirection) {
     case X_POSITIVE:
-      x = 0;
+      x = 1;
       y = 1;
       stepMiddle = new Immutable3dPoint(1, 0, 0);
       cPointMiddle = new CollisionPoint(new Immutable3dPoint(1, 0, 0), stdCondition);
@@ -119,7 +119,7 @@ public class SimpleVector2dMover extends AMover {
       lastPoint = new SimpleVectorMotionState(MoveDirection.Y_POSITIVE);
       break;
     case X_NEGATIVE:
-      x = 0;
+      x = -1;
       y = -1;
       stepMiddle = new Immutable3dPoint(-1, 0, 0);
       cPointMiddle = new CollisionPoint(new Immutable3dPoint(-1, 0, 0), stdCondition);
@@ -128,7 +128,7 @@ public class SimpleVector2dMover extends AMover {
       break;
     case Y_POSITIVE:
       x = -1;
-      y = 0;
+      y = 1;
       stepMiddle = new Immutable3dPoint(0, 1, 0);
       cPointMiddle = new CollisionPoint(new Immutable3dPoint(0, 1, 0), stdCondition);
       firstPoint = new SimpleVectorMotionState(MoveDirection.Y_POSITIVE);
@@ -136,7 +136,7 @@ public class SimpleVector2dMover extends AMover {
       break;
     case Y_NEGATIVE:
       x = 1;
-      y = 0;
+      y = -1;
       stepMiddle = new Immutable3dPoint(0, -1, 0);
       cPointMiddle = new CollisionPoint(new Immutable3dPoint(0, -1, 0), stdCondition);
       firstPoint = new SimpleVectorMotionState(MoveDirection.Y_NEGATIVE);
@@ -178,7 +178,7 @@ public class SimpleVector2dMover extends AMover {
 
     switch (startDirection) {
     case X_POSITIVE:
-      x = 0;
+      x = 1;
       y = -1;
       stepMiddle = new Immutable3dPoint(1, 0, 0);
       cPointMiddle = new CollisionPoint(new Immutable3dPoint(1, 0, 0), stdCondition);
@@ -186,7 +186,7 @@ public class SimpleVector2dMover extends AMover {
       lastPoint = new SimpleVectorMotionState(MoveDirection.Y_NEGATIVE);
       break;
     case X_NEGATIVE:
-      x = 0;
+      x = -1;
       y = 1;
       stepMiddle = new Immutable3dPoint(-1, 0, 0);
       cPointMiddle = new CollisionPoint(new Immutable3dPoint(-1, 0, 0), stdCondition);
@@ -195,7 +195,7 @@ public class SimpleVector2dMover extends AMover {
       break;
     case Y_POSITIVE:
       x = 1;
-      y = 0;
+      y = 1;
       stepMiddle = new Immutable3dPoint(0, 1, 0);
       cPointMiddle = new CollisionPoint(new Immutable3dPoint(0, 1, 0), stdCondition);
       firstPoint = new SimpleVectorMotionState(MoveDirection.Y_POSITIVE);
@@ -203,7 +203,7 @@ public class SimpleVector2dMover extends AMover {
       break;
     case Y_NEGATIVE:
       x = -1;
-      y = 0;
+      y = -1;
       stepMiddle = new Immutable3dPoint(0, -1, 0);
       cPointMiddle = new CollisionPoint(new Immutable3dPoint(0, -1, 0), stdCondition);
       firstPoint = new SimpleVectorMotionState(MoveDirection.Y_NEGATIVE);

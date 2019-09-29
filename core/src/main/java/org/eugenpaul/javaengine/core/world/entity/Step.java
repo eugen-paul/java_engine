@@ -16,7 +16,7 @@ import lombok.Getter;
 public class Step {
   @Getter
   private List<Immutable3dPoint> movingWay = null;
-  
+
   @Getter
   private AMotionState fromState = null;
 
@@ -46,17 +46,8 @@ public class Step {
     this.lastState = lastState;
     this.cost = cost;
 
-    int x = 0;
-    int y = 0;
-    int z = 0;
-
-    for (Immutable3dPoint wayPoint : movingWay) {
-      x += wayPoint.getX();
-      y += wayPoint.getY();
-      z += wayPoint.getZ();
-    }
-
-    lastPosition = new Immutable3dPoint(x, y, z);
+    int size = movingWay.size();
+    lastPosition = movingWay.get(size - 1);
   }
 
   @Override

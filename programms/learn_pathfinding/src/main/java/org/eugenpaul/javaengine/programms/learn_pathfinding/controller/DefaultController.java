@@ -81,7 +81,7 @@ public class DefaultController extends AbstractController {
       Job job = element.getJob();
       if(null != job && (job instanceof PathfinderJob)) {
         PathfinderJob pJob = (PathfinderJob) job;
-        pJob.removePropertyChangeListener(this);
+        pJob.stopped();
       }
     }
     scheduler.stopScheduler();

@@ -67,7 +67,7 @@ class JobExecuter implements Runnable {
       try {
         nanosRemaining = condition.awaitNanos(nanosRemaining);
       } catch (InterruptedException e) {
-        e.printStackTrace();
+//        e.printStackTrace();
         System.out.println("Interrup JobExecuter");
         return null;
       } finally {

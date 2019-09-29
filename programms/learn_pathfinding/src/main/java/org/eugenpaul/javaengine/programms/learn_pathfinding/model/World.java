@@ -96,7 +96,9 @@ public class World implements ITileBasedMap, AbstractModel {
       addDebugInfo(result);
     } else {
       List<Immutable3dPoint> way = doPathfinding();
-      addWaypointsToMax(result, way);
+      if (null != way) {
+        addWaypointsToMap(result, way);
+      }
     }
 
     if (start != null) {
@@ -109,7 +111,7 @@ public class World implements ITileBasedMap, AbstractModel {
     return result;
   }
 
-  private void addWaypointsToMax(final int[][] map, List<Immutable3dPoint> way) {
+  private void addWaypointsToMap(final int[][] map, List<Immutable3dPoint> way) {
     Iterator<Immutable3dPoint> iterator = way.iterator();
     while (iterator.hasNext()) {
       Immutable3dPoint step = iterator.next();
@@ -149,7 +151,7 @@ public class World implements ITileBasedMap, AbstractModel {
     if (debugWayFound) {
       List<Step> way = pathfinding.getDebugInfo().getStepsResult();
       LinkedList<Immutable3dPoint> waypoints = convertWayToPoints(way);
-      addWaypointsToMax(result, waypoints);
+      addWaypointsToMap(result, waypoints);
     }
   }
 
@@ -219,22 +221,18 @@ public class World implements ITileBasedMap, AbstractModel {
     // Initial variables for path finding
     LinkedList<Immutable3dPoint> respose = new LinkedList<Immutable3dPoint>();
 
-    Iterator<Step> iterator = way.iterator();
     Immutable3dPoint lastPoint = start;
-    while (iterator.hasNext()) {
-      Step stepWay = iterator.next();
-      Iterator<Immutable3dPoint> stepPoints = stepWay.getMovingWay().iterator();
+    for (Step stepWay : way) {
       // add all Points from StepWay to response.
-      while (stepPoints.hasNext()) {
-        Immutable3dPoint step = stepPoints.next();
+      for (Immutable3dPoint step : stepWay.getMovingWay()) {
         Immutable3dPoint point = new Immutable3dPoint(//
             lastPoint.getX() + step.getX(), //
             lastPoint.getY() + step.getY(), //
             lastPoint.getZ() + step.getZ() //
         );
         respose.add(point);
-        lastPoint = point;
       }
+      lastPoint = stepWay.getMovingWay().get(stepWay.getMovingWay().size() - 1).add(lastPoint);
     }
 
     return respose;
@@ -289,7 +287,7 @@ public class World implements ITileBasedMap, AbstractModel {
     if (!debugWayFound) {
       debugWayFound = pathfinding.getDebugInfo().doOneStep();
       propertyChangeSupport.firePropertyChange(DefaultController.ELEMENT_MAP, null, getMap());
-      
+
       propertyChangeSupport.firePropertyChange(DefaultController.ELEMENT_DEBUG_INFO, null, pathfinding.getDebugInfo().getCurrentPathfindingInfo().getStepDescription());
     }
 

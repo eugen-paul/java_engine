@@ -369,8 +369,12 @@ public class MainFrame extends JFrame implements AbstractViewPanel {
         Boolean runnung = (Boolean) evt.getNewValue();
         if(runnung.booleanValue()) {
           spnMsProStep.setEnabled(false);
+          btnStartSearch.setEnabled(false);
+          btnStopSearch.setEnabled(true);
         }else {
           spnMsProStep.setEnabled(true);
+          btnStartSearch.setEnabled(true);
+          btnStopSearch.setEnabled(false);
         }
       }
     }
@@ -433,11 +437,9 @@ public class MainFrame extends JFrame implements AbstractViewPanel {
   
   private void startAutoPathfindung() {
     controller.startPathfinding((Integer)spnMsProStep.getValue());
-    spnMsProStep.setEnabled(false);
   }
   
   private void stopAutoPathfindung() {
     controller.stopPathfinding();
-    spnMsProStep.setEnabled(true);
   }
 }

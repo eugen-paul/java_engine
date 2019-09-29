@@ -110,12 +110,11 @@ public class LeeTileBasedMap implements Pathfinding, PathfindingDebug {
         }
 
         if (debugMode && null != debugData) {
-          for (Immutable3dPoint stepPoint : step.getMovingWay()) {
-            debugData.setPoint(checkNode.getX() + stepPoint.getX(), //
-                checkNode.getY() + stepPoint.getY(), //
-                checkNode.getZ() + stepPoint.getZ(), //
-                InfoPathfindingMapStatus.NEW_STEP);
-          }
+          Immutable3dPoint stepPoint = step.getMovingWay().get(step.getMovingWay().size() - 1);
+          debugData.setPoint(checkNode.getX() + stepPoint.getX(), //
+              checkNode.getY() + stepPoint.getY(), //
+              checkNode.getZ() + stepPoint.getZ(), //
+              InfoPathfindingMapStatus.NEW_STEP);
         }
       }
     }
