@@ -1,4 +1,4 @@
-package org.eugenpaul.javaengine.commons.algos.pathfinding.lee;
+package org.eugenpaul.javaengine.commons.algos.pathfinding.data;
 
 import java.util.Arrays;
 

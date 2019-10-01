@@ -256,4 +256,9 @@ public class SimpleVector2dMover extends AMover {
     return Collections.emptyList();
   }
 
+  @Override
+  public int getSimpleStepHeuristicsCost() {
+    return 10;
+  }
+
 }

@@ -1,4 +1,4 @@
-package org.eugenpaul.javaengine.commons.algos.pathfinding.lee;
+package org.eugenpaul.javaengine.commons.algos.pathfinding.data;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -49,7 +49,7 @@ public class Node {
   }
 
   /**
-   * Check if the state is in the node. If the new state is better then add it to node.
+   * Check if the state is in the node. If the new state is better (new cost < old cost or state is new) then add it to node.
    * 
    * @param state
    * @param cost
@@ -57,7 +57,7 @@ public class Node {
    * @param x
    * @param y
    * @param z
-   * @return not null - new state is better or not in the node<br>
+   * @return not null - new state - new state is better or not in the node<br>
    *         null - new state is worse
    */
   public SearchStep chechAndAddNode(AMotionState state, long cost, Step stepFrom, int x, int y, int z) {
@@ -67,12 +67,13 @@ public class Node {
       SearchStep aMotionState = (SearchStep) iterator.next();
       if (aMotionState.getState().checkState(state)) {
         // found
-        if (aMotionState.getCost() <= cost) {
+        if (aMotionState.getStepscost() <= cost) {
           // old state is better
           return null;
         } else {
           // new state is better
-          iterator.remove();
+          iterator.remove(); // TODO don't remove. The step still in sorted list.
+          aMotionState.setRemoved();
           break;
         }
       }

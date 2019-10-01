@@ -16,6 +16,13 @@ public abstract class AMover extends Entity {
    */
   public abstract List<Step> getNextSteps(AMotionState state);
 
+  /**
+   * Heuristics cost of simple step.
+   * 
+   * @return
+   */
+  public abstract int getSimpleStepHeuristicsCost();
+
 //  /**
 //   * Get next possible Steps from state and position on the map
 //   * 

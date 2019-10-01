@@ -1,9 +1,12 @@
-package org.eugenpaul.javaengine.commons.algos.pathfinding.lee;
+package org.eugenpaul.javaengine.commons.algos.pathfinding;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.eugenpaul.javaengine.commons.algos.pathfinding.data.MapBuffer;
+import org.eugenpaul.javaengine.commons.algos.pathfinding.data.Node;
+import org.eugenpaul.javaengine.commons.algos.pathfinding.data.SearchStep;
 import org.eugenpaul.javaengine.core.data.SimpleSortedList;
 import org.eugenpaul.javaengine.core.data.statistics.InfoPathfinding;
 import org.eugenpaul.javaengine.core.data.statistics.InfoPathfindingMapStatus;
@@ -22,7 +25,7 @@ import org.eugenpaul.javaengine.core.world.moving.AMoving;
  * @author Eugen Paul
  *
  */
-public class LeeTileBasedMap implements Pathfinding, PathfindingDebug {
+public abstract class AWave implements Pathfinding, PathfindingDebug {
 
   /// The complete set of nodes across the map
   private MapBuffer nodes = null;
@@ -57,7 +60,7 @@ public class LeeTileBasedMap implements Pathfinding, PathfindingDebug {
   public List<Step> getPath(AMover mover, AMotionState from, Immutable3dPoint fromPoint, AMotionState to, Immutable3dPoint toPoint) {
 
     // add Startpoint to nodesToCheck
-    push(from, 0, null, fromPoint.getX(), fromPoint.getY(), fromPoint.getZ());
+    push(from, 0, null, fromPoint.getX(), fromPoint.getY(), fromPoint.getZ(), toPoint, mover.getSimpleStepHeuristicsCost());
 
     SearchStep checkNode = pop();
     while (checkNode != null) {
@@ -69,6 +72,32 @@ public class LeeTileBasedMap implements Pathfinding, PathfindingDebug {
 
     return getPath(to, toPoint);
   }
+
+  protected long getHeuristicsCost(long wayCost, Immutable3dPoint a, Immutable3dPoint b, int simpleStepCost) {
+    return getHeuristicsFullCost(wayCost, a.getX(), a.getY(), a.getZ(), b.getX(), b.getY(), b.getZ(), simpleStepCost);
+  }
+
+  protected long getHeuristicsCost(long wayCost, int x, int y, int z, Immutable3dPoint b, int simpleStepCost) {
+    return getHeuristicsFullCost(wayCost, x, y, z, b.getX(), b.getY(), b.getZ(), simpleStepCost);
+  }
+
+  protected long getHeuristicsCost(long wayCost, Immutable3dPoint a, int x, int y, int z, int simpleStepCost) {
+    return getHeuristicsFullCost(wayCost, a.getX(), a.getY(), a.getZ(), x, y, z, simpleStepCost);
+  }
+
+  /**
+   * 
+   * @param wayCost
+   * @param xFrom
+   * @param yFrom
+   * @param zFrom
+   * @param xTo
+   * @param yTo
+   * @param zTo
+   * @param simpleStepCost
+   * @return
+   */
+  protected abstract long getHeuristicsFullCost(long wayCost, int xFrom, int yFrom, int zFrom, int xTo, int yTo, int zTo, int simpleStepCost);
 
   /**
    * One step of Pathfinding.
@@ -95,11 +124,13 @@ public class LeeTileBasedMap implements Pathfinding, PathfindingDebug {
 
       if (push(//
           step.getLastState(), //
-          checkNode.getCost() + step.getCost(), //
+          checkNode.getStepscost() + step.getCost(), //
           step, //
           xLastPonit, //
           yLastPonit, //
-          zLastPonit //
+          zLastPonit, //
+          toPoint, //
+          mover.getSimpleStepHeuristicsCost() //
       )) {
         if ((xLastPonit == toPoint.getX())//
             && (yLastPonit == toPoint.getY())//
@@ -161,9 +192,10 @@ public class LeeTileBasedMap implements Pathfinding, PathfindingDebug {
    * @return true - added<br>
    *         false - old node
    */
-  private boolean push(AMotionState state, long cost, Step stepFrom, int x, int y, int z) {
+  private boolean push(AMotionState state, long cost, Step stepFrom, int x, int y, int z, Immutable3dPoint toPoint, int heuristicsStepCost) {
     SearchStep step = nodes.addStepToNode(state, cost, stepFrom, x, y, z);
     if (step != null) {
+      step.setHeuristicscost(getHeuristicsCost(step.getStepscost(), x, y, z, toPoint, heuristicsStepCost));
       nodesToCheck.add(step);
       return true;
     }
@@ -177,7 +209,11 @@ public class LeeTileBasedMap implements Pathfinding, PathfindingDebug {
    */
   private SearchStep pop() {
     try {
-      return nodesToCheck.pop();
+      SearchStep resultStep = nodesToCheck.pop();
+      while (null != resultStep && resultStep.isRemoved()) {
+        resultStep = nodesToCheck.pop();
+      }
+      return resultStep;
     } catch (NoSuchElementException e) {
       return null;
     }
@@ -189,16 +225,20 @@ public class LeeTileBasedMap implements Pathfinding, PathfindingDebug {
       return false;
     }
 
-    if (!debugMode && null == debugData) {
+    debugMode = mode;
+
+    if (debugMode && null == debugData) {
       debugData = new InfoPathfinding(nodes.getSizeX(), nodes.getSizeY(), nodes.getSizeZ());
     }
-    debugMode = mode;
+
     return true;
   }
 
   @Override
   public boolean restartPathfinding(AMover mover, AMotionState from, Immutable3dPoint fromPoint, AMotionState to, Immutable3dPoint toPoint) {
-    debugData.resetInfo();
+    if (debugMode && null != debugData) {
+      debugData.resetInfo();
+    }
 
     this.nodes.reset();
     this.nodesToCheck.clear();
@@ -208,7 +248,7 @@ public class LeeTileBasedMap implements Pathfinding, PathfindingDebug {
     this.debugToPoint = toPoint;
 
     // add Startpoint to nodesToCheck
-    push(from, 0, null, fromPoint.getX(), fromPoint.getY(), fromPoint.getZ());
+    push(from, 0, null, fromPoint.getX(), fromPoint.getY(), fromPoint.getZ(), toPoint, mover.getSimpleStepHeuristicsCost());
 
     return false;
   }
@@ -221,7 +261,7 @@ public class LeeTileBasedMap implements Pathfinding, PathfindingDebug {
     }
 
     debugData.setStepDescription("Step nummber " + debugData.getStepsCount() + ": Checking x = " + checkNode.getX() + ", y = " + checkNode.getY() + ", z = " + checkNode.getZ()
-        + ". Cost = " + checkNode.getCost());
+        + ". Cost = " + checkNode.getStepscost());
     System.out.println(debugData.getStepDescription());
 
     debugData.nextStep();

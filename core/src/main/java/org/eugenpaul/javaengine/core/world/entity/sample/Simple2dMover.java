@@ -94,4 +94,9 @@ public class Simple2dMover extends AMover {
     return possibleSteps;
   }
 
+  @Override
+  public int getSimpleStepHeuristicsCost() {
+    return 10;
+  }
+
 }
