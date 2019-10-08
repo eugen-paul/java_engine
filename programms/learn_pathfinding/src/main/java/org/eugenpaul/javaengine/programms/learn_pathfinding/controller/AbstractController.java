@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import org.eugenpaul.javaengine.programms.learn_pathfinding.model.World;
 import org.eugenpaul.javaengine.programms.learn_pathfinding.model.WorldElements;
-import org.eugenpaul.javaengine.programms.learn_pathfinding.view.view2d.AbstractViewPanel;
+import org.eugenpaul.javaengine.programms.learn_pathfinding.view.AbstractViewPanel;
 
 public abstract class AbstractController implements PropertyChangeListener {
 

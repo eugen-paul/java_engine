@@ -7,7 +7,7 @@ import org.eugenpaul.javaengine.programms.learn_pathfinding.model.MoverTyp;
 import org.eugenpaul.javaengine.programms.learn_pathfinding.model.PathfinderJob;
 import org.eugenpaul.javaengine.programms.learn_pathfinding.model.PathfindingAlgo;
 import org.eugenpaul.javaengine.programms.learn_pathfinding.model.WorldElements;
-import org.eugenpaul.javaengine.programms.learn_pathfinding.view.view2d.MapElements;
+import org.eugenpaul.javaengine.programms.learn_pathfinding.view.MapElements;
 
 public class DefaultController extends AbstractController {
 

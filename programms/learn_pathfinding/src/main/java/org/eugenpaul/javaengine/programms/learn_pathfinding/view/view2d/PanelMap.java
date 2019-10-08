@@ -6,6 +6,8 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import org.eugenpaul.javaengine.programms.learn_pathfinding.view.MapElements;
+
 public class PanelMap extends JPanel {
 
   /**

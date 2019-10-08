@@ -8,6 +8,8 @@ import javax.swing.border.EmptyBorder;
 import org.eugenpaul.javaengine.programms.learn_pathfinding.controller.DefaultController;
 import org.eugenpaul.javaengine.programms.learn_pathfinding.model.MoverTyp;
 import org.eugenpaul.javaengine.programms.learn_pathfinding.model.PathfindingAlgo;
+import org.eugenpaul.javaengine.programms.learn_pathfinding.view.AbstractViewPanel;
+import org.eugenpaul.javaengine.programms.learn_pathfinding.view.MapElements;
 
 import javax.swing.JSplitPane;
 import java.awt.Dimension;

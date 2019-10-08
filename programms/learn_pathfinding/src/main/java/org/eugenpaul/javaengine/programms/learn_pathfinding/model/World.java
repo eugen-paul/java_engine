@@ -19,7 +19,7 @@ import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
 import org.eugenpaul.javaengine.core.world.moving.AMoving;
 import org.eugenpaul.javaengine.core.world.moving.sample.SimpleMoving;
 import org.eugenpaul.javaengine.programms.learn_pathfinding.controller.DefaultController;
-import org.eugenpaul.javaengine.programms.learn_pathfinding.view.view2d.MapElements;
+import org.eugenpaul.javaengine.programms.learn_pathfinding.view.MapElements;
 
 public class World implements ITileBasedMap, AbstractModel {
 

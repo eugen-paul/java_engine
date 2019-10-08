@@ -1,4 +1,4 @@
-package org.eugenpaul.javaengine.programms.learn_pathfinding.view.view2d;
+package org.eugenpaul.javaengine.programms.learn_pathfinding.view;
 
 import java.beans.PropertyChangeEvent;
 
