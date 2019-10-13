@@ -279,6 +279,7 @@ public class World implements ITileBasedMap, AbstractModel {
 
   public void setAutoPathfinding(boolean autoPathfinding) {
     this.autoPathfinding = autoPathfinding;
+    pathfinding.init(this, mapMoving);
     reset();
 
     propertyChangeSupport.firePropertyChange(DefaultController.ELEMENT_MAP, null, getMap());

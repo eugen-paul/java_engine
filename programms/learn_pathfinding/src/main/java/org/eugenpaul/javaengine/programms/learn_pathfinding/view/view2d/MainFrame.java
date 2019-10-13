@@ -109,6 +109,7 @@ public class MainFrame extends JFrame implements AbstractViewPanel {
                                                 btnClearPoint.setToolTipText("Clear Point");
                                                 
                                                     JButton btnClearMap = new JButton("Clear Map");
+                                                    btnClearMap.setEnabled(false);
                                                     btnClearMap.setToolTipText("Clear Map");
                                                     
                                                     jCbMoverSelector = new JComboBox<>();

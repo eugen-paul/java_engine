@@ -18,7 +18,8 @@ import com.jme3.scene.shape.Box;
 public class WorldItem {
   private Node rootNode = null;
   private MapElements currentElement = MapElements.NOPE;
-  Geometry geom;
+  private Geometry geom;
+  private boolean edited = true;
 
   /**
    * 
@@ -49,7 +50,6 @@ public class WorldItem {
     currentElement = element;
     switch (element) {
     case NOPE:
-      rootNode.detachChild(geom);
       break;
     case END:
       geom.getMaterial().setColor("Color", ColorRGBA.Blue);
@@ -80,8 +80,20 @@ public class WorldItem {
       break;
     }
 
-    if (element != MapElements.NOPE && null == geom.getParent()) {
-      rootNode.attachChild(geom);
+    edited = true;
+  }
+
+  /**
+   * Update rootNode if necessary
+   */
+  protected void render() {
+    if (edited) {
+      if (MapElements.NOPE == currentElement) {
+        rootNode.detachChild(geom);
+      } else {
+        rootNode.attachChild(geom);
+      }
+      edited = false;
     }
   }
 }
