@@ -8,14 +8,11 @@
 			<panel id="panel" height="90%" width="20%" align="center" valign="center" backgroundColor="#000f" childLayout="vertical" visibleToMouse="true">
 				<control name="button" label="set Start" id="StartButton" align="center" valign="center" visibleToMouse="true" color="#000f">
 					<interact onClick="startButtonClick()" />
-					<effect>
-						<onFocus color="#000f" />
-					</effect>
 				</control>
 				<control name="button" label="set Stop" id="StopButton" align="center" valign="center" visibleToMouse="true" color="#000f">
 					<interact onClick="stopButtonClick()" />
 				</control>
-				<control name="button" label="set Wall" id="StopButton" align="center" valign="center" visibleToMouse="true" color="#000f">
+				<control name="button" label="set Wall" id="WallButton" align="center" valign="center" visibleToMouse="true" color="#000f">
 					<interact onClick="wallButtonClick()" />
 				</control>
 				<control name="button" label="set Pit" id="PitButton" align="center" valign="center" visibleToMouse="true" color="#000f">
@@ -47,8 +44,8 @@
 					<interact onClick="doResetButtonClick()" />
 				</control>
 			</panel>
-			<panel height="5%" valign="bottom" childLayout="vertical">
-				<control name="label" text="TEXT"></control>
+			<panel height="5%" width="50%" valign="bottom" childLayout="vertical">
+				<text id="debugText" style="nifty-label" width="75%" backgroundColor="#fc0f" text="debu Text" color="#000f" textHAlign="left" textVAlign="center" />
 			</panel>
 		</layer>
 	</screen>

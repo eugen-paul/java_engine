@@ -1,8 +1,6 @@
 package org.eugenpaul.javaengine.programms.learn_pathfinding.controller;
 
-import org.eugenpaul.javaengine.core.multithreading.scheduler.Job;
-import org.eugenpaul.javaengine.core.multithreading.scheduler.JobElement;
-import org.eugenpaul.javaengine.core.multithreading.scheduler.JobScheduler;
+import org.eugenpaul.javaengine.core.multithreading.scheduler.JobSchedulerThreaded;
 import org.eugenpaul.javaengine.programms.learn_pathfinding.model.MoverTyp;
 import org.eugenpaul.javaengine.programms.learn_pathfinding.model.PathfinderJob;
 import org.eugenpaul.javaengine.programms.learn_pathfinding.model.PathfindingAlgo;
@@ -15,11 +13,11 @@ public class DefaultController extends AbstractController {
   public static final String ELEMENT_DEBUG_INFO = "DEBUG_INFO";
   public static final String ELEMENT_PATHWAYFINDING_RUNNING = "PATHWAYFINDING_RUNNING";
 
-  private JobScheduler scheduler;
+  private JobSchedulerThreaded scheduler;
 
   public DefaultController() {
     super();
-    scheduler = new JobScheduler();
+    scheduler = new JobSchedulerThreaded();
   }
 
   public void setPointOnMap(int x, int y, MapElements value) {
@@ -76,14 +74,7 @@ public class DefaultController extends AbstractController {
   }
 
   public void stopPathfinding() {
-    JobElement element = scheduler.removeJob(PathfinderJob.NAME);
-    if(null != element) {
-      Job job = element.getJob();
-      if(null != job && (job instanceof PathfinderJob)) {
-        PathfinderJob pJob = (PathfinderJob) job;
-        pJob.stopped();
-      }
-    }
+    scheduler.removeJob(PathfinderJob.NAME);
     scheduler.stopScheduler();
   }
 

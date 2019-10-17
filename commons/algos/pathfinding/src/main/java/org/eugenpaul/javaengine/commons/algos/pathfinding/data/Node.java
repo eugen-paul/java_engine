@@ -8,7 +8,7 @@ import org.eugenpaul.javaengine.core.world.entity.AMotionState;
 import org.eugenpaul.javaengine.core.world.entity.Step;
 
 /**
- * Node
+ * One node on the map, to save visited steps.
  * 
  * @author Eugen Paul
  *
@@ -61,6 +61,7 @@ public class Node {
    *         null - new state is worse
    */
   public SearchStep chechAndAddNode(AMotionState state, long cost, Step stepFrom, int x, int y, int z) {
+    boolean returnStep = true;
     // search the state in the node
     Iterator<SearchStep> iterator = states.iterator();
     while (iterator.hasNext()) {
@@ -71,8 +72,11 @@ public class Node {
           // old state is better
           return null;
         } else {
+          if (aMotionState.isChecked()) {
+            returnStep = false;
+          }
           // new state is better
-          iterator.remove(); // TODO don't remove. The step still in sorted list.
+          iterator.remove();
           aMotionState.setRemoved();
           break;
         }
@@ -82,7 +86,14 @@ public class Node {
     // state is better or new => add to node
     SearchStep step = new SearchStep(cost, state, stepFrom, x, y, z);
     states.add(step);
-    return step;
+
+    if (returnStep) {
+      // new State is better AND old step is not checked
+      return step;
+    } else {
+      return null;
+    }
+
   }
 
   /**

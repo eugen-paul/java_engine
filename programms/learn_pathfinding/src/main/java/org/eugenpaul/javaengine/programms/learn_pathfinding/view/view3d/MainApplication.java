@@ -1,10 +1,9 @@
 package org.eugenpaul.javaengine.programms.learn_pathfinding.view.view3d;
 
 import java.beans.PropertyChangeEvent;
+import java.util.Properties;
 
 import org.eugenpaul.javaengine.programms.learn_pathfinding.controller.DefaultController;
-import org.eugenpaul.javaengine.programms.learn_pathfinding.model.MoverTyp;
-import org.eugenpaul.javaengine.programms.learn_pathfinding.model.PathfindingAlgo;
 import org.eugenpaul.javaengine.programms.learn_pathfinding.view.AbstractViewPanel;
 import org.eugenpaul.javaengine.programms.learn_pathfinding.view.MapElements;
 
@@ -52,8 +51,6 @@ public class MainApplication extends SimpleApplication implements AbstractViewPa
   private Nifty nifty;
 
   protected MapElements clickElement = null;
-  private MoverTyp movertyp = MoverTyp.Simple2dMoverSlim;
-  private PathfindingAlgo algo = PathfindingAlgo.Lee;
 
   private GuiController guiController = null;
 
@@ -81,11 +78,14 @@ public class MainApplication extends SimpleApplication implements AbstractViewPa
 
     this.setSettings(settings);
 
-    guiController = new GuiController(this);
+    guiController = new GuiController(this.controller, this);
   }
 
   @Override
   public void simpleInitApp() {
+// disable the fly cam
+//    flyCam.setDragToRotate(true);
+//    inputManager.setCursorVisible(true);
     flyCam.setEnabled(false);
 
     collisionNode = new Node("CollisionNode");
@@ -97,15 +97,11 @@ public class MainApplication extends SimpleApplication implements AbstractViewPa
     initGround();
     initElems();
 
-//    System.out.println("Rotation = " + getCamera().getRotation());
     // look down
     getCamera().setLocation(new Vector3f(mapSizeX / 2 - 10, 70, mapSizeZ / 2));
-//    getCamera().lookAt(new Vector3f(mapSizeX / 2, 0, mapSizeZ / 2), Vector3f.UNIT_Y);
     Quaternion lookDown = new Quaternion();
     lookDown.fromAngleNormalAxis(FastMath.HALF_PI, Vector3f.UNIT_X);
     getCamera().setRotation(getCamera().getRotation().multLocal(lookDown));
-
-//    System.out.println("Rotation = " + getCamera().getRotation());
 
     initKeys();
 
@@ -120,18 +116,30 @@ public class MainApplication extends SimpleApplication implements AbstractViewPa
 
     nifty.setIgnoreKeyboardEvents(true);
 
-// attach the nifty display to the gui view port as a processor
-    guiViewPort.addProcessor(niftyDisplay);
+    // disable double clicks
+    Properties data = nifty.getGlobalProperties();
+    if (null == data) {
+      data = new Properties();
+      nifty.setGlobalProperties(data);
+    }
+    data.setProperty("MULTI_CLICK_TIME", "0");
 
-// disable the fly cam
-//    flyCam.setEnabled(false);
-//    flyCam.setDragToRotate(true);
-//    inputManager.setCursorVisible(true);
+//    nifty.setDebugOptionPanelColors(true);
+
+    // attach the nifty display to the gui view port as a processor
+    guiViewPort.addProcessor(niftyDisplay);
   }
 
   @Override
   public void simpleUpdate(float tpf) {
     printMapData();
+    guiController.update();
+  }
+  
+  @Override
+  public void destroy() {
+    super.destroy();
+    controller.stopPathfinding();
   }
 
   private void initElems() {
@@ -164,7 +172,19 @@ public class MainApplication extends SimpleApplication implements AbstractViewPa
   private void initKeys() {
     inputManager.addMapping("pick", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
     inputManager.addListener(analogListener, "pick");
+//
+//    inputManager.addMapping("pick2", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+//    inputManager.addListener(actionListener, "pick2");
   }
+
+//  private ActionListener actionListener = new ActionListener() {
+//    @Override
+//    public void onAction(String name, boolean isPressed, float tpf) {
+//      if (isPressed && name.equals("pick2")) {
+//        System.out.println("click!!!   " + System.nanoTime());
+//      }
+//    }
+//  };
 
   private AnalogListener analogListener = new AnalogListener() {
     @Override
@@ -236,36 +256,6 @@ public class MainApplication extends SimpleApplication implements AbstractViewPa
         worldItems[x * mapSizeX + y].render();
       }
     }
-  }
-
-  protected void setMoverTyp(MoverTyp typ) {
-    movertyp = typ;
-    controller.setMover(movertyp);
-  }
-
-  protected void setAlgo(PathfindingAlgo algo) {
-    this.algo = algo;
-    controller.setPathfindingAlgo(this.algo);
-  }
-
-  protected void setAutoPathfinding(boolean autoPathfinding) {
-    controller.setAutoPathfinding(autoPathfinding);
-  }
-
-  protected void doStep() {
-    controller.doPathfindingStep();
-  }
-
-  protected void doStart() {
-    controller.startPathfinding(20);
-  }
-
-  protected void doStop() {
-    controller.stopPathfinding();
-  }
-  
-  protected void doReset() {
-    controller.resetPathfinding();
   }
 
 }

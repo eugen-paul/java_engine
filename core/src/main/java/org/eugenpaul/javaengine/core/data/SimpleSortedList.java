@@ -1,5 +1,6 @@
 package org.eugenpaul.javaengine.core.data;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
@@ -22,6 +23,42 @@ public class SimpleSortedList<E extends Comparable<E>> extends LinkedList<E> {
   @Override
   public void add(int index, E element) {
     sortedInsert(element);
+  }
+
+  @Override
+  public void addFirst(E e) {
+    sortedInsert(e);
+  }
+
+  @Override
+  public void addLast(E e) {
+    sortedInsert(e);
+  }
+
+  @Override
+  public boolean addAll(Collection<? extends E> c) {
+    for (E elem : c) {
+      sortedInsert(elem);
+    }
+    return true;
+  }
+
+  @Override
+  public boolean addAll(int index, Collection<? extends E> c) {
+    int i = 0;
+    for (E elem : c) {
+      if (i >= index) {
+        sortedInsert(elem);
+      }
+      i++;
+    }
+    return true;
+  }
+
+  @Override
+  public E set(int index, E element) {
+    sortedInsert(element);
+    return null;
   }
 
   private boolean sortedInsert(E element) {

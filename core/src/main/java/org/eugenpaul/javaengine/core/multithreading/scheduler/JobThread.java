@@ -9,13 +9,13 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author Eugen Paul
  *
  */
-class JobExecuter implements Runnable {
+class JobThread implements Runnable {
 
   private ReentrantLock lock;
 
   private Condition condition;
 
-  private JobScheduler scheduler;
+  private JobContainer cont;
 
   private boolean stopped = false;
 
@@ -24,11 +24,11 @@ class JobExecuter implements Runnable {
    * 
    * @param scheduler
    */
-  public JobExecuter(JobScheduler scheduler) {
+  public JobThread(JobContainer cont) {
     lock = new ReentrantLock();
     condition = lock.newCondition();
 
-    this.scheduler = scheduler;
+    this.cont = cont;
   }
 
   /**
@@ -43,24 +43,54 @@ class JobExecuter implements Runnable {
   @Override
   public void run() {
     while (!stopped) {
-      JobElement nextJob = waitOfJob();
-      if (null != nextJob) {
-        if (nextJob.execute()) {
-          // add job to queue again
-          scheduler.addJob(nextJob);
+      JobElement nextJob = waitForJob();
+      executeOneJob(nextJob);
+    }
+
+    cont.removeAll();
+  }
+
+  /**
+   * 
+   * @param nextJob
+   */
+  private void executeOneJob(JobElement nextJob) {
+    if (null != nextJob) {
+      // check before execution
+      if (nextJob.isDeleted()) {
+        nextJob.getJob().stop();
+        return;
+      }
+      if (nextJob.execute()) {
+        // check after execution
+        if (nextJob.isDeleted()) {
+          nextJob.getJob().stop();
+          return;
         }
+        // add job to queue again
+        cont.addJob(nextJob);
+      } else {
+        nextJob.getJob().stop();
       }
     }
   }
 
+  /**
+   * 
+   * @return
+   */
   private long timeToNextJob() {
     long timeNow = System.nanoTime();
-    long startTime = scheduler.timeOfNextJob();
+    long startTime = cont.timeOfNextJob();
     long timeToStart = startTime - timeNow;
     return timeToStart;
   }
 
-  private JobElement waitOfJob() {
+  /**
+   * 
+   * @return
+   */
+  private JobElement waitForJob() {
     long nanosRemaining = timeToNextJob();
     while (nanosRemaining > 0) {
       lock.lock();
@@ -68,7 +98,8 @@ class JobExecuter implements Runnable {
         nanosRemaining = condition.awaitNanos(nanosRemaining);
       } catch (InterruptedException e) {
 //        e.printStackTrace();
-        System.out.println("Interrup JobExecuter");
+        System.out.println("Interrupt JobExecuter");
+        stopped = true;
         return null;
       } finally {
         lock.unlock();
@@ -82,7 +113,7 @@ class JobExecuter implements Runnable {
     }
 
     // get and return new Job
-    return scheduler.getJobToExecute();
+    return cont.getJobToExecute();
   }
 
   /**

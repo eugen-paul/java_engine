@@ -106,6 +106,8 @@ public abstract class AWave implements Pathfinding, PathfindingDebug {
    *         false - try more
    */
   private boolean oneStep(SearchStep checkNode, AMover mover, AMotionState to, Immutable3dPoint toPoint) {
+    checkNode.setChecked();
+
     if (checkNode.getX() == toPoint.getX()//
         && checkNode.getY() == toPoint.getY()//
         && checkNode.getZ() == toPoint.getZ()//

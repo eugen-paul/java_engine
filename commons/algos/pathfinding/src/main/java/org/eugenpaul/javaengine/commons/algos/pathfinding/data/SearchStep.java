@@ -32,6 +32,8 @@ public class SearchStep implements Comparable<SearchStep> {
   int z;
   /** false - the step must be checked. False - the step was removed, don't check it. */
   private boolean removed = false;
+  /** false - the step must be checked. True - The step are checked. Don't check it again. */
+  private boolean checked = false;
 
   /**
    * C'tor. heuristicscost will be set to stepscost
@@ -73,6 +75,13 @@ public class SearchStep implements Comparable<SearchStep> {
    */
   public void setRemoved() {
     removed = true;
+  }
+  
+  /**
+   * Set the step as checked. Cann't be undone.
+   */
+  public void setChecked() {
+    checked = true;
   }
 
   @Override
