@@ -1,4 +1,4 @@
-package org.eugenpaul.javaengine.core.multithreading.scheduler;
+package org.eugenpaul.javaengine.core.scheduler.job;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -22,8 +22,6 @@ public class JobElement implements Comparable<JobElement> {
   @Getter
   private boolean deleted = false;
 
-  private JobStopCallback stopCallback;
-
   /**
    * C'tor
    * 
@@ -37,20 +35,6 @@ public class JobElement implements Comparable<JobElement> {
     this.job = job;
 
     this.deleted = false;
-    this.stopCallback = null;
-  }
-
-  /**
-   * C'tor
-   * 
-   * @param timeOfNextStart
-   * @param timeBetweenStart
-   * @param job
-   * @param stopCallback
-   */
-  public JobElement(Long timeOfNextStart, Long timeBetweenStart, Job job, JobStopCallback stopCallback) {
-    this(timeOfNextStart, timeBetweenStart, job);
-    this.stopCallback = stopCallback;
   }
 
   @Override
@@ -61,6 +45,16 @@ public class JobElement implements Comparable<JobElement> {
       return -1;
     }
     return 0;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return super.equals(obj);
+  }
+
+  @Override
+  public int hashCode() {
+    return super.hashCode();
   }
 
   /**
@@ -81,10 +75,6 @@ public class JobElement implements Comparable<JobElement> {
    */
   public void setDeleted() {
     deleted = true;
-  }
-
-  public void callStop() {
-    stopCallback.lastRun(job);
   }
 
 }

@@ -7,11 +7,12 @@ import org.eugenpaul.javaengine.core.world.map.ITileBasedMap;
 import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
 
 /**
+ * Interface to test if the step is on the map possible.
  * 
  * @author Eugen Paul
  *
  */
-public abstract class AMoving {
+public interface IMoving {
 
   /**
    * Check possibility of steps.

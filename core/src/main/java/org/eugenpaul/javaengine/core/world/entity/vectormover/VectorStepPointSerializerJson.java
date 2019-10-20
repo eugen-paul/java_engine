@@ -1,6 +1,6 @@
 package org.eugenpaul.javaengine.core.world.entity.vectormover;
 
-public class VectorStepPointSerializerJson {
+public interface VectorStepPointSerializerJson {
 
 }
 

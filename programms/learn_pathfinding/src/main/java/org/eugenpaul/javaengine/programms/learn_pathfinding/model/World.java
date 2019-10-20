@@ -11,12 +11,12 @@ import java.util.List;
 import org.eugenpaul.javaengine.core.data.statistics.InfoPathfinding;
 import org.eugenpaul.javaengine.core.data.statistics.InfoPathfindingMapStatus;
 import org.eugenpaul.javaengine.core.interfaces.algos.Pathfinding;
-import org.eugenpaul.javaengine.core.world.entity.AMotionState;
+import org.eugenpaul.javaengine.core.world.entity.IMotionState;
 import org.eugenpaul.javaengine.core.world.entity.Step;
 import org.eugenpaul.javaengine.core.world.entity.collision.ICollisionCondition;
 import org.eugenpaul.javaengine.core.world.map.ITileBasedMap;
 import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
-import org.eugenpaul.javaengine.core.world.moving.AMoving;
+import org.eugenpaul.javaengine.core.world.moving.IMoving;
 import org.eugenpaul.javaengine.core.world.moving.sample.SimpleMoving;
 import org.eugenpaul.javaengine.programms.learn_pathfinding.controller.DefaultController;
 import org.eugenpaul.javaengine.programms.learn_pathfinding.view.MapElements;
@@ -26,9 +26,9 @@ public class World implements ITileBasedMap, AbstractModel {
   private Immutable3dPoint start = null;
   private Immutable3dPoint end = null;
   private PropertyChangeSupport propertyChangeSupport;
-  private AMoving mapMoving = null;
+  private IMoving mapMoving = null;
 
-  private ICollisionCondition grid[][];
+  private ICollisionCondition[][] grid;
   private int sizeX;
   private int sizeY;
 
@@ -57,8 +57,8 @@ public class World implements ITileBasedMap, AbstractModel {
     propertyChangeSupport = new PropertyChangeSupport(this);
     mapMoving = new SimpleMoving();
 
-    mover = MoverTyp.Simple2dMoverSlim;
-    pathfinding = PathfindingAlgo.Lee.getNewPathfinding();
+    mover = MoverTyp.SIMPLE_2D_MOVER_SLIM;
+    pathfinding = PathfindingAlgo.LEE.getNewPathfinding();
   }
 
   public WorldElements getPosition(int x, int y) {
@@ -122,7 +122,7 @@ public class World implements ITileBasedMap, AbstractModel {
   private void addDebugInfo(final int[][] result) {
     InfoPathfinding info = pathfinding.getDebugInfo().getCurrentPathfindingInfo();
     if (null != info) {
-      InfoPathfindingMapStatus infodata[][][] = info.getStepsmap();
+      InfoPathfindingMapStatus[][][] infodata = info.getInfoMap();
       int xSize = infodata.length;
       int ySize = infodata[0].length;
 
@@ -198,10 +198,10 @@ public class World implements ITileBasedMap, AbstractModel {
 
     pathfinding.init(this, mapMoving);
 
-    AMotionState fromStep = mover.getStartState();
+    IMotionState fromStep = mover.getStartState();
     Immutable3dPoint fromPoint = new Immutable3dPoint(start);
 
-    AMotionState toStep = mover.getEndState();
+    IMotionState toStep = mover.getEndState();
     Immutable3dPoint toPoint = new Immutable3dPoint(end);
 
     // do path finding
@@ -219,7 +219,7 @@ public class World implements ITileBasedMap, AbstractModel {
 
   private LinkedList<Immutable3dPoint> convertWayToPoints(List<Step> way) {
     // Initial variables for path finding
-    LinkedList<Immutable3dPoint> respose = new LinkedList<Immutable3dPoint>();
+    LinkedList<Immutable3dPoint> respose = new LinkedList<>();
 
     Immutable3dPoint lastPoint = start;
     for (Step stepWay : way) {
@@ -259,7 +259,7 @@ public class World implements ITileBasedMap, AbstractModel {
     if (z != 0) {
       return false;
     }
-    return grid[x][y].equals(condition);
+    return grid[x][y].isSame(condition);
   }
 
   public void setMover(MoverTyp mover) {
@@ -308,10 +308,10 @@ public class World implements ITileBasedMap, AbstractModel {
     if (!autoPathfinding) {
       pathfinding.getDebugInfo().setDebugMode(true);
 
-      AMotionState fromStep = mover.getStartState();
+      IMotionState fromStep = mover.getStartState();
       Immutable3dPoint fromPoint = new Immutable3dPoint(start);
 
-      AMotionState toStep = mover.getEndState();
+      IMotionState toStep = mover.getEndState();
       Immutable3dPoint toPoint = new Immutable3dPoint(end);
 
       pathfinding.getDebugInfo().restartPathfinding(mover.getMover(), fromStep, fromPoint, toStep, toPoint);

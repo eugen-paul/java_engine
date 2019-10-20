@@ -3,7 +3,7 @@ package org.eugenpaul.javaengine.core.world.entity.sample;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eugenpaul.javaengine.core.world.entity.AMotionState;
+import org.eugenpaul.javaengine.core.world.entity.IMotionState;
 import org.eugenpaul.javaengine.core.world.entity.AMover;
 import org.eugenpaul.javaengine.core.world.entity.CollisionPoint;
 import org.eugenpaul.javaengine.core.world.entity.Step;
@@ -17,10 +17,10 @@ import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
  * @author Eugen Paul
  *
  */
-public class Simple2dMover extends AMover {
+public class Simple2dMover implements AMover {
 
   /** all possible steps */
-  private List<Step> possibleSteps = new ArrayList<Step>();
+  private List<Step> possibleSteps = new ArrayList<>();
 
   private ICollisionCondition stdCondition = null;
 
@@ -62,7 +62,7 @@ public class Simple2dMover extends AMover {
 
   private Step createStep(int x, int y) {
     List<Immutable3dPoint> movingWay = new ArrayList<>();
-    AMotionState lastPoint = new SimpleMotionState();
+    IMotionState lastPoint = new SimpleMotionState();
     long cost = 10L;
 
     if (x != 0 && y != 0) {
@@ -85,12 +85,11 @@ public class Simple2dMover extends AMover {
     CollisionPoint cPointEnd = new CollisionPoint(new Immutable3dPoint(x, y, 0), stdCondition);
     collisionList.add(cPointEnd);
 
-    Step responseWay = new Step(movingWay, lastPoint, lastPoint, collisionList, cost);
-    return responseWay;
+    return new Step(movingWay, lastPoint, lastPoint, collisionList, cost);
   }
 
   @Override
-  public List<Step> getNextSteps(AMotionState state) {
+  public List<Step> getNextSteps(IMotionState state) {
     return possibleSteps;
   }
 

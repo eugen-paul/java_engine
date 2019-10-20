@@ -15,15 +15,18 @@ import de.lessvoid.nifty.controls.CheckBox;
 import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
 import de.lessvoid.nifty.controls.DropDown;
 import de.lessvoid.nifty.controls.DropDownSelectionChangedEvent;
-import de.lessvoid.nifty.controls.FocusGainedEvent;
-import de.lessvoid.nifty.controls.FocusLostEvent;
 import de.lessvoid.nifty.controls.TextField;
-import de.lessvoid.nifty.controls.TextFieldChangedEvent;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
+/**
+ * GUI
+ * 
+ * @author Eugen Paul
+ *
+ */
 public class GuiController implements ScreenController, AbstractViewPanel {
 
   private final MainApplication app;
@@ -82,26 +85,26 @@ public class GuiController implements ScreenController, AbstractViewPanel {
     }
     dropDownAlgoElem.selectItemByIndex(0);
 
-    autoSearchElem = (CheckBox) screen.findNiftyControl("autoSearchCheckBox", CheckBox.class);
+    autoSearchElem = screen.findNiftyControl("autoSearchCheckBox", CheckBox.class);
     autoSearchElem.setChecked(true);
 
-    stepBtn = (Button) screen.findNiftyControl("doStepButton", Button.class);
+    stepBtn = screen.findNiftyControl("doStepButton", Button.class);
     stepBtn.setEnabled(false);
     stepBtnState = false;
 
-    startBtn = (Button) screen.findNiftyControl("doStartButton", Button.class);
+    startBtn = screen.findNiftyControl("doStartButton", Button.class);
     startBtn.setEnabled(false);
     startBtnState = false;
 
-    stopBtn = (Button) screen.findNiftyControl("doStopButton", Button.class);
+    stopBtn = screen.findNiftyControl("doStopButton", Button.class);
     stopBtn.setEnabled(false);
     stopBtnState = false;
 
-    resetBtn = (Button) screen.findNiftyControl("doRestetButton", Button.class);
+    resetBtn = screen.findNiftyControl("doRestetButton", Button.class);
     resetBtn.setEnabled(false);
     resetBtnState = false;
 
-    TextField msProFrameField = (TextField) screen.findNiftyControl("msProStepFeld", TextField.class);
+    TextField msProFrameField = screen.findNiftyControl("msProStepFeld", TextField.class);
     msProFrameField.getElement().setIgnoreKeyboardEvents(false);
 
     debugText = nifty.getCurrentScreen().findElementById("debugText");
@@ -145,10 +148,6 @@ public class GuiController implements ScreenController, AbstractViewPanel {
   @Override
   public void onEndScreen() {
 //    System.out.println("onEndScreen");
-  }
-
-  public void clickTester() {
-    System.out.println("clickTester");
   }
 
   public void startButtonClick() {
@@ -209,39 +208,16 @@ public class GuiController implements ScreenController, AbstractViewPanel {
     controller.setAutoPathfinding(checked);
 
     if (checked) {
-//      stepBtn.setEnabled(false);
-//      startBtn.setEnabled(false);
-//      stopBtn.setEnabled(false);
-//      resetBtn.setEnabled(false);
       stepBtnState = false;
       startBtnState = false;
       stopBtnState = false;
       resetBtnState = false;
     } else {
-//      stepBtn.setEnabled(true);
-//      startBtn.setEnabled(true);
-//      stopBtn.setEnabled(true);
-//      resetBtn.setEnabled(true);
       stepBtnState = true;
       startBtnState = true;
       stopBtnState = true;
       resetBtnState = true;
     }
-  }
-
-  @NiftyEventSubscriber(id = "msProStepFeld")
-  public void ms(String id, TextFieldChangedEvent event) {
-//    System.out.println("id: " + id);
-//    System.out.println(" -currentText : " + event.getText());
-//    app.setAutoPathfinding(event.isChecked());
-  }
-
-  @NiftyEventSubscriber(id = "msProStepFeld")
-  public void msGetFocus(String id, FocusGainedEvent event) {
-  }
-
-  @NiftyEventSubscriber(id = "msProStepFeld")
-  public void msLostFocus(String id, FocusLostEvent event) {
   }
 
   public void doStepButtonClick() {
@@ -275,18 +251,15 @@ public class GuiController implements ScreenController, AbstractViewPanel {
       if (!autoSearchElem.isChecked()) {
         Boolean runnung = (Boolean) evt.getNewValue();
         if (runnung.booleanValue()) {
-//          spnMsProStep.setEnabled(false);
-//          startBtn.setEnabled(false);
           startBtnState = false;
-//          stopBtn.setEnabled(true);
           stopBtnState = true;
         } else {
-//          spnMsProStep.setEnabled(true);
-//          startBtn.setEnabled(true);
           startBtnState = true;
-//          stopBtn.setEnabled(false);
           stopBtnState = false;
         }
+      } else {
+        startBtnState = false;
+        stopBtnState = false;
       }
     }
   }

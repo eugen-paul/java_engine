@@ -1,4 +1,4 @@
-package org.eugenpaul.javaengine.core.multithreading.scheduler;
+package org.eugenpaul.javaengine.core.scheduler.job;
 
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
@@ -82,8 +82,7 @@ class JobThread implements Runnable {
   private long timeToNextJob() {
     long timeNow = System.nanoTime();
     long startTime = cont.timeOfNextJob();
-    long timeToStart = startTime - timeNow;
-    return timeToStart;
+    return startTime - timeNow;
   }
 
   /**
@@ -100,6 +99,7 @@ class JobThread implements Runnable {
 //        e.printStackTrace();
         System.out.println("Interrupt JobExecuter");
         stopped = true;
+        Thread.currentThread().interrupt();
         return null;
       } finally {
         lock.unlock();

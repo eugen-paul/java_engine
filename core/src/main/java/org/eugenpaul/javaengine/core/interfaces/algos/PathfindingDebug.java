@@ -3,12 +3,13 @@ package org.eugenpaul.javaengine.core.interfaces.algos;
 import java.util.List;
 
 import org.eugenpaul.javaengine.core.data.statistics.InfoPathfinding;
-import org.eugenpaul.javaengine.core.world.entity.AMotionState;
+import org.eugenpaul.javaengine.core.world.entity.IMotionState;
 import org.eugenpaul.javaengine.core.world.entity.AMover;
 import org.eugenpaul.javaengine.core.world.entity.Step;
 import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
 
 /**
+ * Debug interface for path finding to do path finding step to step.
  * 
  * @author Eugen Paul
  *
@@ -34,7 +35,7 @@ public interface PathfindingDebug {
    * @param toPoint
    * @return
    */
-  public boolean restartPathfinding(AMover mover, AMotionState from, Immutable3dPoint fromPoint, AMotionState to, Immutable3dPoint toPoint);
+  public boolean restartPathfinding(AMover mover, IMotionState from, Immutable3dPoint fromPoint, IMotionState to, Immutable3dPoint toPoint);
 
   /**
    * Do one Pathfinding step.
@@ -58,5 +59,5 @@ public interface PathfindingDebug {
    * @return
    */
   public InfoPathfinding getCurrentPathfindingInfo();
-  
+
 }

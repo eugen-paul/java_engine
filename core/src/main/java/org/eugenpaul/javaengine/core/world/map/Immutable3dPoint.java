@@ -7,6 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 /**
+ * Immutable point in 3D.
+ * 
  * @author Eugen Paul
  *
  */
@@ -46,7 +48,7 @@ public class Immutable3dPoint {
   public Immutable3dPoint minus(Immutable3dPoint point) {
     return new Immutable3dPoint(x - point.getX(), y - point.getY(), z - point.getZ());
   }
-  
+
   public Immutable3dPoint add(Immutable3dPoint point) {
     return new Immutable3dPoint(x + point.getX(), y + point.getY(), z + point.getZ());
   }

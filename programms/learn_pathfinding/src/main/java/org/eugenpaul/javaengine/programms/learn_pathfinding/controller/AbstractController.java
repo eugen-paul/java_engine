@@ -8,6 +8,12 @@ import org.eugenpaul.javaengine.programms.learn_pathfinding.model.World;
 import org.eugenpaul.javaengine.programms.learn_pathfinding.model.WorldElements;
 import org.eugenpaul.javaengine.programms.learn_pathfinding.view.AbstractViewPanel;
 
+/**
+ * Controller for MCV.
+ * 
+ * @author Eugen Paul
+ *
+ */
 public abstract class AbstractController implements PropertyChangeListener {
 
   private ArrayList<AbstractViewPanel> registeredViews;
@@ -15,13 +21,21 @@ public abstract class AbstractController implements PropertyChangeListener {
   protected World world;
 //  private ArrayList<AbstractModel> registeredModels;
 
+  /**
+   * set world (model).
+   * 
+   * @param world
+   */
   public void setWorld(World world) {
     this.world = world;
     world.addPropertyChangeListener(this);
   }
-  
+
+  /**
+   * C*tor
+   */
   public AbstractController() {
-    registeredViews = new ArrayList<AbstractViewPanel>();
+    registeredViews = new ArrayList<>();
 //    registeredModels = new ArrayList<AbstractModel>();
   }
 
@@ -35,17 +49,27 @@ public abstract class AbstractController implements PropertyChangeListener {
 //    model.removePropertyChangeListener(this);
 //  }
 
+  /**
+   * add/register view to controller.
+   * 
+   * @param view
+   */
   public void addView(AbstractViewPanel view) {
     registeredViews.add(view);
   }
 
+  /**
+   * remove vier from controller.
+   * 
+   * @param view
+   */
   public void removeView(AbstractViewPanel view) {
     registeredViews.remove(view);
   }
 
-  // Use this to observe property changes from registered models
-  // and propagate them on to all the views.
-
+  /**
+   * Use this to observe property changes from registered models and propagate them on to all the views.
+   */
   public void propertyChange(PropertyChangeEvent evt) {
 
     for (AbstractViewPanel view : registeredViews) {

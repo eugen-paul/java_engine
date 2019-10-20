@@ -17,7 +17,8 @@ public class SimpleSortedList<E extends Comparable<E>> extends LinkedList<E> {
 
   @Override
   public boolean add(E e) {
-    return sortedInsert(e);
+    sortedInsert(e);
+    return true;
   }
 
   @Override
@@ -61,8 +62,7 @@ public class SimpleSortedList<E extends Comparable<E>> extends LinkedList<E> {
     return null;
   }
 
-  private boolean sortedInsert(E element) {
-    boolean added = false;
+  private void sortedInsert(E element) {
     ListIterator<E> iterator = this.listIterator();
 
     while (iterator.hasNext()) {
@@ -72,14 +72,11 @@ public class SimpleSortedList<E extends Comparable<E>> extends LinkedList<E> {
           iterator.previous();
         }
         iterator.add(element);
-        return true;
+        return;
       }
     }
 
-    if (!added) {
-      super.addLast(element);
-    }
-    return true;
+    super.addLast(element);
   }
 
 }

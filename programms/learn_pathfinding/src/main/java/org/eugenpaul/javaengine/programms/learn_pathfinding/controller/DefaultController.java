@@ -1,12 +1,18 @@
 package org.eugenpaul.javaengine.programms.learn_pathfinding.controller;
 
-import org.eugenpaul.javaengine.core.multithreading.scheduler.JobSchedulerThreaded;
+import org.eugenpaul.javaengine.core.scheduler.job.JobSchedulerThreaded;
 import org.eugenpaul.javaengine.programms.learn_pathfinding.model.MoverTyp;
 import org.eugenpaul.javaengine.programms.learn_pathfinding.model.PathfinderJob;
 import org.eugenpaul.javaengine.programms.learn_pathfinding.model.PathfindingAlgo;
 import org.eugenpaul.javaengine.programms.learn_pathfinding.model.WorldElements;
 import org.eugenpaul.javaengine.programms.learn_pathfinding.view.MapElements;
 
+/**
+ * Controller for path finding.
+ * 
+ * @author Eugen Paul
+ *
+ */
 public class DefaultController extends AbstractController {
 
   public static final String ELEMENT_MAP = "MAP";
@@ -15,11 +21,21 @@ public class DefaultController extends AbstractController {
 
   private JobSchedulerThreaded scheduler;
 
+  /**
+   * C*tor
+   */
   public DefaultController() {
     super();
     scheduler = new JobSchedulerThreaded();
   }
 
+  /**
+   * Set point on the map.
+   * 
+   * @param x
+   * @param y
+   * @param value
+   */
   public void setPointOnMap(int x, int y, MapElements value) {
     switch (value) {
     case START:
@@ -43,28 +59,55 @@ public class DefaultController extends AbstractController {
 
   }
 
+  /**
+   * set mover type on the map.
+   * 
+   * @param mover
+   */
   public void setMover(MoverTyp mover) {
     world.setMover(mover);
   }
 
+  /**
+   * set path finding algorithm.
+   * 
+   * @param algo
+   */
   public void setPathfindingAlgo(PathfindingAlgo algo) {
     world.setPathfindingAlgo(algo);
   }
 
+  /**
+   * set auto path finding on/off.
+   * 
+   * @param autoPathfinding - true path finding will start automatically after each change on the map.<br>
+   *                        false - to start path finding the functions step or start path finding should be called.
+   */
   public void setAutoPathfinding(boolean autoPathfinding) {
     world.setAutoPathfinding(autoPathfinding);
     scheduler.removeJob(PathfinderJob.NAME);
     scheduler.stopScheduler();
   }
 
+  /**
+   * do one step of path finding if auto path finding is off.
+   */
   public void doPathfindingStep() {
     world.doPathfindingStep();
   }
 
+  /**
+   * reset path finding if auto path finding is off.
+   */
   public void resetPathfinding() {
     world.resetPathfinding();
   }
 
+  /**
+   * start path finding if auto path finding is off.
+   * 
+   * @param millisProStep - sleep time between the path finding steps.
+   */
   public void startPathfinding(int millisProStep) {
     PathfinderJob pathfinderJob = new PathfinderJob(world);
 
@@ -73,6 +116,9 @@ public class DefaultController extends AbstractController {
     scheduler.startScheduler();
   }
 
+  /**
+   * stop path finding if auto path finding is off and started.
+   */
   public void stopPathfinding() {
     scheduler.removeJob(PathfinderJob.NAME);
     scheduler.stopScheduler();

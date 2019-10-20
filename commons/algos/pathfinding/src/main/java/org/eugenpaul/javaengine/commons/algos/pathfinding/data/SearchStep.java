@@ -1,13 +1,14 @@
 package org.eugenpaul.javaengine.commons.algos.pathfinding.data;
 
-import org.eugenpaul.javaengine.core.world.entity.AMotionState;
+import org.eugenpaul.javaengine.core.world.entity.IMotionState;
 import org.eugenpaul.javaengine.core.world.entity.Step;
 
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * State of the Node
+ * Search-Step of path finding. Each Search-Step contain a current/last position on the map, the full cost of path finding (from start to current position), the last step of the
+ * way and the last state.
  * 
  * @author Eugen Paul
  *
@@ -18,10 +19,10 @@ public class SearchStep implements Comparable<SearchStep> {
   private long stepscost = 0;
 
   @Setter
-  /** current cost of pathfinding (steps + heuristic) */
+  /** current cost of path finding (steps + heuristic) */
   private long heuristicscost = 0;
   /** current Motion step */
-  private AMotionState state = null;
+  private IMotionState state = null;
   /** Parent step */
   private Step stepFrom = null;
   /** x-Position of the current Position on the Map */
@@ -45,7 +46,7 @@ public class SearchStep implements Comparable<SearchStep> {
    * @param y         - y cord
    * @param z         - z cord
    */
-  public SearchStep(long stepscost, AMotionState state, Step stepFrom, int x, int y, int z) {
+  public SearchStep(long stepscost, IMotionState state, Step stepFrom, int x, int y, int z) {
     this(stepscost, stepscost, state, stepFrom, x, y, z);
   }
 
@@ -55,12 +56,12 @@ public class SearchStep implements Comparable<SearchStep> {
    * @param stepscost      - total cost of the way
    * @param heuristicscost - total cost of the way + heuristic cost
    * @param state          - last state of the way
-   * @param stepFrom       - source step
+   * @param stepFrom       - last step
    * @param x              - x cord
    * @param y              - y cord
    * @param z              - z cord
    */
-  public SearchStep(long stepscost, long heuristicscost, AMotionState state, Step stepFrom, int x, int y, int z) {
+  public SearchStep(long stepscost, long heuristicscost, IMotionState state, Step stepFrom, int x, int y, int z) {
     this.stepscost = stepscost;
     this.heuristicscost = heuristicscost;
     this.state = state;
@@ -71,14 +72,14 @@ public class SearchStep implements Comparable<SearchStep> {
   }
 
   /**
-   * Set the step as removed. Cann't be undone.
+   * Set the step as removed. The step should not be checked. Cann't be undone.
    */
   public void setRemoved() {
     removed = true;
   }
-  
+
   /**
-   * Set the step as checked. Cann't be undone.
+   * Set the step as checked. Don't check it again. Cann't be undone.
    */
   public void setChecked() {
     checked = true;
@@ -92,6 +93,16 @@ public class SearchStep implements Comparable<SearchStep> {
       return -1;
     }
     return 0;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return super.equals(obj);
+  }
+
+  @Override
+  public int hashCode() {
+    return super.hashCode();
   }
 
 }

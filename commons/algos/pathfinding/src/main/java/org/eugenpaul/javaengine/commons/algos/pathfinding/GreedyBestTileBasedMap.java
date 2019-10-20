@@ -1,7 +1,9 @@
 package org.eugenpaul.javaengine.commons.algos.pathfinding;
 
+import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
+
 /**
- * Implementarion of Lee algorithm in TileBasedMap.
+ * Implementation of GreedyBest algorithm in TileBasedMap.
  * 
  * @author Eugen Paul
  *
@@ -9,9 +11,9 @@ package org.eugenpaul.javaengine.commons.algos.pathfinding;
 public class GreedyBestTileBasedMap extends AWave {
 
   @Override
-  protected long getHeuristicsFullCost(long wayCost, int xFrom, int yFrom, int zFrom, int xTo, int yTo, int zTo, int simpleStepCost) {
+  protected long getHeuristicsCost(long wayCost, Immutable3dPoint a, Immutable3dPoint b, int simpleStepCost) {
     // Manhattan distance on a square grid
-    return (Math.abs(xTo - xFrom) + Math.abs(yTo - yFrom) + Math.abs(zTo - zFrom)) * simpleStepCost;
+    return (Math.abs(a.getX() - b.getX()) + Math.abs(a.getY() - b.getY()) + Math.abs(a.getZ() - b.getZ())) * (long) simpleStepCost;
   }
 
 }

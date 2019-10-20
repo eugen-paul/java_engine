@@ -13,21 +13,21 @@ public enum Sample3dCollisionCondition implements ICollisionCondition {
   @Getter
   private int value;
 
-  private static final Sample3dCollisionCondition[] somethingList = (Sample3dCollisionCondition[]) Arrays.asList(Sample3dCollisionCondition.values()).toArray();
+  private static final Sample3dCollisionCondition[] somethingList = Arrays.asList(Sample3dCollisionCondition.values()).toArray(new Sample3dCollisionCondition[0]);
 
   private Sample3dCollisionCondition(int value) {
     this.value = value;
   }
 
   public static Sample3dCollisionCondition fromInt(int value) {
-    if (value < 0 || value >= somethingList.length) {
+    if (value < 0 || somethingList.length <= value) {
       return null;
     }
     return somethingList[value];
   }
 
   @Override
-  public boolean equals(ICollisionCondition a) {
+  public boolean isSame(ICollisionCondition a) {
     if (!(a instanceof Sample3dCollisionCondition)) {
       return false;
     }

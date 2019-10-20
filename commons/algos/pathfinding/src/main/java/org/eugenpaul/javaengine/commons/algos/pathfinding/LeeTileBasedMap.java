@@ -1,7 +1,9 @@
 package org.eugenpaul.javaengine.commons.algos.pathfinding;
 
+import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
+
 /**
- * Implementarion of Lee algorithm in TileBasedMap.
+ * Implementation of Lee (wave propagation) algorithm in TileBasedMap.
  * 
  * @author Eugen Paul
  *
@@ -9,7 +11,7 @@ package org.eugenpaul.javaengine.commons.algos.pathfinding;
 public class LeeTileBasedMap extends AWave {
 
   @Override
-  protected long getHeuristicsFullCost(long wayCost, int xFrom, int yFrom, int zFrom, int xTo, int yTo, int zTo, int simpleStepCost) {
+  protected long getHeuristicsCost(long wayCost, Immutable3dPoint a, Immutable3dPoint b, int simpleStepCost) {
     return wayCost;
   }
 

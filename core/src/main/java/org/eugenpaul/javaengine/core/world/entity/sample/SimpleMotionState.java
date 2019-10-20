@@ -1,6 +1,6 @@
 package org.eugenpaul.javaengine.core.world.entity.sample;
 
-import org.eugenpaul.javaengine.core.world.entity.AMotionState;
+import org.eugenpaul.javaengine.core.world.entity.IMotionState;
 
 import lombok.NoArgsConstructor;
 
@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
  *
  */
 @NoArgsConstructor
-public class SimpleMotionState extends AMotionState {
+public class SimpleMotionState implements IMotionState {
   @Override
-  public boolean checkState(AMotionState testRules) {
+  public boolean isSame(IMotionState testRules) {
     return true;
   }
 }

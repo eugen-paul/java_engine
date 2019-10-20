@@ -12,21 +12,21 @@ public enum Sample2dCollisionCondition implements ICollisionCondition {
   @Getter
   private int value;
 
-  private static final Sample2dCollisionCondition[] somethingList = (Sample2dCollisionCondition[]) Arrays.asList(Sample2dCollisionCondition.values()).toArray();
+  private static final Sample2dCollisionCondition[] somethingList = Arrays.asList(Sample2dCollisionCondition.values()).toArray(new Sample2dCollisionCondition[0]);
 
   private Sample2dCollisionCondition(int value) {
     this.value = value;
   }
 
   public static Sample2dCollisionCondition fromInt(int value) {
-    if (value < 0 || value >= somethingList.length) {
+    if (value < 0 || somethingList.length <= value) {
       return null;
     }
     return somethingList[value];
   }
 
   @Override
-  public boolean equals(ICollisionCondition a) {
+  public boolean isSame(ICollisionCondition a) {
     if (!(a instanceof Sample2dCollisionCondition)) {
       return false;
     }

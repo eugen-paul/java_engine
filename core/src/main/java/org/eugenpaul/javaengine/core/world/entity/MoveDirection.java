@@ -3,7 +3,7 @@ package org.eugenpaul.javaengine.core.world.entity;
 import lombok.Getter;
 
 /**
- * Possible Move Direction from/to neighbor Nodes
+ * Possible move direction from/to neighbor nodes.
  * 
  * @author Eugen Paul
  *
@@ -21,7 +21,7 @@ public enum MoveDirection {
   private int value;
 
   private static final MoveDirection[] somethingList = MoveDirection.values();
-  
+
   private MoveDirection(int value) {
     this.value = value;
   }

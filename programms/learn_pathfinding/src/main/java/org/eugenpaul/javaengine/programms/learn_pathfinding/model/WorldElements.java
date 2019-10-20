@@ -7,6 +7,12 @@ import org.eugenpaul.javaengine.core.world.entity.collision.ICollisionCondition;
 
 import lombok.Getter;
 
+/**
+ * Elements on the map.
+ * 
+ * @author Eugen Paul
+ *
+ */
 public enum WorldElements implements ICollisionCondition {
 
   NOPE(0, false, 1.0), //
@@ -20,10 +26,13 @@ public enum WorldElements implements ICollisionCondition {
   private int value;
   @Getter
   private double speedModifier;
+  @Getter
+  private boolean collision;
 
   private WorldElements(int value, boolean isCollision, double speedModifier) {
     this.value = value;
     this.speedModifier = speedModifier;
+    this.collision = isCollision;
   }
 
   public static WorldElements fromInt(int value) {
@@ -34,7 +43,7 @@ public enum WorldElements implements ICollisionCondition {
   }
 
   @Override
-  public boolean equals(ICollisionCondition a) {
+  public boolean isSame(ICollisionCondition a) {
     if (!(a instanceof WorldElements)) {
       return false;
     }

@@ -3,18 +3,19 @@ package org.eugenpaul.javaengine.core.world.entity;
 import java.util.List;
 
 /**
+ * The possibility of an entity to moving in the world.
  * 
  * @author Eugen Paul
  *
  */
-public abstract class AMover extends Entity {
+public interface AMover extends Entity {
   /**
    * Get next possible Steps from state
    * 
    * @param state
    * @return
    */
-  public abstract List<Step> getNextSteps(AMotionState state);
+  public abstract List<Step> getNextSteps(IMotionState state);
 
   /**
    * Heuristics cost of simple step.
@@ -23,25 +24,4 @@ public abstract class AMover extends Entity {
    */
   public abstract int getSimpleStepHeuristicsCost();
 
-//  /**
-//   * Get next possible Steps from state and position on the map
-//   * 
-//   * @param state
-//   * @param position
-//   * @param map
-//   * @return
-//   */
-//  public abstract List<Step> getNextSteps(AMotionState state, Immutable3dPoint position, TileBasedMap map);
-//
-//  /**
-//   * Get next possible Steps from state and position on the map
-//   * 
-//   * @param state
-//   * @param x
-//   * @param y
-//   * @param z
-//   * @param map
-//   * @return
-//   */
-//  public abstract List<Step> getNextSteps(AMotionState state, int x, int y, int z, TileBasedMap map);
 }

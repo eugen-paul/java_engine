@@ -10,9 +10,9 @@ import java.lang.reflect.InvocationTargetException;
 import lombok.Getter;
 
 public enum PathfindingAlgo {
-  Lee(0, LeeTileBasedMap.class),
-  GreedyBest(1, GreedyBestTileBasedMap.class),
-  AStar(1, AStarTileBasedMap.class);
+  LEE(0, LeeTileBasedMap.class), //
+  GREEDYBEST(1, GreedyBestTileBasedMap.class), //
+  ASTAR(1, AStarTileBasedMap.class);
 
   @Getter
   private int value;

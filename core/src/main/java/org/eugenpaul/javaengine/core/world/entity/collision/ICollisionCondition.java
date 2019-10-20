@@ -8,5 +8,5 @@ package org.eugenpaul.javaengine.core.world.entity.collision;
  */
 public interface ICollisionCondition {
 
-  public boolean equals(ICollisionCondition a);
+  public boolean isSame(ICollisionCondition a);
 }

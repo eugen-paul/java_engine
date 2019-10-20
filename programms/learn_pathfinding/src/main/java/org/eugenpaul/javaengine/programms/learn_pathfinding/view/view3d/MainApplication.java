@@ -42,13 +42,8 @@ public class MainApplication extends SimpleApplication implements AbstractViewPa
   private int mapSizeZ;
 
   private Node collisionNode;
-  private Node nonCollisionNode;
 
-  private Quad ground = null;
-
-  private WorldItem worldItems[] = null;
-
-  private Nifty nifty;
+  private WorldItem[] worldItems = null;
 
   protected MapElements clickElement = null;
 
@@ -70,7 +65,7 @@ public class MainApplication extends SimpleApplication implements AbstractViewPa
     worldItems = new WorldItem[x * y];
 
     AppSettings settings = new AppSettings(true);
-    settings.setWidth(1280);
+    settings.setWidth(900);
     settings.setHeight(720);
 //    settings.setResizable(true);
 
@@ -89,7 +84,7 @@ public class MainApplication extends SimpleApplication implements AbstractViewPa
     flyCam.setEnabled(false);
 
     collisionNode = new Node("CollisionNode");
-    nonCollisionNode = new Node("NonCollisionNode");
+    Node nonCollisionNode = new Node("NonCollisionNode");
 
     rootNode.attachChild(collisionNode);
     rootNode.attachChild(nonCollisionNode);
@@ -98,7 +93,10 @@ public class MainApplication extends SimpleApplication implements AbstractViewPa
     initElems();
 
     // look down
-    getCamera().setLocation(new Vector3f(mapSizeX / 2 - 10, 70, mapSizeZ / 2));
+    int camPosX = mapSizeX / 2 - 5;
+    int camPosZ = mapSizeZ / 2;
+
+    getCamera().setLocation(new Vector3f(camPosX, 70, camPosZ));
     Quaternion lookDown = new Quaternion();
     lookDown.fromAngleNormalAxis(FastMath.HALF_PI, Vector3f.UNIT_X);
     getCamera().setRotation(getCamera().getRotation().multLocal(lookDown));
@@ -106,7 +104,7 @@ public class MainApplication extends SimpleApplication implements AbstractViewPa
     initKeys();
 
     NiftyJmeDisplay niftyDisplay = NiftyJmeDisplay.newNiftyJmeDisplay(assetManager, inputManager, audioRenderer, guiViewPort);
-    nifty = niftyDisplay.getNifty();
+    Nifty nifty = niftyDisplay.getNifty();
     try {
       nifty.validateXml("GUI/Nifty/HelloJme.xml");
     } catch (Exception e) {
@@ -135,7 +133,7 @@ public class MainApplication extends SimpleApplication implements AbstractViewPa
     printMapData();
     guiController.update();
   }
-  
+
   @Override
   public void destroy() {
     super.destroy();
@@ -144,17 +142,17 @@ public class MainApplication extends SimpleApplication implements AbstractViewPa
 
   private void initElems() {
     for (int nr = 0; nr < worldItems.length; nr++) {
-      float x = nr / mapSizeX + 0.5f;
-      float z = nr % mapSizeX + 0.5f;
+      int x = nr / mapSizeX;
+      int z = nr % mapSizeX;
 
-      worldItems[nr] = new WorldItem(rootNode, new Vector3f(x, 0.3f, z), assetManager);
+      worldItems[nr] = new WorldItem(rootNode, new Vector3f(x + 0.5f, 0.3f, z + 0.5f), assetManager);
 
       worldItems[nr].setElement(MapElements.NOPE);
     }
   }
 
   private void initGround() {
-    ground = new Quad(50, 50);
+    Quad ground = new Quad(50, 50);
     Geometry geom = new Geometry("ground", ground);
     Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
     mat.setColor("Color", ColorRGBA.Gray);
@@ -172,19 +170,7 @@ public class MainApplication extends SimpleApplication implements AbstractViewPa
   private void initKeys() {
     inputManager.addMapping("pick", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
     inputManager.addListener(analogListener, "pick");
-//
-//    inputManager.addMapping("pick2", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
-//    inputManager.addListener(actionListener, "pick2");
   }
-
-//  private ActionListener actionListener = new ActionListener() {
-//    @Override
-//    public void onAction(String name, boolean isPressed, float tpf) {
-//      if (isPressed && name.equals("pick2")) {
-//        System.out.println("click!!!   " + System.nanoTime());
-//      }
-//    }
-//  };
 
   private AnalogListener analogListener = new AnalogListener() {
     @Override
@@ -193,46 +179,38 @@ public class MainApplication extends SimpleApplication implements AbstractViewPa
         mouseClickAction();
       }
     }
-  };
 
-  private void mouseClickAction() {
-    if (null != clickElement) {
-      Vector2f coord = getMouseTarget();
-      if (null != coord) {
-        controller.setPointOnMap((int) coord.getX(), (int) coord.getY(), clickElement);
+    private void mouseClickAction() {
+      if (null != clickElement) {
+        Vector2f coord = getMouseTarget();
+        if (null != coord) {
+          controller.setPointOnMap((int) coord.getX(), (int) coord.getY(), clickElement);
+        }
       }
     }
-  }
 
-  private Vector2f getMouseTarget() {
-    // Reset results list.
-    CollisionResults results = new CollisionResults();
-    // Convert screen click to 3d position
-    Vector2f click2d = inputManager.getCursorPosition();
-    Vector3f click3d = cam.getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
-    Vector3f dir = cam.getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d).normalizeLocal();
-    // Aim the ray from the clicked spot forwards.
-    Ray ray = new Ray(click3d, dir);
-    // Collect intersections between ray and all nodes in results list.
-    collisionNode.collideWith(ray, results);
+    private Vector2f getMouseTarget() {
+      // Reset results list.
+      CollisionResults results = new CollisionResults();
+      // Convert screen click to 3d position
+      Vector2f click2d = inputManager.getCursorPosition();
+      Vector3f click3d = cam.getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
+      Vector3f dir = cam.getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d).normalizeLocal();
+      // Aim the ray from the clicked spot forwards.
+      Ray ray = new Ray(click3d, dir);
+      // Collect intersections between ray and all nodes in results list.
+      collisionNode.collideWith(ray, results);
 
-    CollisionResult coll = results.getClosestCollision();
-    if (null == coll) {
-      return null;
-    } else {
-      Vector3f pt = coll.getContactPoint();
-      return new Vector2f((int) pt.getX(), (int) pt.getZ());
+      CollisionResult coll = results.getClosestCollision();
+      if (null == coll) {
+        return null;
+      } else {
+        Vector3f pt = coll.getContactPoint();
+        return new Vector2f((int) pt.getX(), (int) pt.getZ());
+      }
+
     }
-
-    // (Print the results so we see what is going on:)
-//    for (int i = 0; i < results.size(); i++) {
-//      // (For each “hit”, we know distance, impact point, geometry.)
-//      float dist = results.getCollision(i).getDistance();
-//      Vector3f pt = results.getCollision(i).getContactPoint();
-//      String target = results.getCollision(i).getGeometry().getName();
-//      System.out.println("Selection #" + i + ": " + target + " at " + pt + ", " + dist + " WU away.");
-//    }
-  }
+  };
 
   @Override
   public void modelPropertyChange(PropertyChangeEvent evt) {
@@ -242,7 +220,7 @@ public class MainApplication extends SimpleApplication implements AbstractViewPa
     }
   }
 
-  private void updateMapData(int grid[][]) {
+  private void updateMapData(int[][] grid) {
     for (int x = 0; x < grid.length; x++) {
       for (int y = 0; y < grid[x].length; y++) {
         worldItems[x * mapSizeX + y].setElement(MapElements.fromInt(grid[x][y]));

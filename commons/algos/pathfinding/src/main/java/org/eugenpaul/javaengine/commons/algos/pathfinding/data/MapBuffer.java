@@ -2,7 +2,7 @@ package org.eugenpaul.javaengine.commons.algos.pathfinding.data;
 
 import java.util.Arrays;
 
-import org.eugenpaul.javaengine.core.world.entity.AMotionState;
+import org.eugenpaul.javaengine.core.world.entity.IMotionState;
 import org.eugenpaul.javaengine.core.world.entity.Step;
 import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
 
@@ -16,7 +16,7 @@ import lombok.Getter;
  */
 public class MapBuffer {
 
-  Node[] nodes = null;
+  private Node[] nodes = null;
 
   @Getter
   int sizeX;
@@ -49,10 +49,24 @@ public class MapBuffer {
     return (sizeY * x) + (sizeZ * y) + z;
   }
 
+  /**
+   * get a node on Position (x,y,z)
+   * 
+   * @param x x Position of the node
+   * @param y y Position of the node
+   * @param z z Position of the node
+   * @return node
+   */
   public Node getNode(int x, int y, int z) {
     return nodes[coordToElem(x, y, z)];
   }
 
+  /**
+   * get a node on Position point
+   * 
+   * @param point position of the node
+   * @return node
+   */
   public Node getNode(Immutable3dPoint point) {
     return getNode(point.getX(), point.getY(), point.getZ());
   }
@@ -71,12 +85,25 @@ public class MapBuffer {
     return checkNode;
   }
 
-  public SearchStep addStepToNode(AMotionState state, long cost, Step stepFrom, int x, int y, int z) {
-    Node checkNode = getOrCreateNode(x, y, z);
+  /**
+   * Add a state to the node on position "position" if the new state is new or better
+   * 
+   * @param state    end state of the step
+   * @param cost     full cost of the way
+   * @param stepFrom start position of last step
+   * @param position position of the last step / way
+   * @return not null - new state - new state is better or not in the node<br>
+   *         null - new state is worse
+   */
+  public SearchStep addStepToNode(IMotionState state, long cost, Step stepFrom, Immutable3dPoint position) {
+    Node checkNode = getOrCreateNode(position.getX(), position.getY(), position.getZ());
 
-    return checkNode.chechAndAddNode(state, cost, stepFrom, x, y, z);
+    return checkNode.chechAndAddNode(state, cost, stepFrom, position.getX(), position.getY(), position.getZ());
   }
 
+  /**
+   * remove all Node
+   */
   public void reset() {
     Arrays.fill(nodes, null);
   }

@@ -45,7 +45,7 @@
 				</control>
 			</panel>
 			<panel height="5%" width="50%" valign="bottom" childLayout="vertical">
-				<text id="debugText" style="nifty-label" width="75%" backgroundColor="#fc0f" text="debu Text" color="#000f" textHAlign="left" textVAlign="center" />
+				<text id="debugText" style="nifty-label" width="75%" backgroundColor="#fc0f" text="debug Text" color="#000f" textHAlign="left" textVAlign="center" />
 			</panel>
 		</layer>
 	</screen>

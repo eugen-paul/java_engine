@@ -8,9 +8,15 @@ import org.eugenpaul.javaengine.core.world.entity.collision.Sample2dCollisionCon
 import org.eugenpaul.javaengine.core.world.map.ITileBasedMap;
 import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
 
+/**
+ * Implementation of 2D-TileBasedMap.
+ * 
+ * @author Eugen Paul
+ *
+ */
 public class SimpleTileBased2dMap implements ITileBasedMap {
 
-  protected ICollisionCondition grid[][];
+  protected ICollisionCondition[][] grid;
   protected int sizeX;
   protected int sizeY;
 
@@ -28,12 +34,15 @@ public class SimpleTileBased2dMap implements ITileBasedMap {
     return new Immutable3dPoint(sizeX, sizeY, 1);
   }
 
-  public void setPoint(int x, int y, int z, Sample2dCollisionCondition value) {
+  /**
+   * Set point on map
+   * 
+   * @param x
+   * @param y
+   * @param value
+   */
+  public void setPoint(int x, int y, Sample2dCollisionCondition value) {
     grid[x][y] = value;
-  }
-
-  public void setPoint(int x, int y, int z, int value) {
-    grid[x][y] = Sample2dCollisionCondition.fromInt(value);
   }
 
   @Override

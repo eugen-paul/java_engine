@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * Immutable Point to check collision by the pathfinding.
+ * Immutable Point to check collision by the path finding.
  * 
  * @author Eugen Paul
  *

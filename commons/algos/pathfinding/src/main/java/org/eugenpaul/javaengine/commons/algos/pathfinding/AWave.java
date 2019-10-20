@@ -1,5 +1,6 @@
 package org.eugenpaul.javaengine.commons.algos.pathfinding;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -12,15 +13,15 @@ import org.eugenpaul.javaengine.core.data.statistics.InfoPathfinding;
 import org.eugenpaul.javaengine.core.data.statistics.InfoPathfindingMapStatus;
 import org.eugenpaul.javaengine.core.interfaces.algos.Pathfinding;
 import org.eugenpaul.javaengine.core.interfaces.algos.PathfindingDebug;
-import org.eugenpaul.javaengine.core.world.entity.AMotionState;
+import org.eugenpaul.javaengine.core.world.entity.IMotionState;
 import org.eugenpaul.javaengine.core.world.entity.AMover;
 import org.eugenpaul.javaengine.core.world.entity.Step;
 import org.eugenpaul.javaengine.core.world.map.ITileBasedMap;
 import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
-import org.eugenpaul.javaengine.core.world.moving.AMoving;
+import org.eugenpaul.javaengine.core.world.moving.IMoving;
 
 /**
- * Implementarion of Lee algorithm in TileBasedMap
+ * Abstract Implementation of wave-based algorithm in TileBasedMap.
  * 
  * @author Eugen Paul
  *
@@ -34,18 +35,18 @@ public abstract class AWave implements Pathfinding, PathfindingDebug {
 
   private SimpleSortedList<SearchStep> nodesToCheck = null;
 
-  private AMoving movingTester = null;
+  private IMoving movingTester = null;
 
   private boolean debugMode = false;
 
   private InfoPathfinding debugData = null;
 
   private AMover debugMover = null;
-  private AMotionState debugTo = null;
+  private IMotionState debugTo = null;
   private Immutable3dPoint debugToPoint = null;
 
   @Override
-  public boolean init(ITileBasedMap map, AMoving movingTester) {
+  public boolean init(ITileBasedMap map, IMoving movingTester) {
     Immutable3dPoint mapSize = map.getPathfinderSize();
     nodes = new MapBuffer(mapSize.getX(), mapSize.getY(), mapSize.getZ());
 
@@ -57,10 +58,10 @@ public abstract class AWave implements Pathfinding, PathfindingDebug {
   }
 
   @Override
-  public List<Step> getPath(AMover mover, AMotionState from, Immutable3dPoint fromPoint, AMotionState to, Immutable3dPoint toPoint) {
+  public List<Step> getPath(AMover mover, IMotionState from, Immutable3dPoint fromPoint, IMotionState to, Immutable3dPoint toPoint) {
 
     // add Startpoint to nodesToCheck
-    push(from, 0, null, fromPoint.getX(), fromPoint.getY(), fromPoint.getZ(), toPoint, mover.getSimpleStepHeuristicsCost());
+    push(from, 0, null, fromPoint, toPoint, mover.getSimpleStepHeuristicsCost());
 
     SearchStep checkNode = pop();
     while (checkNode != null) {
@@ -73,31 +74,16 @@ public abstract class AWave implements Pathfinding, PathfindingDebug {
     return getPath(to, toPoint);
   }
 
-  protected long getHeuristicsCost(long wayCost, Immutable3dPoint a, Immutable3dPoint b, int simpleStepCost) {
-    return getHeuristicsFullCost(wayCost, a.getX(), a.getY(), a.getZ(), b.getX(), b.getY(), b.getZ(), simpleStepCost);
-  }
-
-  protected long getHeuristicsCost(long wayCost, int x, int y, int z, Immutable3dPoint b, int simpleStepCost) {
-    return getHeuristicsFullCost(wayCost, x, y, z, b.getX(), b.getY(), b.getZ(), simpleStepCost);
-  }
-
-  protected long getHeuristicsCost(long wayCost, Immutable3dPoint a, int x, int y, int z, int simpleStepCost) {
-    return getHeuristicsFullCost(wayCost, a.getX(), a.getY(), a.getZ(), x, y, z, simpleStepCost);
-  }
-
   /**
+   * Compute heuristic cost
    * 
    * @param wayCost
-   * @param xFrom
-   * @param yFrom
-   * @param zFrom
-   * @param xTo
-   * @param yTo
-   * @param zTo
+   * @param a
+   * @param b
    * @param simpleStepCost
    * @return
    */
-  protected abstract long getHeuristicsFullCost(long wayCost, int xFrom, int yFrom, int zFrom, int xTo, int yTo, int zTo, int simpleStepCost);
+  protected abstract long getHeuristicsCost(long wayCost, Immutable3dPoint a, Immutable3dPoint b, int simpleStepCost);
 
   /**
    * One step of Pathfinding.
@@ -105,13 +91,13 @@ public abstract class AWave implements Pathfinding, PathfindingDebug {
    * @return true - found<br>
    *         false - try more
    */
-  private boolean oneStep(SearchStep checkNode, AMover mover, AMotionState to, Immutable3dPoint toPoint) {
+  private boolean oneStep(SearchStep checkNode, AMover mover, IMotionState to, Immutable3dPoint toPoint) {
     checkNode.setChecked();
 
     if (checkNode.getX() == toPoint.getX()//
         && checkNode.getY() == toPoint.getY()//
         && checkNode.getZ() == toPoint.getZ()//
-        && checkNode.getState().checkState(to)//
+        && checkNode.getState().isSame(to)//
     ) {
       return true;
     }
@@ -128,16 +114,14 @@ public abstract class AWave implements Pathfinding, PathfindingDebug {
           step.getLastState(), //
           checkNode.getStepscost() + step.getCost(), //
           step, //
-          xLastPonit, //
-          yLastPonit, //
-          zLastPonit, //
+          new Immutable3dPoint(xLastPonit, yLastPonit, zLastPonit), //
           toPoint, //
           mover.getSimpleStepHeuristicsCost() //
       )) {
         if ((xLastPonit == toPoint.getX())//
             && (yLastPonit == toPoint.getY())//
             && (zLastPonit == toPoint.getZ())//
-            && step.getLastState().checkState(to)//
+            && step.getLastState().isSame(to)//
         ) {
           return true;
         }
@@ -162,13 +146,13 @@ public abstract class AWave implements Pathfinding, PathfindingDebug {
    * 
    * @return
    */
-  private List<Step> getPath(AMotionState to, Immutable3dPoint toPoint) {
+  private List<Step> getPath(IMotionState to, Immutable3dPoint toPoint) {
     LinkedList<Step> response = new LinkedList<>();
 
     Immutable3dPoint pointToTest = toPoint;
     Node lastNode = nodes.getNode(toPoint);
     if (null == lastNode) {
-      return null;
+      return Collections.emptyList();
     }
 
     SearchStep lastSearchStep = nodes.getNode(toPoint).getSearchStep(to);
@@ -187,17 +171,17 @@ public abstract class AWave implements Pathfinding, PathfindingDebug {
   }
 
   /**
-   * push step to check List, if the step a good.
+   * check and push step to check List, if the step a good.
    * 
    * @param step
    * @param debugFromPoint
    * @return true - added<br>
    *         false - old node
    */
-  private boolean push(AMotionState state, long cost, Step stepFrom, int x, int y, int z, Immutable3dPoint toPoint, int heuristicsStepCost) {
-    SearchStep step = nodes.addStepToNode(state, cost, stepFrom, x, y, z);
+  private boolean push(IMotionState state, long cost, Step stepFrom, Immutable3dPoint fromPoint, Immutable3dPoint toPoint, int heuristicsStepCost) {
+    SearchStep step = nodes.addStepToNode(state, cost, stepFrom, fromPoint);
     if (step != null) {
-      step.setHeuristicscost(getHeuristicsCost(step.getStepscost(), x, y, z, toPoint, heuristicsStepCost));
+      step.setHeuristicscost(getHeuristicsCost(step.getStepscost(), fromPoint, toPoint, heuristicsStepCost));
       nodesToCheck.add(step);
       return true;
     }
@@ -237,7 +221,8 @@ public abstract class AWave implements Pathfinding, PathfindingDebug {
   }
 
   @Override
-  public boolean restartPathfinding(AMover mover, AMotionState from, Immutable3dPoint fromPoint, AMotionState to, Immutable3dPoint toPoint) {
+  public boolean restartPathfinding(AMover mover, IMotionState from, Immutable3dPoint fromPoint, IMotionState to, Immutable3dPoint toPoint) {
+    // reset all old data
     if (debugMode && null != debugData) {
       debugData.resetInfo();
     }
@@ -249,8 +234,8 @@ public abstract class AWave implements Pathfinding, PathfindingDebug {
     this.debugTo = to;
     this.debugToPoint = toPoint;
 
-    // add Startpoint to nodesToCheck
-    push(from, 0, null, fromPoint.getX(), fromPoint.getY(), fromPoint.getZ(), toPoint, mover.getSimpleStepHeuristicsCost());
+    // add a new start point to nodesToCheck
+    push(from, 0, null, fromPoint, toPoint, mover.getSimpleStepHeuristicsCost());
 
     return false;
   }

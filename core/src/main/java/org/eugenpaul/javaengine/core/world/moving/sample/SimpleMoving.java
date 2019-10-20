@@ -7,14 +7,14 @@ import org.eugenpaul.javaengine.core.world.entity.CollisionPoint;
 import org.eugenpaul.javaengine.core.world.entity.Step;
 import org.eugenpaul.javaengine.core.world.map.ITileBasedMap;
 import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
-import org.eugenpaul.javaengine.core.world.moving.AMoving;
+import org.eugenpaul.javaengine.core.world.moving.IMoving;
 
 /**
  * 
  * @author Eugen Paul
  *
  */
-public class SimpleMoving extends AMoving {
+public class SimpleMoving implements IMoving {
 
   @Override
   public List<Step> checkPossibleSteps(List<Step> steps, Immutable3dPoint position, ITileBasedMap map) {
@@ -38,9 +38,9 @@ public class SimpleMoving extends AMoving {
 
     List<CollisionPoint> collisionBox = step.getCollisionBox();
 
-    int checkX = x;
-    int checkY = y;
-    int checkZ = z;
+    int checkX;
+    int checkY;
+    int checkZ;
 
     for (CollisionPoint pointToTest : collisionBox) {
       Immutable3dPoint coord = pointToTest.getPoint();

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eugenpaul.javaengine.core.world.entity.AMotionState;
+import org.eugenpaul.javaengine.core.world.entity.IMotionState;
 import org.eugenpaul.javaengine.core.world.entity.AMover;
 import org.eugenpaul.javaengine.core.world.entity.CollisionPoint;
 import org.eugenpaul.javaengine.core.world.entity.MoveDirection;
@@ -17,7 +17,7 @@ import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
  * @author Eugen Paul
  *
  */
-public class SimpleVector2dMover extends AMover {
+public class SimpleVector2dMover implements AMover {
 
   /** all possible steps */
   private List<Step> possibleStepsXPositiv = new ArrayList<>();
@@ -52,8 +52,8 @@ public class SimpleVector2dMover extends AMover {
   }
 
   private Step createForwardStep(MoveDirection startDirection) {
-    AMotionState firstPoint;
-    AMotionState lastPoint;
+    IMotionState firstPoint;
+    IMotionState lastPoint;
 
     int x = 0;
     int y = 0;
@@ -95,16 +95,15 @@ public class SimpleVector2dMover extends AMover {
     collisionList.add(cPointEnd);
 
     long cost = 10L;
-    Step responseWay = new Step(movingWay, firstPoint, lastPoint, collisionList, cost);
-    return responseWay;
+    return new Step(movingWay, firstPoint, lastPoint, collisionList, cost);
   }
 
   private Step createLeftStep(MoveDirection startDirection) {
     int x = 0;
     int y = 0;
 
-    AMotionState firstPoint;
-    AMotionState lastPoint;
+    IMotionState firstPoint;
+    IMotionState lastPoint;
 
     Immutable3dPoint stepMiddle;
     CollisionPoint cPointMiddle;
@@ -162,16 +161,15 @@ public class SimpleVector2dMover extends AMover {
     collisionList.add(cPointEnd);
 
     long cost = 15L;
-    Step responseWay = new Step(movingWay, firstPoint, lastPoint, collisionList, cost);
-    return responseWay;
+    return new Step(movingWay, firstPoint, lastPoint, collisionList, cost);
   }
 
   private Step createRightStep(MoveDirection startDirection) {
     int x = 0;
     int y = 0;
 
-    AMotionState firstPoint;
-    AMotionState lastPoint;
+    IMotionState firstPoint;
+    IMotionState lastPoint;
 
     Immutable3dPoint stepMiddle;
     CollisionPoint cPointMiddle;
@@ -229,12 +227,11 @@ public class SimpleVector2dMover extends AMover {
     collisionList.add(cPointEnd);
 
     long cost = 15L;
-    Step responseWay = new Step(movingWay, firstPoint, lastPoint, collisionList, cost);
-    return responseWay;
+    return new Step(movingWay, firstPoint, lastPoint, collisionList, cost);
   }
 
   @Override
-  public List<Step> getNextSteps(AMotionState state) {
+  public List<Step> getNextSteps(IMotionState state) {
     if (!(state instanceof SimpleVectorMotionState)) {
       throw new IllegalArgumentException();
     }

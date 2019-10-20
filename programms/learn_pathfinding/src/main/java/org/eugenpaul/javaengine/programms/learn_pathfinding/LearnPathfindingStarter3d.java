@@ -4,6 +4,12 @@ import org.eugenpaul.javaengine.programms.learn_pathfinding.controller.DefaultCo
 import org.eugenpaul.javaengine.programms.learn_pathfinding.model.World;
 import org.eugenpaul.javaengine.programms.learn_pathfinding.view.view3d.MainApplication;
 
+/**
+ * 3D program to check path finding.
+ * 
+ * @author Eugen Paul
+ *
+ */
 public class LearnPathfindingStarter3d {
 
   public static void main(String[] args) {

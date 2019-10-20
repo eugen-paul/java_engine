@@ -3,7 +3,7 @@ package org.eugenpaul.javaengine.programms.learn_pathfinding.model;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-import org.eugenpaul.javaengine.core.multithreading.scheduler.Job;
+import org.eugenpaul.javaengine.core.scheduler.job.Job;
 import org.eugenpaul.javaengine.programms.learn_pathfinding.controller.DefaultController;
 
 public class PathfinderJob implements Job, AbstractModel {

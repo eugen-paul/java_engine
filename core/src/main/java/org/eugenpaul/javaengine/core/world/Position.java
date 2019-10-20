@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
+ * Deprecated?
  * 
  * @author Eugen Paul
  *
@@ -11,7 +12,7 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class Position {
-  private double x;
-  private double y;
-  private double z;
+  private float x;
+  private float y;
+  private float z;
 }

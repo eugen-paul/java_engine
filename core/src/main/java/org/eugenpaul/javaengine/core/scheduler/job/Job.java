@@ -1,7 +1,7 @@
-package org.eugenpaul.javaengine.core.multithreading.scheduler;
+package org.eugenpaul.javaengine.core.scheduler.job;
 
 /**
- * Job, that cann be added to Jobscheduler
+ * Job, that can be added to {@link JobSchedulerThreaded}}
  * 
  * @author Eugen Paul
  *
@@ -22,7 +22,7 @@ public interface Job {
   public boolean execute();
 
   /**
-   * The function will be called if the job will not be called any more oder after last execute-call (execute return false).
+   * The function will be called if the job will not be called any more, after last execute-call (execute return false) or if the JobScheduler will be stoped.
    */
   public void stop();
 

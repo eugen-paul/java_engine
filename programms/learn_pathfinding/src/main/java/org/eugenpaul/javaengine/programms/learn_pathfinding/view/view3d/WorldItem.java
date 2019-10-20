@@ -11,17 +11,21 @@ import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 
 /**
+ * Nodes on map
  * 
  * @author Eugen Paul
  *
  */
 public class WorldItem {
+  private static final String COLOR_NAME = "Color";
+
   private Node rootNode = null;
   private MapElements currentElement = MapElements.NOPE;
   private Geometry geom;
   private boolean edited = true;
 
   /**
+   * C'tor
    * 
    * @param rootNode
    * @param position
@@ -34,7 +38,7 @@ public class WorldItem {
     geom = new Geometry("Box", box1);
     geom.setLocalTranslation(position);
     Material mat1 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-    mat1.setColor("Color", ColorRGBA.Gray);
+    mat1.setColor(COLOR_NAME, ColorRGBA.Gray);
     geom.setMaterial(mat1);
   }
 
@@ -52,31 +56,31 @@ public class WorldItem {
     case NOPE:
       break;
     case END:
-      geom.getMaterial().setColor("Color", ColorRGBA.Blue);
+      geom.getMaterial().setColor(COLOR_NAME, ColorRGBA.Blue);
       break;
     case MUD:
-      geom.getMaterial().setColor("Color", ColorRGBA.DarkGray);
+      geom.getMaterial().setColor(COLOR_NAME, ColorRGBA.DarkGray);
       break;
     case WALL:
-      geom.getMaterial().setColor("Color", ColorRGBA.Black);
+      geom.getMaterial().setColor(COLOR_NAME, ColorRGBA.Black);
       break;
     case START:
-      geom.getMaterial().setColor("Color", ColorRGBA.Green);
+      geom.getMaterial().setColor(COLOR_NAME, ColorRGBA.Green);
       break;
     case WAY:
-      geom.getMaterial().setColor("Color", ColorRGBA.Cyan);
+      geom.getMaterial().setColor(COLOR_NAME, ColorRGBA.Cyan);
       break;
     case STEP_OLD:
-      geom.getMaterial().setColor("Color", ColorRGBA.LightGray);
+      geom.getMaterial().setColor(COLOR_NAME, ColorRGBA.LightGray);
       break;
     case STEP_NEW:
-      geom.getMaterial().setColor("Color", ColorRGBA.Orange);
+      geom.getMaterial().setColor(COLOR_NAME, ColorRGBA.Orange);
       break;
     case STEP_CHECKPOINT:
-      geom.getMaterial().setColor("Color", ColorRGBA.Red);
+      geom.getMaterial().setColor(COLOR_NAME, ColorRGBA.Red);
       break;
     case STEP_TO_CHECK:
-      geom.getMaterial().setColor("Color", ColorRGBA.Gray);
+      geom.getMaterial().setColor(COLOR_NAME, ColorRGBA.Gray);
       break;
     }
 

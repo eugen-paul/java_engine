@@ -11,22 +11,18 @@ import org.eugenpaul.javaengine.programms.learn_pathfinding.view.MapElements;
 public class PanelMap extends JPanel {
 
   /**
-   * 
+   * Panel to print map
    */
   private static final long serialVersionUID = 3518239133683265379L;
 
-  private int grid[][] = null;
+  private int[][] grid = null;
 
-  public void setGrid(int grid[][]) {
+  public void setGrid(int[][] grid) {
     this.grid = grid;
 
-    SwingUtilities.invokeLater(new Runnable() {
-
-      @Override
-      public void run() {
-        revalidate();
-        repaint();
-      }
+    SwingUtilities.invokeLater(() -> {
+      revalidate();
+      repaint();
     });
   }
 

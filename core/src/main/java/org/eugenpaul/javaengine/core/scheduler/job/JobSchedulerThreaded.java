@@ -1,7 +1,7 @@
-package org.eugenpaul.javaengine.core.multithreading.scheduler;
+package org.eugenpaul.javaengine.core.scheduler.job;
 
 /**
- * Class to start jobs one or more time. The Job will be started in job-thread thread.
+ * Class to start jobs one or more time. The Jobs will be started in job-thread thread.
  * 
  * @author Eugen Paul
  *
@@ -52,7 +52,8 @@ public class JobSchedulerThreaded {
   }
 
   /**
-   * Stop scheduler and wait for scheduler to die.
+   * Stop scheduler and wait for scheduler to die. <br>
+   * Check "Interrupt" state after function call.
    */
   public void stopAndWaitScheduler() {
     synchronized (this) {
@@ -65,13 +66,15 @@ public class JobSchedulerThreaded {
         jobThread.join();
       } catch (InterruptedException e) {
         e.printStackTrace();
+        Thread.currentThread().interrupt();
       }
       jobThread = null;
     }
   }
 
   /**
-   * Stop scheduler and wait at most millis milliseconds for scheduler to die.
+   * Stop scheduler and wait at most millis milliseconds for scheduler to die. <br>
+   * Check "Interrupt" state after function call.
    * 
    * @param millis
    */
@@ -86,6 +89,7 @@ public class JobSchedulerThreaded {
         jobThread.join(millis);
       } catch (InterruptedException e) {
         e.printStackTrace();
+        Thread.currentThread().interrupt();
       }
       jobThread = null;
     }
@@ -94,11 +98,11 @@ public class JobSchedulerThreaded {
   /**
    * Add Job to Scheduler
    * 
-   * @param job
-   * @param timeToSart        - System.nanoTime + startToStart(ns)
+   * @param job               - job to be executed
+   * @param timeToSart        - System.nanoTime + timeToStart(ns)
    * @param timeBetweenStarts - time between starts (ns)
    * @return true - OK<br>
-   *         false - job.name not unique
+   *         false - name of the job is not unique
    */
   public boolean addJob(Job job, long timeOfFirstStart, long timeBetweenStarts) {
     if (!cont.addJob(job, timeOfFirstStart, timeBetweenStarts)) {
@@ -114,7 +118,7 @@ public class JobSchedulerThreaded {
   /**
    * Add Job to Scheduler
    * 
-   * @param newJob
+   * @param newJob - job to be executed
    * @return true - OK<br>
    *         false - name of the job is not unique
    */

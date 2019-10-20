@@ -1,4 +1,4 @@
-package org.eugenpaul.javaengine.core.multithreading.scheduler;
+package org.eugenpaul.javaengine.core.scheduler.job;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -8,7 +8,7 @@ import java.util.NoSuchElementException;
 import org.eugenpaul.javaengine.core.data.SimpleSortedList;
 
 /**
- * Synchronized Job Container.
+ * Synchronized Job Container to save Jobs
  * 
  * @author Eugen Paul
  *

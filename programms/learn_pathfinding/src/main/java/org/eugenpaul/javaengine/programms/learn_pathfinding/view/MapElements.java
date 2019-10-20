@@ -5,8 +5,13 @@ import java.util.List;
 
 import lombok.Getter;
 
+/**
+ * Elements on the map
+ * 
+ * @author Eugen Paul
+ *
+ */
 public enum MapElements {
-
   NOPE(0), //
   WALL(1), //
   MUD(2), //

@@ -1,6 +1,6 @@
 package org.eugenpaul.javaengine.core.world.entity.sample;
 
-import org.eugenpaul.javaengine.core.world.entity.AMotionState;
+import org.eugenpaul.javaengine.core.world.entity.IMotionState;
 import org.eugenpaul.javaengine.core.world.entity.MoveDirection;
 
 import lombok.AllArgsConstructor;
@@ -13,13 +13,13 @@ import lombok.Getter;
  *
  */
 @AllArgsConstructor
-public class SimpleVectorMotionState extends AMotionState {
+public class SimpleVectorMotionState implements IMotionState {
 
   @Getter
   private MoveDirection moveDirection;
 
   @Override
-  public boolean checkState(AMotionState testRules) {
+  public boolean isSame(IMotionState testRules) {
     if (!(testRules instanceof SimpleVectorMotionState)) {
       throw new IllegalArgumentException();
     }

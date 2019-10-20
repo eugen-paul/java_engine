@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Pathfinding stepsinfo.
+ * Info of current state of path finding.
  * 
  * @author Eugen Paul
  *
@@ -22,21 +22,23 @@ public class InfoPathfinding {
   @Setter
   private long stepsCount = 0;
 
-  private InfoPathfindingMapStatus stepsmap[][][] = null;
+  private InfoPathfindingMapStatus[][][] stepsmap = null;
 
   /**
+   * C'tor
    * 
-   * @param mapSize
+   * @param mapSize size of map
    */
   public InfoPathfinding(Immutable3dPoint mapSize) {
     this(mapSize.getX(), mapSize.getY(), mapSize.getZ());
   }
 
   /**
+   * C'tor
    * 
-   * @param x
-   * @param y
-   * @param z
+   * @param x - x size of map
+   * @param y - y size of map
+   * @param z - z size of map
    */
   public InfoPathfinding(int x, int y, int z) {
     stepDescription = "";
@@ -46,7 +48,7 @@ public class InfoPathfinding {
   }
 
   /**
-   * 
+   * reset all info
    */
   public void resetInfo() {
     if (stepsmap == null) {
@@ -66,14 +68,16 @@ public class InfoPathfinding {
   }
 
   /**
+   * get info of current state
    * 
    * @return
    */
-  public InfoPathfindingMapStatus[][][] getStepsmap() {
+  public InfoPathfindingMapStatus[][][] getInfoMap() {
     return stepsmap;
   }
 
   /**
+   * set info
    * 
    * @param coordinates
    * @param info
@@ -83,6 +87,7 @@ public class InfoPathfinding {
   }
 
   /**
+   * set info
    * 
    * @param x
    * @param y
@@ -109,7 +114,7 @@ public class InfoPathfinding {
   }
 
   /**
-   * All new_steps and check_point will be set to old_step
+   * All info point with states "new_steps" and "check_point" will be set to old_step.
    */
   public void nextStep() {
     int xSize = stepsmap.length;
@@ -134,6 +139,9 @@ public class InfoPathfinding {
     }
   }
 
+  /**
+   * Increase number of path finding steps
+   */
   public void incStepsCount() {
     stepsCount++;
   }
