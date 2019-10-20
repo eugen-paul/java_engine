@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import org.eugenpaul.javaengine.core.clock.Clock;
 import org.eugenpaul.javaengine.core.data.SimpleSortedList;
 
 /**
@@ -17,18 +18,22 @@ class JobContainer {
   private Map<String, JobElement> jobs;
 
   private SimpleSortedList<JobElement> timeLine;
+  
+  private final Clock clock;
 
-  public JobContainer() {
+  public JobContainer(Clock clock) {
     jobs = new HashMap<>();
 
     timeLine = new SimpleSortedList<>();
+    
+    this.clock = clock;
   }
 
   /**
-   * Add Job to Scheduler
+   * Add Job to Scheduler. Use Clock time to set timeOfFirstStart.
    * 
    * @param job
-   * @param timeToSart        - System.nanoTime + startToStart(ns)
+   * @param timeToSart        - startToStart(ns)
    * @param timeBetweenStarts - time between starts (ns)
    * @return true - OK<br>
    *         false - job.name not unique
@@ -102,7 +107,7 @@ class JobContainer {
    *         null - nothing must be executed jet
    */
   public synchronized JobElement getJobToExecute() {
-    long timeNow = System.nanoTime();
+    long timeNow = clock.time();
 
     JobElement nextElement;
     try {

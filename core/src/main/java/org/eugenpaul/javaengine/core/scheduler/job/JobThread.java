@@ -3,6 +3,8 @@ package org.eugenpaul.javaengine.core.scheduler.job;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.eugenpaul.javaengine.core.clock.Clock;
+
 /**
  * Thread to run all Jobs.
  * 
@@ -18,17 +20,20 @@ class JobThread implements Runnable {
   private JobContainer cont;
 
   private boolean stopped = false;
+  
+  private final Clock clock;
 
   /**
    * C'tor
    * 
    * @param scheduler
    */
-  public JobThread(JobContainer cont) {
+  public JobThread(JobContainer cont, Clock clock) {
     lock = new ReentrantLock();
     condition = lock.newCondition();
 
     this.cont = cont;
+    this.clock = clock;
   }
 
   /**
@@ -80,7 +85,7 @@ class JobThread implements Runnable {
    * @return
    */
   private long timeToNextJob() {
-    long timeNow = System.nanoTime();
+    long timeNow = clock.time();
     long startTime = cont.timeOfNextJob();
     return startTime - timeNow;
   }

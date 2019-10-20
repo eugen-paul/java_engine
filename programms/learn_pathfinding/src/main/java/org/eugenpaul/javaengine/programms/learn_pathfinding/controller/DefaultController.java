@@ -1,5 +1,6 @@
 package org.eugenpaul.javaengine.programms.learn_pathfinding.controller;
 
+import org.eugenpaul.javaengine.core.clock.Clock;
 import org.eugenpaul.javaengine.core.scheduler.job.JobSchedulerThreaded;
 import org.eugenpaul.javaengine.programms.learn_pathfinding.model.MoverTyp;
 import org.eugenpaul.javaengine.programms.learn_pathfinding.model.PathfinderJob;
@@ -20,13 +21,16 @@ public class DefaultController extends AbstractController {
   public static final String ELEMENT_PATHWAYFINDING_RUNNING = "PATHWAYFINDING_RUNNING";
 
   private JobSchedulerThreaded scheduler;
+  
+  private final Clock clock;
 
   /**
    * C*tor
    */
-  public DefaultController() {
+  public DefaultController(Clock clock) {
     super();
-    scheduler = new JobSchedulerThreaded();
+    scheduler = new JobSchedulerThreaded(clock);
+    this.clock = clock;
   }
 
   /**
@@ -112,7 +116,7 @@ public class DefaultController extends AbstractController {
     PathfinderJob pathfinderJob = new PathfinderJob(world);
 
     pathfinderJob.addPropertyChangeListener(this);
-    scheduler.addJob(pathfinderJob, System.nanoTime(), millisProStep * 1_000_000L);
+    scheduler.addJob(pathfinderJob, clock.time(), millisProStep * 1_000_000L);
     scheduler.startScheduler();
   }
 

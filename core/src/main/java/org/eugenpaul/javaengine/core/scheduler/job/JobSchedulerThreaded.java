@@ -1,5 +1,7 @@
 package org.eugenpaul.javaengine.core.scheduler.job;
 
+import org.eugenpaul.javaengine.core.clock.Clock;
+
 /**
  * Class to start jobs one or more time. The Jobs will be started in job-thread thread.
  * 
@@ -11,12 +13,15 @@ public class JobSchedulerThreaded {
 
   private JobThread executer = null;
   private Thread jobThread = null;
+  
+  private final Clock clock;
 
   /**
    * C'tor
    */
-  public JobSchedulerThreaded() {
-    cont = new JobContainer();
+  public JobSchedulerThreaded(Clock clock) {
+    cont = new JobContainer(clock);
+    this.clock = clock;
   }
 
   /**
@@ -30,7 +35,7 @@ public class JobSchedulerThreaded {
       if (null != jobThread) {
         return false;
       }
-      executer = new JobThread(cont);
+      executer = new JobThread(cont, clock);
       jobThread = new Thread(executer);
     }
     jobThread.start();
@@ -96,10 +101,10 @@ public class JobSchedulerThreaded {
   }
 
   /**
-   * Add Job to Scheduler
+   * Add Job to Scheduler.
    * 
    * @param job               - job to be executed
-   * @param timeToSart        - System.nanoTime + timeToStart(ns)
+   * @param timeToSart        - timeToStart(ns) (Clock time)
    * @param timeBetweenStarts - time between starts (ns)
    * @return true - OK<br>
    *         false - name of the job is not unique
