@@ -51,6 +51,11 @@ public class SimpleTileBased2dMap implements ITileBasedMap {
   }
 
   @Override
+  public List<ICollisionCondition> getCollisionCondition(Immutable3dPoint position) {
+    return getCollisionCondition(position.getX(), position.getY(), position.getZ());
+  }
+
+  @Override
   public boolean isCollisionCondition(int x, int y, int z, ICollisionCondition condition) {
     return (condition == grid[x][y]);
   }

@@ -29,6 +29,14 @@ public interface ITileBasedMap {
   public List<ICollisionCondition> getCollisionCondition(int x, int y, int z);
 
   /**
+   * Get list of collisions in map.
+   * 
+   * @param position
+   * @return
+   */
+  public List<ICollisionCondition> getCollisionCondition(Immutable3dPoint position);
+
+  /**
    * Check, if the collision condition is at map point. <br>
    * Example: is on the location a wall? is on the location nothing? is on the location water?
    * 

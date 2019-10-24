@@ -102,7 +102,6 @@ public class MainFrame extends JFrame implements AbstractViewPanel {
                                         btnSetWall.setToolTipText("Set Wall");
                                         
                                             JButton btnSetPit = new JButton("Set Pit");
-                                            btnSetPit.setEnabled(false);
                                             btnSetPit.setToolTipText("Set Pit");
                                             
                                                 JButton btnClearPoint = new JButton("Clear Point");

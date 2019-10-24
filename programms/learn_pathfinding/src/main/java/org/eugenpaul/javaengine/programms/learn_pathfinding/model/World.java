@@ -21,6 +21,13 @@ import org.eugenpaul.javaengine.core.world.moving.sample.SimpleMoving;
 import org.eugenpaul.javaengine.programms.learn_pathfinding.controller.DefaultController;
 import org.eugenpaul.javaengine.programms.learn_pathfinding.view.MapElements;
 
+/**
+ * Model for MCV.<br>
+ * In this example all model functions are synchronized because there is are JobThread that calls are Model-Functions too.
+ * 
+ * @author Eugen Paul
+ *
+ */
 public class World implements ITileBasedMap, AbstractModel {
 
   private Immutable3dPoint start = null;
@@ -61,7 +68,7 @@ public class World implements ITileBasedMap, AbstractModel {
     pathfinding = PathfindingAlgo.LEE.getNewPathfinding();
   }
 
-  public WorldElements getPosition(int x, int y) {
+  public synchronized WorldElements getPosition(int x, int y) {
     return (WorldElements) grid[x][y];
   }
 
@@ -69,7 +76,7 @@ public class World implements ITileBasedMap, AbstractModel {
     return getPosition(point.getX(), point.getY());
   }
 
-  public boolean setPosition(int x, int y, WorldElements element) {
+  public synchronized boolean setPosition(int x, int y, WorldElements element) {
     grid[x][y] = element;
 
     reset();
@@ -155,7 +162,7 @@ public class World implements ITileBasedMap, AbstractModel {
     }
   }
 
-  public boolean setStart(int x, int y) {
+  public synchronized boolean setStart(int x, int y) {
     start = new Immutable3dPoint(x, y, 0);
 
     reset();
@@ -164,7 +171,7 @@ public class World implements ITileBasedMap, AbstractModel {
     return true;
   }
 
-  public boolean setEnd(int x, int y) {
+  public synchronized boolean setEnd(int x, int y) {
     end = new Immutable3dPoint(x, y, 0);
 
     reset();
@@ -196,7 +203,7 @@ public class World implements ITileBasedMap, AbstractModel {
       return Collections.emptyList();
     }
 
-    pathfinding.init(this, mapMoving);
+    pathfinding.init(this, mapMoving, true);
 
     IMotionState fromStep = mover.getStartState();
     Immutable3dPoint fromPoint = new Immutable3dPoint(start);
@@ -249,6 +256,11 @@ public class World implements ITileBasedMap, AbstractModel {
   }
 
   @Override
+  public List<ICollisionCondition> getCollisionCondition(Immutable3dPoint position) {
+    return getCollisionCondition(position.getX(), position.getY(), position.getZ());
+  }
+
+  @Override
   public boolean isCollisionCondition(int x, int y, int z, ICollisionCondition condition) {
     if (x < 0 || sizeX <= x) {
       return false;
@@ -262,30 +274,30 @@ public class World implements ITileBasedMap, AbstractModel {
     return grid[x][y].isSame(condition);
   }
 
-  public void setMover(MoverTyp mover) {
+  public synchronized void setMover(MoverTyp mover) {
     this.mover = mover;
     reset();
 
     propertyChangeSupport.firePropertyChange(DefaultController.ELEMENT_MAP, null, getMap());
   }
 
-  public void setPathfindingAlgo(PathfindingAlgo algo) {
+  public synchronized void setPathfindingAlgo(PathfindingAlgo algo) {
     pathfinding = algo.getNewPathfinding();
-    pathfinding.init(this, mapMoving);
+    pathfinding.init(this, mapMoving, true);
     reset();
 
     propertyChangeSupport.firePropertyChange(DefaultController.ELEMENT_MAP, null, getMap());
   }
 
-  public void setAutoPathfinding(boolean autoPathfinding) {
+  public synchronized void setAutoPathfinding(boolean autoPathfinding) {
     this.autoPathfinding = autoPathfinding;
-    pathfinding.init(this, mapMoving);
+    pathfinding.init(this, mapMoving, true);
     reset();
 
     propertyChangeSupport.firePropertyChange(DefaultController.ELEMENT_MAP, null, getMap());
   }
 
-  public boolean doPathfindingStep() {
+  public synchronized boolean doPathfindingStep() {
     if (!debugWayFound) {
       debugWayFound = pathfinding.getDebugInfo().doOneStep();
       propertyChangeSupport.firePropertyChange(DefaultController.ELEMENT_MAP, null, getMap());
@@ -296,7 +308,7 @@ public class World implements ITileBasedMap, AbstractModel {
     return debugWayFound;
   }
 
-  public void resetPathfinding() {
+  public synchronized void resetPathfinding() {
     reset();
 
     propertyChangeSupport.firePropertyChange(DefaultController.ELEMENT_MAP, null, getMap());

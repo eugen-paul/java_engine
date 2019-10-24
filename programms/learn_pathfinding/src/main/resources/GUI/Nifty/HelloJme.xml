@@ -16,6 +16,7 @@
 					<interact onClick="wallButtonClick()" />
 				</control>
 				<control name="button" label="set Pit" id="PitButton" align="center" valign="center" visibleToMouse="true" color="#000f">
+					<interact onClick="pitButtonClick()" />
 				</control>
 				<control name="button" label="clear Point" id="clearButton" align="center" valign="center" visibleToMouse="true" color="#000f">
 					<interact onClick="clearButtonClick()" />

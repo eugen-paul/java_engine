@@ -26,7 +26,8 @@ public interface PathfindingDebug {
   public boolean setDebugMode(boolean mode);
 
   /**
-   * Reset Pathfinding to start new search.
+   * Reset Pathfinding to start new search.<br>
+   * The function is not thread safe!
    * 
    * @param mover
    * @param from
@@ -38,7 +39,8 @@ public interface PathfindingDebug {
   public boolean restartPathfinding(AMover mover, IMotionState from, Immutable3dPoint fromPoint, IMotionState to, Immutable3dPoint toPoint);
 
   /**
-   * Do one Pathfinding step.
+   * Do one Pathfinding step.<br>
+   * The function is not thread safe!
    * 
    * @return false - more steps are possible.<br>
    *         true - end of pathfinding. Call {@link #getStepsResult()} to get Pathway

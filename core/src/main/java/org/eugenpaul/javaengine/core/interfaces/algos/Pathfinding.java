@@ -21,9 +21,10 @@ public interface Pathfinding {
    * 
    * @param map
    * @param movingTester
+   * @param doDynamicCost
    * @return
    */
-  public boolean init(ITileBasedMap map, IMoving movingTester);
+  public boolean init(ITileBasedMap map, IMoving movingTester, boolean doDynamicCost);
 
   /**
    * Find and get a Path

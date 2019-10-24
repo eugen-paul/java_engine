@@ -56,7 +56,7 @@ public class Node {
    * 
    * @param state    end state of the step
    * @param cost     full cost of the way
-   * @param stepFrom start position of last step
+   * @param stepFrom step to reach this position
    * @param x        end x-position of the last step / way
    * @param y        end y-position of the last step / way
    * @param z        end z-position of the last step / way
@@ -94,6 +94,7 @@ public class Node {
       // new State is better AND old step is not checked
       return step;
     } else {
+      step.setChecked();
       return null;
     }
 

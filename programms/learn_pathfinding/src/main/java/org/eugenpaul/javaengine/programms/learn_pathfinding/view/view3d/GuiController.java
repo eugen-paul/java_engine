@@ -65,11 +65,6 @@ public class GuiController implements ScreenController, AbstractViewPanel {
     if (null == screen) {
       return;
     }
-    Element element = screen.findElementById("PitButton");
-    if (null == element) {
-      return;
-    }
-    element.disable();
 
     @SuppressWarnings("unchecked")
     DropDown<MoverTyp> dropDownMoverElem = (DropDown<MoverTyp>) screen.findNiftyControl("moverSelector", DropDown.class);
@@ -160,6 +155,10 @@ public class GuiController implements ScreenController, AbstractViewPanel {
 
   public void wallButtonClick() {
     app.clickElement = MapElements.WALL;
+  }
+
+  public void pitButtonClick() {
+    app.clickElement = MapElements.MUD;
   }
 
   public void clearButtonClick() {

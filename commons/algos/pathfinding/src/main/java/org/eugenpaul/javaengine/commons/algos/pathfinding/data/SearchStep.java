@@ -23,7 +23,7 @@ public class SearchStep implements Comparable<SearchStep> {
   private long heuristicscost = 0;
   /** current Motion step */
   private IMotionState state = null;
-  /** Parent step */
+  /** step to reach this position */
   private Step stepFrom = null;
   /** x-Position of the current Position on the Map */
   int x;

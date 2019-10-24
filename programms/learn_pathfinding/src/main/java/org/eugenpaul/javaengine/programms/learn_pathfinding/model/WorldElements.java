@@ -17,7 +17,7 @@ public enum WorldElements implements ICollisionCondition {
 
   NOPE(0, false, 1.0), //
   WALL(1, true, 0), //
-  DIRT(2, false, 0.8)//
+  DIRT(2, false, 1.5)//
   ;
 
   private static final List<WorldElements> somethingList = Arrays.asList(WorldElements.values());
@@ -49,7 +49,16 @@ public enum WorldElements implements ICollisionCondition {
     }
 
     WorldElements testVar = (WorldElements) a;
-    return testVar == this;
+
+    switch (testVar) {
+    case NOPE:
+    case DIRT:
+      return (NOPE == this) || (DIRT == this);
+    case WALL:
+      return WALL == this;
+    }
+
+    return false;
   }
 
 }

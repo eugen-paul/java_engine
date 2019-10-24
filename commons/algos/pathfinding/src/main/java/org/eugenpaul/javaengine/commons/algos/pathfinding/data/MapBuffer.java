@@ -90,7 +90,7 @@ public class MapBuffer {
    * 
    * @param state    end state of the step
    * @param cost     full cost of the way
-   * @param stepFrom start position of last step
+   * @param stepFrom step to reach this position
    * @param position position of the last step / way
    * @return not null - new state - new state is better or not in the node<br>
    *         null - new state is worse
