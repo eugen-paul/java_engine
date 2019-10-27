@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * Motion State with direction.
+ * Motion State with direction. The two SimpleVectorMotionState are the same if the direction of both states are the same.
  * 
  * @author Eugen Paul
  *

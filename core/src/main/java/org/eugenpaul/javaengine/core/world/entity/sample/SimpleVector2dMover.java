@@ -13,6 +13,8 @@ import org.eugenpaul.javaengine.core.world.entity.collision.ICollisionCondition;
 import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
 
 /**
+ * Sample implementation of a vector mover. Each state of move has a direction (like a car, train, ...). He can not turn on the spot. To turn, he has to take a step forward and
+ * then side.
  * 
  * @author Eugen Paul
  *
@@ -28,6 +30,11 @@ public class SimpleVector2dMover implements AMover {
 
   private ICollisionCondition stdCondition = null;
 
+  /**
+   * C'tor
+   * 
+   * @param stdCondition - Condition for every step that needs to be fulfilled.
+   */
   public SimpleVector2dMover(ICollisionCondition stdCondition) {
     this.stdCondition = stdCondition;
     initSteps();

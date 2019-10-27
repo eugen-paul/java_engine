@@ -4,6 +4,12 @@ import java.util.Arrays;
 
 import lombok.Getter;
 
+/**
+ * Implementation of ICollisionCondition for simple map. Each node of the map can be {@code NOT} } or {@code BARRIER}}.
+ * 
+ * @author Eugen Paul
+ *
+ */
 public enum Sample2dCollisionCondition implements ICollisionCondition {
   NOT(0), // You can move through/on the object.
   BARRIER(1) // You cann't through/on it.

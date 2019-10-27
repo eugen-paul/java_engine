@@ -29,7 +29,7 @@ public class Simple2dMover implements AMover {
   /**
    * Move on diagonal (slim).
    * 
-   * @param stdCondition
+   * @param stdCondition - Condition for every step that needs to be fulfilled.
    */
   public Simple2dMover(ICollisionCondition stdCondition) {
     this(stdCondition, true);
@@ -37,7 +37,7 @@ public class Simple2dMover implements AMover {
 
   /**
    * 
-   * @param stdCondition
+   * @param stdCondition - Condition for every step that needs to be fulfilled.
    * @param slim         - false - for diagonal move need two free neighbor
    */
   public Simple2dMover(ICollisionCondition stdCondition, boolean slim) {
