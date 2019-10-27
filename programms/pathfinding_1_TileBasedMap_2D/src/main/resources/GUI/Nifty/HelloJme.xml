@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nifty>
+<nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+	<useStyles filename="nifty-default-styles.xml" />
+	<useControls filename="nifty-default-controls.xml" />
+	<screen id="start" controller="org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.view3d.GuiController">
+		<layer id="layer" backgroundColor="#0000" childLayout="horizontal">
+			<panel id="panel" height="90%" width="20%" align="center" valign="center" backgroundColor="#000f" childLayout="vertical" visibleToMouse="true">
+				<control name="button" label="set Start" id="StartButton" align="center" valign="center" visibleToMouse="true" color="#000f">
+					<interact onClick="startButtonClick()" />
+				</control>
+				<control name="button" label="set Stop" id="StopButton" align="center" valign="center" visibleToMouse="true" color="#000f">
+					<interact onClick="stopButtonClick()" />
+				</control>
+				<control name="button" label="set Wall" id="WallButton" align="center" valign="center" visibleToMouse="true" color="#000f">
+					<interact onClick="wallButtonClick()" />
+				</control>
+				<control name="button" label="set Pit" id="PitButton" align="center" valign="center" visibleToMouse="true" color="#000f">
+					<interact onClick="pitButtonClick()" />
+				</control>
+				<control name="button" label="clear Point" id="clearButton" align="center" valign="center" visibleToMouse="true" color="#000f">
+					<interact onClick="clearButtonClick()" />
+				</control>
+				<control name="dropDown" id="moverSelector" width="50%" align="center">
+				</control>
+				<control name="label" text="Pathfinding algorithm" align="center"></control>
+				<control name="dropDown" id="algoSelector" width="50%" align="center">
+				</control>
+				<panel childLayout="horizontal" width="50%" align="center">
+					<control name="label" text="Auto pathfinding"></control>
+					<control name="checkbox" id="autoSearchCheckBox"></control>
+				</panel>
+				<control name="button" label="do Step" id="doStepButton" align="center" valign="center" visibleToMouse="true" color="#000f">
+					<interact onClick="doStepButtonClick()" />
+				</control>
+				<control name="button" label="start Search" id="doStartButton" align="center" valign="center" visibleToMouse="true" color="#000f">
+					<interact onClick="doStartButtonClick()" />
+				</control>
+				<control name="button" label="stop Search" id="doStopButton" align="center" valign="center" visibleToMouse="true" color="#000f">
+					<interact onClick="doStopButtonClick()" />
+				</control>
+				<control name="label" text="Milliseconds per step"></control>
+				<control name="textfield" id="msProStepFeld" maxLength="20" width="50%" align="center"></control>
+				<control name="button" label="reset Search" id="doRestetButton" align="center" valign="center" visibleToMouse="true" color="#000f">
+					<interact onClick="doResetButtonClick()" />
+				</control>
+			</panel>
+			<panel height="5%" width="50%" valign="bottom" childLayout="vertical">
+				<text id="debugText" style="nifty-label" width="75%" backgroundColor="#fc0f" text="" color="#000f" textHAlign="left" textVAlign="center" />
+			</panel>
+		</layer>
+	</screen>
+</nifty>
