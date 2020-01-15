@@ -10,7 +10,7 @@
 		<coreVersion>0.0.1</coreVersion>
 		<jackson.version>2.9.7</jackson.version>
 		<jme3_g>org.jmonkeyengine</jme3_g>
-		<jme3_v>3.2.0-stable</jme3_v>
+		<jme3_v>3.2.4-stable</jme3_v>
 		<nifty_v>1.4.3</nifty_v>
 	</properties>
 	<repositories>
@@ -23,5 +23,6 @@
 		<module>commons</module>
 		<module>core</module>
 		<module>programms</module>
+		<module>coreJme</module>
 	</modules>
 </project>

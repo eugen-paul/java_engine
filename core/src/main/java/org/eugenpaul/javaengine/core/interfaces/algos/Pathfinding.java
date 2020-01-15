@@ -10,7 +10,9 @@ import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
 import org.eugenpaul.javaengine.core.world.moving.IMoving;
 
 /**
- * path finding interface
+ * path finding interface.<br>
+ * To initialize the path finding the function {@link #init} must be called once. Then you can call the function {@link #getPath} to find the path. The function {@link #getPath}
+ * can be called more then one time.
  * 
  * @author Eugen Paul
  *

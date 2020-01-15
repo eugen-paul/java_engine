@@ -18,6 +18,7 @@
 	</build>
 	<modules>
 		<module>learn_pathfinding</module>
+		<module>pathfinding_2_TileBasedMap_3D</module>
 	</modules>
 	<dependencies>
 		<dependency>
