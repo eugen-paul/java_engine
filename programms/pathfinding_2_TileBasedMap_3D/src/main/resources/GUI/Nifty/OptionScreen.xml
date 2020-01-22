@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nifty>
+<nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+<!-- 	<useStyles filename="nifty-default-styles.xml" /> -->
+<!-- 	<useControls filename="nifty-default-controls.xml" /> -->
+	<screen id="OptionMain" controller="org.eugenpaul.javaengine.programms.pathfinding_2_tilebasedmap_3d.screens.OptionScreen">
+<!-- 	<screen id="start"> -->
+		<layer id="layer" backgroundColor="#0000" childLayout="horizontal">
+			<panel id="panel" height="100%" width="100%" align="center" valign="center" backgroundColor="#000f" childLayout="vertical" visibleToMouse="true">
+				<control name="button" label="Option Screen Button" id="StartButton" align="center" valign="center" visibleToMouse="true" color="#000f">
+					<interact onClick="startButtonClick()" />
+				</control>
+			</panel>
+		</layer>
+	</screen>
+</nifty>
