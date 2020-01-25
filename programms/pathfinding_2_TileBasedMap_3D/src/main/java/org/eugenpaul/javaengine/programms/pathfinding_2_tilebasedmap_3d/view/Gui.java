@@ -35,44 +35,49 @@ public class Gui implements IView, IResource {
   @Override
   public void init() {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
   public void load() {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
   public void firstShow() {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
   public void update(float tpf) {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
   public void unload() {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
   public void pause() {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
   public void resume() {
     // TODO Auto-generated method stub
-    
+
   }
 
+  @Override
+  public void destroy() {
+    // TODO Auto-generated method stub
+
+  }
 
 }

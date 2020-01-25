@@ -4,26 +4,32 @@ import org.eugenpaul.javaengine.core.resource.IResource;
 
 import de.lessvoid.nifty.Nifty;
 
+/**
+ * 
+ * @author Eugen Paul
+ *
+ */
 public class NiftyXmlScreen implements IResource {
 
   private String xmlPath = null;
   private String screenName = null;
   private NiftyScreenController controller = null;
   private Nifty nifty = null;
+  private boolean enabled = false;
 
   /**
+   * Constructor
    * 
    * @param path       - path to xml
    * @param screenName - unique name of main screen
    * @param nifty      - main nifty object
    */
   public NiftyXmlScreen(String path, String screenName, Nifty nifty) {
-    this.xmlPath = path;
-    this.screenName = screenName;
-    this.nifty = nifty;
+    this(path, screenName, nifty, null);
   }
 
   /**
+   * Constructor
    * 
    * @param path       - path to xml
    * @param screenName - unique name of main screen
@@ -31,21 +37,24 @@ public class NiftyXmlScreen implements IResource {
    * @param controller - controller for this screen
    */
   public NiftyXmlScreen(String path, String screenName, Nifty nifty, NiftyScreenController controller) {
-    this(path, screenName, nifty);
+    this.xmlPath = path;
+    this.screenName = screenName;
+    this.nifty = nifty;
     this.controller = controller;
   }
 
   @Override
   public void init() {
-    if (null != controller) {
-      nifty.registerScreenController(controller);
-    }
-    nifty.addXml(xmlPath);
+    // Nothing to do
   }
 
   @Override
   public void load() {
-    // Nothing to do
+    if (null != controller) {
+      nifty.registerScreenController(controller);
+    }
+    nifty.addXml(xmlPath);
+    enabled = true;
   }
 
   @Override
@@ -62,11 +71,15 @@ public class NiftyXmlScreen implements IResource {
 
   @Override
   public void unload() {
-    // Nothing to do
+    if (!enabled) {
+      // The screen are not enabled
+      return;
+    }
     if (null != controller) {
       nifty.unregisterScreenController(controller);
     }
     nifty.removeScreen(screenName);
+    enabled = false;
   }
 
   @Override
@@ -81,6 +94,11 @@ public class NiftyXmlScreen implements IResource {
     if (null != controller) {
       controller.resume();
     }
+  }
+
+  @Override
+  public void destroy() {
+    unload();
   }
 
 }

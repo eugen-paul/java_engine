@@ -39,6 +39,11 @@
 			<artifactId>jme3-niftygui</artifactId>
 			<version>${jme3_v}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombokVersion}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

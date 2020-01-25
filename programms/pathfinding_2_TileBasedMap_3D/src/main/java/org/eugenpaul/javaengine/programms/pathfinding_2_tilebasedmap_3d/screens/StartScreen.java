@@ -1,18 +1,17 @@
 package org.eugenpaul.javaengine.programms.pathfinding_2_tilebasedmap_3d.screens;
 
-import org.eugenpaul.javaengine.core.resource.IResource;
-import org.eugenpaul.javaengine.core.resource.ResourceManager;
 import org.eugenpaul.javaengine.core.resource.nifty.NiftyScreenController;
+import org.eugenpaul.javaengine.core.resource.nifty.NiftyXmlManager;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.screen.Screen;
 
 public class StartScreen implements NiftyScreenController {
-  private ResourceManager<IResource> screenManager = null;
+  private NiftyXmlManager screenManager = null;
   private volatile String nextScreenName = null;
 
-  public StartScreen(ResourceManager<IResource> screenManager) {
-    this.screenManager = screenManager;
+  public StartScreen(NiftyXmlManager screenManager2) {
+    this.screenManager = screenManager2;
   }
 
   @Override
@@ -34,29 +33,26 @@ public class StartScreen implements NiftyScreenController {
     System.out.println("Go to Option");
 //    res.load();
 //    res.firstShow();
-    nextScreenName = "Option";
+    nextScreenName = "OptionMain";
   }
 
   @Override
   public void update(float tpf) {
-//    System.out.println("update Start");
     if (null != nextScreenName) {
       nextScreenName = null;
-      screenManager.disable("Start");
-      IResource res = screenManager.getResource("Option");
-      res.init();
-      screenManager.enable("Option");
+      screenManager.disable("StartMain"); // TODO edit double disable of current screen
+      screenManager.enable("OptionMain");
     }
   }
 
   @Override
   public void pause() {
-
+    // nix
   }
 
   @Override
   public void resume() {
-
+    // nix
   }
 
 }

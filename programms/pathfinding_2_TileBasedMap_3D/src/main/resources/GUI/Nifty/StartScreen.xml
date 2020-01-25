@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE nifty>
 <nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
-	<useStyles filename="nifty-default-styles.xml" />
-	<useControls filename="nifty-default-controls.xml" />
+<!-- 	<useStyles filename="nifty-default-styles.xml" /> -->
+<!-- 	<useControls filename="nifty-default-controls.xml" /> -->
 	<screen id="StartMain" controller="org.eugenpaul.javaengine.programms.pathfinding_2_tilebasedmap_3d.screens.StartScreen">
 <!-- 	<screen id="start"> -->
 		<layer id="layer" backgroundColor="#0000" childLayout="horizontal">

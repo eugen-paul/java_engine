@@ -43,4 +43,9 @@ public interface IResource {
    * This function will be called once after by resume, if the resource is loaded.
    */
   public void resume();
+
+  /**
+   * This function will be called once (before destroying create).
+   */
+  public void destroy();
 }

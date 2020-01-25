@@ -40,6 +40,11 @@
 			<artifactId>coreJme</artifactId>
 			<version>0.0.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombokVersion}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

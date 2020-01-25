@@ -1,19 +1,18 @@
 package org.eugenpaul.javaengine.programms.pathfinding_2_tilebasedmap_3d.screens;
 
-import org.eugenpaul.javaengine.core.resource.IResource;
-import org.eugenpaul.javaengine.core.resource.ResourceManager;
 import org.eugenpaul.javaengine.core.resource.nifty.NiftyScreenController;
+import org.eugenpaul.javaengine.core.resource.nifty.NiftyXmlManager;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.screen.Screen;
 
 public class OptionScreen implements NiftyScreenController {
-  private ResourceManager<IResource> screenManager = null;
+  private NiftyXmlManager screenManager = null;
 
   private volatile String nextScreenName = null;
 
-  public OptionScreen(ResourceManager<IResource> screenManager) {
-    this.screenManager = screenManager;
+  public OptionScreen(NiftyXmlManager screenManager2) {
+    this.screenManager = screenManager2;
   }
 
   @Override
@@ -35,7 +34,7 @@ public class OptionScreen implements NiftyScreenController {
     System.out.println("Go to Start");
 //    res.load();
 //    res.firstShow();
-    nextScreenName = "start";
+    nextScreenName = "StartMain";
   }
 
   @Override
@@ -43,10 +42,8 @@ public class OptionScreen implements NiftyScreenController {
 //    System.out.println("update Option");
     if (null != nextScreenName) {
       nextScreenName = null;
-      screenManager.disable("Option");
-      IResource res = screenManager.getResource("Start");
-      res.init();
-      screenManager.enable("Start");
+      screenManager.disable("OptionMain");
+      screenManager.enable("StartMain");
     }
   }
 
