@@ -33,14 +33,14 @@ public class World implements ITileBasedMap, AbstractModel {
   private Immutable3dPoint start = null;
   private Immutable3dPoint end = null;
   private PropertyChangeSupport propertyChangeSupport;
-  private IMoving mapMoving = null;
+  private IMoving<Step> mapMoving = null;
 
   private ICollisionCondition[][] grid;
   private int sizeX;
   private int sizeY;
 
   private MoverTyp mover = null;
-  private Pathfinding pathfinding = null;
+  private Pathfinding<Step> pathfinding = null;
 
   private boolean autoPathfinding = true;
   private boolean debugWayFound = false;

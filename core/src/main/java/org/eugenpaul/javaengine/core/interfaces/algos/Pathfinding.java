@@ -17,7 +17,7 @@ import org.eugenpaul.javaengine.core.world.moving.IMoving;
  * @author Eugen Paul
  *
  */
-public interface Pathfinding {
+public interface Pathfinding<T extends Step> {
   /**
    * Initialize algorithm to search a path in a TileBasedMap
    * 
@@ -26,7 +26,7 @@ public interface Pathfinding {
    * @param doDynamicCost
    * @return
    */
-  public boolean init(ITileBasedMap map, IMoving movingTester, boolean doDynamicCost);
+  public boolean init(ITileBasedMap map, IMoving<T> movingTester, boolean doDynamicCost);
 
   /**
    * Find and get a Path

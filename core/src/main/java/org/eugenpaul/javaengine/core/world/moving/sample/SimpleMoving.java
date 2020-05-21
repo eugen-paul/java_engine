@@ -14,7 +14,7 @@ import org.eugenpaul.javaengine.core.world.moving.IMoving;
  * @author Eugen Paul
  *
  */
-public class SimpleMoving implements IMoving {
+public class SimpleMoving implements IMoving<Step> {
 
   @Override
   public List<Step> checkPossibleSteps(List<Step> steps, Immutable3dPoint position, ITileBasedMap map) {

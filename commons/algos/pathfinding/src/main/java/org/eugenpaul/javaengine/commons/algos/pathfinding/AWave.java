@@ -28,7 +28,7 @@ import org.eugenpaul.javaengine.core.world.moving.IMoving;
  * @author Eugen Paul
  *
  */
-public abstract class AWave implements Pathfinding, PathfindingDebug {
+public abstract class AWave implements Pathfinding<Step>, PathfindingDebug {
 
   /// The complete set of nodes across the map
   private MapBuffer nodes = null;
@@ -37,7 +37,7 @@ public abstract class AWave implements Pathfinding, PathfindingDebug {
 
   private SimpleSortedList<SearchStep> nodesToCheck = null;
 
-  private IMoving movingTester = null;
+  private IMoving<Step> movingTester = null;
 
   private boolean debugMode = false;
 
@@ -50,14 +50,14 @@ public abstract class AWave implements Pathfinding, PathfindingDebug {
   private boolean doDynamicCost = false;
 
   @Override
-  public boolean init(ITileBasedMap map, IMoving movingTester, boolean doDynamicCost) {
+  public boolean init(ITileBasedMap map, IMoving<Step> movingTester, boolean doDynamicCost) {
     Immutable3dPoint mapSize = map.getPathfinderSize();
     nodes = new MapBuffer(mapSize.getX(), mapSize.getY(), mapSize.getZ());
 
     this.mapCopy = map;
     this.movingTester = movingTester;
     this.doDynamicCost = doDynamicCost;
-
+    
     nodesToCheck = new SimpleSortedList<>();
     return true;
   }

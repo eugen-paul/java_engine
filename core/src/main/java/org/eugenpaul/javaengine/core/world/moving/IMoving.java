@@ -12,7 +12,7 @@ import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
  * @author Eugen Paul
  *
  */
-public interface IMoving {
+public interface IMoving<T extends Step> {
 
   /**
    * Check possibility of steps.
@@ -22,7 +22,7 @@ public interface IMoving {
    * @param map
    * @return allowed steps
    */
-  public abstract List<Step> checkPossibleSteps(List<Step> steps, Immutable3dPoint position, ITileBasedMap map);
+  public abstract List<T> checkPossibleSteps(List<T> steps, Immutable3dPoint position, ITileBasedMap map);
 
   /**
    * Check possibility of steps.
@@ -34,5 +34,6 @@ public interface IMoving {
    * @param map
    * @return allowed steps
    */
-  public abstract List<Step> checkPossibleSteps(List<Step> steps, int x, int y, int z, ITileBasedMap map);
+  public abstract List<T> checkPossibleSteps(List<T> steps, int x, int y, int z, ITileBasedMap map);
+
 }

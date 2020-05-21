@@ -12,7 +12,7 @@
 		<jme3_g>org.jmonkeyengine</jme3_g>
 		<jme3_v>3.2.4-stable</jme3_v>
 		<nifty_v>1.4.3</nifty_v>
-		<lombokVersion>1.18.6</lombokVersion>
+		<lombokVersion>1.18.12</lombokVersion>
 	</properties>
 	<repositories>
 		<repository>
