@@ -17,7 +17,7 @@ import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
 public interface PathfindingDebug {
 
   /**
-   * Enable/Disable debugmod. In a debugmode you cann use PathfindingDebug-functions and get a info about a current step.
+   * Enable/Disable debugmod. In a debugmode you can use PathfindingDebug-functions and get a info about a current step.
    * 
    * @param mode
    * @return true - debugMode changed<br>

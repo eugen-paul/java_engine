@@ -32,6 +32,9 @@ import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JTextArea;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 public class MainFrame extends JFrame implements AbstractViewPanel {
 
@@ -56,13 +59,16 @@ public class MainFrame extends JFrame implements AbstractViewPanel {
   private JButton btnResetSearch;
   private JCheckBox chckbxAutoSearching;
   private JTextArea textAreaDebugInfo;
+  
+  private SettingsFrame settingFrame;
 
   /**
    * Create the frame.
    */
   public MainFrame(DefaultController controller, int x, int y) {
-
     this.controller = controller;
+    
+    settingFrame = new SettingsFrame(controller);
 
     mapSizeX = x;
     mapSizeY = y;
@@ -352,6 +358,27 @@ public class MainFrame extends JFrame implements AbstractViewPanel {
     panelDebug.setLayout(gl_panelDebug);
     splitPane_2.setDividerLocation(601);
     splitPane.setDividerLocation(150);
+    
+    JMenuBar menuBar = new JMenuBar();
+    contentPane.add(menuBar, BorderLayout.NORTH);
+    
+    JMenu menuEdit = new JMenu("Edit");
+    menuBar.add(menuEdit);
+    
+    JMenuItem menuItemSettings = new JMenuItem("Settings");
+    menuItemSettings.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseReleased(MouseEvent e) {
+        settingFrame.setVisible(true);
+      }
+    });
+    menuEdit.add(menuItemSettings);
+    
+    JMenu menuHelp = new JMenu("Help");
+    menuBar.add(menuHelp);
+    
+    JMenuItem menuItemAbout = new JMenuItem("About");
+    menuHelp.add(menuItemAbout);
   }
 
   @Override
@@ -386,6 +413,9 @@ public class MainFrame extends JFrame implements AbstractViewPanel {
   }
 
   private void paintMap(GridElement grid[][]) {
+    mapSizeX = grid.length;
+    mapSizeY = grid[0].length;
+    
     panelMap.setGrid(grid);
   }
 

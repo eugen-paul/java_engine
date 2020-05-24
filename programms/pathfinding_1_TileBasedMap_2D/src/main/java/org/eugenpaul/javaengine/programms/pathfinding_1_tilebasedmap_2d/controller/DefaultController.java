@@ -6,6 +6,7 @@ import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.Mo
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.PathfinderJob;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.PathfindingAlgo;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.WorldElements;
+import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.IMapRepresentation;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.MapElements;
 
 /**
@@ -70,6 +71,15 @@ public class DefaultController extends AbstractController {
    */
   public void setMover(MoverTyp mover) {
     world.setMover(mover);
+  }
+  
+  /**
+   * set map
+   * 
+   * @param map
+   */
+  public void setMap(IMapRepresentation map) {
+    world.setMapRepresentation(map);
   }
 
   /**

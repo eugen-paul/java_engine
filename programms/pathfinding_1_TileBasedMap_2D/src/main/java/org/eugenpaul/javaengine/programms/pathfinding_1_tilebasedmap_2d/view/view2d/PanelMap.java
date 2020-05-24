@@ -86,10 +86,10 @@ public class PanelMap extends JPanel {
         }
 
         g.setColor(color);
-        g.fillRect(x * blockWidth, (y - 1) * blockHeight, blockWidth, blockHeight);
+        g.fillRect(x * blockWidth, y * blockHeight, blockWidth, blockHeight);
         g.setColor(Color.BLACK);
         if (visibleValue) {
-          g.drawString(Integer.toString(grid[x][y].getClearanceValue()), x * blockWidth, y * blockHeight);
+          g.drawString(Integer.toString(grid[x][y].getClearanceValue()), x * blockWidth, (y+1) * blockHeight);
         }
       }
     }

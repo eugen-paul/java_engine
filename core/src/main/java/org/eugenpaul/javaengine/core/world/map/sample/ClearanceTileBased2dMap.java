@@ -17,17 +17,17 @@ import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
  */
 public class ClearanceTileBased2dMap implements ITileBasedMap {
 
-  protected int[][] grid;
+  protected int[] grid;
   protected int sizeX;
   protected int sizeY;
 
   public ClearanceTileBased2dMap(int sizeX, int sizeY) {
-    grid = new int[sizeX][sizeY];
-    for (int[] is : grid) {
-      Arrays.fill(is, 0);
-    }
+    grid = new int[sizeX * sizeY];
+    Arrays.fill(grid, 1);
     this.sizeX = sizeX;
     this.sizeY = sizeY;
+
+    computeClearance();
   }
 
   @Override
@@ -40,19 +40,20 @@ public class ClearanceTileBased2dMap implements ITileBasedMap {
    * 
    * @param x
    * @param y
-   * @param value
+   * @param traversable
    */
-  public void setPoint(int x, int y, Sample2dCollisionCondition value) {
-    if (Sample2dCollisionCondition.BARRIER == value) {
-      grid[x][y] = 0;
+  public void setPoint(int x, int y, boolean traversable) {
+    if (traversable) {
+      grid[xyzToElem(x, y)] = 1;
     } else {
-      grid[x][y] = 1;
+      grid[xyzToElem(x, y)] = 0;
     }
+    computeClearance();
   }
 
   @Override
   public List<ICollisionCondition> getCollisionCondition(int x, int y, int z) {
-    if (grid[x][y] > 0) {
+    if (grid[xyzToElem(x, y)] > 0) {
       return List.of(Sample2dCollisionCondition.NOT);
     } else {
       return List.of(Sample2dCollisionCondition.BARRIER);
@@ -66,16 +67,47 @@ public class ClearanceTileBased2dMap implements ITileBasedMap {
 
   @Override
   public boolean isCollisionCondition(int x, int y, int z, ICollisionCondition condition) {
+    if (x < 0 || sizeX <= x) {
+      return false;
+    }
+    if (y < 0 || sizeY <= y) {
+      return false;
+    }
+    if (z != 0) {
+      return false;
+    }
+
     if (!(condition instanceof Clearance2dCollisionCondition)) {
       return false;
     }
 
     Clearance2dCollisionCondition testVar = (Clearance2dCollisionCondition) condition;
-    return testVar.isSame(grid[x][y]);
+    return testVar.isSame(grid[xyzToElem(x, y)]);
   }
 
-  private void computeClearance(int startX, int startY) {
+  protected int xyzToElem(int x, int y) {
+    return x * sizeY + y;
+  }
 
+  protected void computeClearance() {
+    for (int x = sizeX - 1; x >= 0; x--) {
+      for (int y = sizeY - 1; y >= 0; y--) {
+        if (0 == grid[xyzToElem(x, y)]) {
+          // nothing to do
+        } else if (x >= sizeX - 1) {
+          grid[xyzToElem(x, y)] = 1;
+        } else if (y >= sizeY - 1) {
+          grid[xyzToElem(x, y)] = 1;
+        } else {
+          int valueX = grid[xyzToElem(x + 1, y)];
+          int valueY = grid[xyzToElem(x, y + 1)];
+          int valueXY = grid[xyzToElem(x + 1, y + 1)];
+          int min = Math.min(valueX, valueY);
+          min = Math.min(min, valueXY);
+          grid[xyzToElem(x, y)] = min + 1;
+        }
+      }
+    }
   }
 
 }

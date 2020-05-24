@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eugenpaul.javaengine.core.world.entity.collision.ICollisionCondition;
-import org.eugenpaul.javaengine.core.world.entity.collision.Sample2dCollisionCondition;
 import org.eugenpaul.javaengine.core.world.map.ITileBasedMap;
 import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
 
@@ -16,15 +15,13 @@ import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
  */
 public class SimpleTileBased2dMap implements ITileBasedMap {
 
-  protected ICollisionCondition[][] grid;
+  protected ICollisionCondition[] grid;
   protected int sizeX;
   protected int sizeY;
 
-  public SimpleTileBased2dMap(int sizeX, int sizeY) {
-    grid = new Sample2dCollisionCondition[sizeX][sizeY];
-    for (ICollisionCondition[] is : grid) {
-      Arrays.fill(is, Sample2dCollisionCondition.NOT);
-    }
+  public SimpleTileBased2dMap(int sizeX, int sizeY, ICollisionCondition stdValue) {
+    grid = new ICollisionCondition[sizeX * sizeY];
+    Arrays.fill(grid, stdValue);
     this.sizeX = sizeX;
     this.sizeY = sizeY;
   }
@@ -41,13 +38,13 @@ public class SimpleTileBased2dMap implements ITileBasedMap {
    * @param y
    * @param value
    */
-  public void setPoint(int x, int y, Sample2dCollisionCondition value) {
-    grid[x][y] = value;
+  public void setPoint(int x, int y, ICollisionCondition value) {
+    grid[xyzToElem(x, y)] = value;
   }
 
   @Override
   public List<ICollisionCondition> getCollisionCondition(int x, int y, int z) {
-    return List.of(grid[x][y]);
+    return List.of(grid[xyzToElem(x, y)]);
   }
 
   @Override
@@ -57,7 +54,20 @@ public class SimpleTileBased2dMap implements ITileBasedMap {
 
   @Override
   public boolean isCollisionCondition(int x, int y, int z, ICollisionCondition condition) {
-    return (condition == grid[x][y]);
+    if (x < 0 || sizeX <= x) {
+      return false;
+    }
+    if (y < 0 || sizeY <= y) {
+      return false;
+    }
+    if (z != 0) {
+      return false;
+    }
+    return grid[xyzToElem(x, y)].isSame(condition);
+  }
+
+  protected int xyzToElem(int x, int y) {
+    return x * sizeY + y;
   }
 
 }

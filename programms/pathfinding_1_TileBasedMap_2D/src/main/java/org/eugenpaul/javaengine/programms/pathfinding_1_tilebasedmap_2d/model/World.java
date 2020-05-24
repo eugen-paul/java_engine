@@ -2,7 +2,6 @@ package org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -13,12 +12,12 @@ import org.eugenpaul.javaengine.core.data.statistics.InfoPathfindingMapStatus;
 import org.eugenpaul.javaengine.core.interfaces.algos.Pathfinding;
 import org.eugenpaul.javaengine.core.world.entity.IMotionState;
 import org.eugenpaul.javaengine.core.world.entity.Step;
-import org.eugenpaul.javaengine.core.world.entity.collision.ICollisionCondition;
-import org.eugenpaul.javaengine.core.world.map.ITileBasedMap;
 import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
 import org.eugenpaul.javaengine.core.world.moving.IMoving;
 import org.eugenpaul.javaengine.core.world.moving.sample.SimpleMoving;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.controller.DefaultController;
+import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.IMapRepresentation;
+import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.TileMap;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.MapElements;
 
 /**
@@ -28,16 +27,14 @@ import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.Map
  * @author Eugen Paul
  *
  */
-public class World implements ITileBasedMap, AbstractModel {
+public class World implements AbstractModel {
 
   private Immutable3dPoint start = null;
   private Immutable3dPoint end = null;
   private PropertyChangeSupport propertyChangeSupport;
   private IMoving<Step> mapMoving = null;
 
-  private ICollisionCondition[][] grid;
-  private int sizeX;
-  private int sizeY;
+  private IMapRepresentation map;
 
   private MoverTyp mover = null;
   private Pathfinding<Step> pathfinding = null;
@@ -52,12 +49,7 @@ public class World implements ITileBasedMap, AbstractModel {
    * @param sizeY
    */
   public World(int sizeX, int sizeY) {
-    grid = new WorldElements[sizeX][sizeY];
-    for (ICollisionCondition[] is : grid) {
-      Arrays.fill(is, WorldElements.NOPE);
-    }
-    this.sizeX = sizeX;
-    this.sizeY = sizeY;
+    map = new TileMap(sizeX, sizeY);
 
     start = new Immutable3dPoint(0, 0, 0);
     end = new Immutable3dPoint(0, 5, 0);
@@ -68,8 +60,20 @@ public class World implements ITileBasedMap, AbstractModel {
     pathfinding = PathfindingAlgo.LEE.getNewPathfinding();
   }
 
+  public synchronized void setMapRepresentation(IMapRepresentation map) {
+    this.map = map;
+
+    start = new Immutable3dPoint(0, 0, 0);
+    end = new Immutable3dPoint(0, 5, 0);
+    
+    pathfinding.init(map, mapMoving, true);
+    reset();
+
+    propertyChangeSupport.firePropertyChange(DefaultController.ELEMENT_MAP, null, getMap());
+  }
+
   public synchronized WorldElements getPosition(int x, int y) {
-    return (WorldElements) grid[x][y];
+    return (WorldElements) map.getPosition(x, y);
   }
 
   public WorldElements getPosition(Immutable3dPoint point) {
@@ -77,7 +81,7 @@ public class World implements ITileBasedMap, AbstractModel {
   }
 
   public synchronized boolean setPosition(int x, int y, WorldElements element) {
-    grid[x][y] = element;
+    map.setPosition(x, y, element);
 
     reset();
 
@@ -125,13 +129,17 @@ public class World implements ITileBasedMap, AbstractModel {
    * @return
    */
   private GridElement[][] getCurrentMap() {
-    final GridElement[][] result = new GridElement[grid.length][];
-    for (int i = 0; i < grid.length; i++) {
-      result[i] = new GridElement[grid[i].length];
-      for (int k = 0; k < grid[i].length; k++) {
+    int sizeX = map.getSiezX();
+    int sizeY = map.getSiezY();
+
+    final GridElement[][] result = new GridElement[sizeX][];
+
+    for (int x = 0; x < sizeX; x++) {
+      result[x] = new GridElement[sizeY];
+      for (int y = 0; y < sizeY; y++) {
         GridElement elem = new GridElement();
-        result[i][k] = elem;
-        WorldElements worldElem = (WorldElements) grid[i][k];
+        result[x][y] = elem;
+        WorldElements worldElem = map.getPosition(x, y);
         switch (worldElem) {
         case NOPE:
           elem.setMapElement(MapElements.NOPE);
@@ -144,7 +152,7 @@ public class World implements ITileBasedMap, AbstractModel {
           break;
         }
 
-        elem.setClearanceValue(1);
+        elem.setClearanceValue(map.getValue(x, y));
       }
     }
 
@@ -236,7 +244,7 @@ public class World implements ITileBasedMap, AbstractModel {
       return Collections.emptyList();
     }
 
-    pathfinding.init(this, mapMoving, true);
+    pathfinding.init(map, mapMoving, true);
 
     IMotionState fromStep = mover.getStartState();
     Immutable3dPoint fromPoint = new Immutable3dPoint(start);
@@ -278,35 +286,6 @@ public class World implements ITileBasedMap, AbstractModel {
     return respose;
   }
 
-  @Override
-  public Immutable3dPoint getPathfinderSize() {
-    return new Immutable3dPoint(sizeX, sizeY, 1);
-  }
-
-  @Override
-  public List<ICollisionCondition> getCollisionCondition(int x, int y, int z) {
-    return Arrays.asList(grid[x][y]);
-  }
-
-  @Override
-  public List<ICollisionCondition> getCollisionCondition(Immutable3dPoint position) {
-    return getCollisionCondition(position.getX(), position.getY(), position.getZ());
-  }
-
-  @Override
-  public boolean isCollisionCondition(int x, int y, int z, ICollisionCondition condition) {
-    if (x < 0 || sizeX <= x) {
-      return false;
-    }
-    if (y < 0 || sizeY <= y) {
-      return false;
-    }
-    if (z != 0) {
-      return false;
-    }
-    return grid[x][y].isSame(condition);
-  }
-
   public synchronized void setMover(MoverTyp mover) {
     this.mover = mover;
     reset();
@@ -316,7 +295,7 @@ public class World implements ITileBasedMap, AbstractModel {
 
   public synchronized void setPathfindingAlgo(PathfindingAlgo algo) {
     pathfinding = algo.getNewPathfinding();
-    pathfinding.init(this, mapMoving, true);
+    pathfinding.init(map, mapMoving, true);
     reset();
 
     propertyChangeSupport.firePropertyChange(DefaultController.ELEMENT_MAP, null, getMap());
@@ -324,7 +303,7 @@ public class World implements ITileBasedMap, AbstractModel {
 
   public synchronized void setAutoPathfinding(boolean autoPathfinding) {
     this.autoPathfinding = autoPathfinding;
-    pathfinding.init(this, mapMoving, true);
+    pathfinding.init(map, mapMoving, true);
     reset();
 
     propertyChangeSupport.firePropertyChange(DefaultController.ELEMENT_MAP, null, getMap());
