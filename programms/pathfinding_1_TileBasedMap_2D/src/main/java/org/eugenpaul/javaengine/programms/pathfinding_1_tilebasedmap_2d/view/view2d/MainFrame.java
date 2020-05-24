@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.controller.DefaultController;
+import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.GridElement;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.MoverTyp;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.PathfindingAlgo;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.AbstractViewPanel;
@@ -316,6 +317,7 @@ public class MainFrame extends JFrame implements AbstractViewPanel {
     splitPane.setRightComponent(panelHelper);
     
     JSplitPane splitPane_2 = new JSplitPane();
+    splitPane_2.setMaximumSize(new Dimension(183, 100));
     splitPane_2.setPreferredSize(new Dimension(183, 100));
     splitPane_2.setEnabled(false);
     splitPane_2.setOrientation(JSplitPane.VERTICAL_SPLIT);
@@ -331,6 +333,7 @@ public class MainFrame extends JFrame implements AbstractViewPanel {
     panelHelper.setLayout(gl_panelMap);
     
     splitPane_2.setLeftComponent(panelMap);
+    panelMap.setLayout(null);
     
     JPanel panelDebug = new JPanel();
     splitPane_2.setRightComponent(panelDebug);
@@ -361,7 +364,7 @@ public class MainFrame extends JFrame implements AbstractViewPanel {
 //      yPositionTextField.setText(newStringValue);
 //    }
     if (evt.getPropertyName().equals(DefaultController.ELEMENT_MAP)) {
-      int[][] newStringValue = (int[][]) evt.getNewValue();
+      GridElement[][] newStringValue = (GridElement[][]) evt.getNewValue();
       paintMap(newStringValue);
     } else if(evt.getPropertyName().equals(DefaultController.ELEMENT_DEBUG_INFO)) {
       String debugInfo = (String) evt.getNewValue();
@@ -382,7 +385,7 @@ public class MainFrame extends JFrame implements AbstractViewPanel {
     }
   }
 
-  private void paintMap(int grid[][]) {
+  private void paintMap(GridElement grid[][]) {
     panelMap.setGrid(grid);
   }
 

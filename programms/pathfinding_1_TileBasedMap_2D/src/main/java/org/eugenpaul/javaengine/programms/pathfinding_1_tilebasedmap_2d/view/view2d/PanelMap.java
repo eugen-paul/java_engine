@@ -2,28 +2,39 @@ package org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.vi
 
 import java.awt.Color;
 import java.awt.Graphics;
-
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.MapElements;
+import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.GridElement;
 
+/**
+ * Panel to print map
+ */
 public class PanelMap extends JPanel {
 
-  /**
-   * Panel to print map
-   */
   private static final long serialVersionUID = 3518239133683265379L;
 
-  private int[][] grid = null;
+  private GridElement[][] grid = null;
+  private boolean visibleValue = true;
 
-  public void setGrid(int[][] grid) {
-    this.grid = grid;
-
+  public void setGrid(GridElement[][] grid) {
     SwingUtilities.invokeLater(() -> {
+      setDataToPain(grid);
       revalidate();
       repaint();
     });
+  }
+
+  public void setPrintValue(boolean visible) {
+    SwingUtilities.invokeLater(() -> {
+      visibleValue = visible;
+      revalidate();
+      repaint();
+    });
+  }
+
+  private void setDataToPain(GridElement[][] grid) {
+    this.grid = grid;
   }
 
   @Override
@@ -41,7 +52,7 @@ public class PanelMap extends JPanel {
 
     for (int x = 0; x < grid.length; x++) {
       for (int y = 0; y < grid[0].length; y++) {
-        switch (MapElements.fromInt(grid[x][y])) {
+        switch (grid[x][y].getMapElement()) {
         case NOPE:
           color = Color.WHITE;
           break;
@@ -75,7 +86,11 @@ public class PanelMap extends JPanel {
         }
 
         g.setColor(color);
-        g.fillRect(x * blockWidth, y * blockHeight, blockWidth, blockHeight);
+        g.fillRect(x * blockWidth, (y - 1) * blockHeight, blockWidth, blockHeight);
+        g.setColor(Color.BLACK);
+        if (visibleValue) {
+          g.drawString(Integer.toString(grid[x][y].getClearanceValue()), x * blockWidth, y * blockHeight);
+        }
       }
     }
   }

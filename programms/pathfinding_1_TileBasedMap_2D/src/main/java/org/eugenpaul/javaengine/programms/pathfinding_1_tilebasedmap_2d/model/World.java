@@ -90,8 +90,8 @@ public class World implements ITileBasedMap, AbstractModel {
     return setPosition(point.getX(), point.getY(), element);
   }
 
-  private int[][] getMap() {
-    final int[][] result = getCurrentMap();
+  private GridElement[][] getMap() {
+    final GridElement[][] result = getCurrentMap();
 
     if (!autoPathfinding) {
       addDebugInfo(result);
@@ -103,10 +103,10 @@ public class World implements ITileBasedMap, AbstractModel {
     }
 
     if (start != null) {
-      result[start.getX()][start.getY()] = MapElements.START.getValue();
+      result[start.getX()][start.getY()].setMapElement(MapElements.START);
     }
     if (end != null) {
-      result[end.getX()][end.getY()] = MapElements.END.getValue();
+      result[end.getX()][end.getY()].setMapElement(MapElements.END);
     }
 
     return result;
@@ -124,27 +124,42 @@ public class World implements ITileBasedMap, AbstractModel {
    * 
    * @return
    */
-  private int[][] getCurrentMap() {
-    final int[][] result = new int[grid.length][];
+  private GridElement[][] getCurrentMap() {
+    final GridElement[][] result = new GridElement[grid.length][];
     for (int i = 0; i < grid.length; i++) {
-      result[i] = new int[grid[i].length];
+      result[i] = new GridElement[grid[i].length];
       for (int k = 0; k < grid[i].length; k++) {
-        result[i][k] = ((WorldElements) grid[i][k]).getValue();
+        GridElement elem = new GridElement();
+        result[i][k] = elem;
+        WorldElements worldElem = (WorldElements) grid[i][k];
+        switch (worldElem) {
+        case NOPE:
+          elem.setMapElement(MapElements.NOPE);
+          break;
+        case WALL:
+          elem.setMapElement(MapElements.WALL);
+          break;
+        case DIRT:
+          elem.setMapElement(MapElements.MUD);
+          break;
+        }
+
+        elem.setClearanceValue(1);
       }
     }
 
     return result;
   }
 
-  private void addWaypointsToMap(final int[][] map, List<Immutable3dPoint> way) {
+  private void addWaypointsToMap(final GridElement[][] map, List<Immutable3dPoint> way) {
     Iterator<Immutable3dPoint> iterator = way.iterator();
     while (iterator.hasNext()) {
       Immutable3dPoint step = iterator.next();
-      map[step.getX()][step.getY()] = MapElements.WAY.getValue();
+      map[step.getX()][step.getY()].setMapElement(MapElements.WAY);
     }
   }
 
-  private void addDebugInfo(final int[][] result) {
+  private void addDebugInfo(final GridElement[][] result) {
     InfoPathfinding info = pathfinding.getDebugInfo().getCurrentPathfindingInfo();
     if (null != info) {
       InfoPathfindingMapStatus[][][] infodata = info.getInfoMap();
@@ -155,16 +170,16 @@ public class World implements ITileBasedMap, AbstractModel {
         for (int y = 0; y < ySize; y++) {
           switch (infodata[x][y][0]) {
           case CHECKING_POINT:
-            result[x][y] = MapElements.STEP_CHECKPOINT.getValue();
+            result[x][y].setMapElement(MapElements.STEP_CHECKPOINT);
             break;
           case NEW_STEP:
-            result[x][y] = MapElements.STEP_NEW.getValue();
+            result[x][y].setMapElement(MapElements.STEP_NEW);
             break;
           case CHECKED_POINT:
-            result[x][y] = MapElements.STEP_OLD.getValue();
+            result[x][y].setMapElement(MapElements.STEP_OLD);
             break;
           case POINT_TO_CHECK:
-            result[x][y] = MapElements.STEP_TO_CHECK.getValue();
+            result[x][y].setMapElement(MapElements.STEP_TO_CHECK);
             break;
           case CLEAR:
             break;

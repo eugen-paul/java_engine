@@ -5,7 +5,7 @@ import java.util.Arrays;
 import lombok.Getter;
 
 /**
- * Implementation of ICollisionCondition for simple map. Each node of the map can be {@code NOT} } or {@code BARRIER}}.
+ * Implementation of ICollisionCondition for simple map. Each node of the map can be {@code NOT} or {@code BARRIER}.
  * 
  * @author Eugen Paul
  *

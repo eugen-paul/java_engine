@@ -4,6 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.util.Properties;
 
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.controller.DefaultController;
+import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.GridElement;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.AbstractViewPanel;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.MapElements;
 
@@ -215,15 +216,15 @@ public class MainApplication extends SimpleApplication implements AbstractViewPa
   @Override
   public void modelPropertyChange(PropertyChangeEvent evt) {
     if (evt.getPropertyName().equals(DefaultController.ELEMENT_MAP)) {
-      int[][] newStringValue = (int[][]) evt.getNewValue();
+      GridElement[][] newStringValue = (GridElement[][]) evt.getNewValue();
       updateMapData(newStringValue);
     }
   }
 
-  private void updateMapData(int[][] grid) {
+  private void updateMapData(GridElement[][] grid) {
     for (int x = 0; x < grid.length; x++) {
       for (int y = 0; y < grid[x].length; y++) {
-        worldItems[x * mapSizeX + y].setElement(MapElements.fromInt(grid[x][y]));
+        worldItems[x * mapSizeX + y].setElement(grid[x][y].getMapElement());
       }
     }
   }
