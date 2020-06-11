@@ -7,9 +7,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eugenpaul.javaengine.core.algos.Pathfinding;
 import org.eugenpaul.javaengine.core.data.statistics.InfoPathfinding;
 import org.eugenpaul.javaengine.core.data.statistics.InfoPathfindingMapStatus;
-import org.eugenpaul.javaengine.core.interfaces.algos.Pathfinding;
 import org.eugenpaul.javaengine.core.world.entity.IMotionState;
 import org.eugenpaul.javaengine.core.world.entity.Step;
 import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;

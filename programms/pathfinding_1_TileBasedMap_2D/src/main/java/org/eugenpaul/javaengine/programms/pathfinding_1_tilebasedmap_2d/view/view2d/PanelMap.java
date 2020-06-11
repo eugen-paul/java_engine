@@ -15,7 +15,7 @@ public class PanelMap extends JPanel {
   private static final long serialVersionUID = 3518239133683265379L;
 
   private GridElement[][] grid = null;
-  private boolean visibleValue = true;
+  private boolean visibleValue = false;
 
   public void setGrid(GridElement[][] grid) {
     SwingUtilities.invokeLater(() -> {

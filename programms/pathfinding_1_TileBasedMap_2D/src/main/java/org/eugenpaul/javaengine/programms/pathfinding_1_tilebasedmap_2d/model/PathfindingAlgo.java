@@ -1,9 +1,9 @@
 package org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model;
 
-import org.eugenpaul.javaengine.commons.algos.pathfinding.LeeTileBasedMap;
-import org.eugenpaul.javaengine.commons.algos.pathfinding.GreedyBestTileBasedMap;
-import org.eugenpaul.javaengine.commons.algos.pathfinding.AStarTileBasedMap;
-import org.eugenpaul.javaengine.core.interfaces.algos.Pathfinding;
+import org.eugenpaul.javaengine.core.algos.Pathfinding;
+import org.eugenpaul.javaengine.core.algos.pathfinding.AStarTileBasedMap;
+import org.eugenpaul.javaengine.core.algos.pathfinding.GreedyBestTileBasedMap;
+import org.eugenpaul.javaengine.core.algos.pathfinding.LeeTileBasedMap;
 import org.eugenpaul.javaengine.core.world.entity.Step;
 
 import java.lang.reflect.InvocationTargetException;

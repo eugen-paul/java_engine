@@ -1,0 +1,16 @@
+ext {
+    jme3_version = "3.2.4-stable"
+    nifty_version = "1.4.3"
+
+    commonDependencies = [
+            jme3_core              : "org.jmonkeyengine:jme3-core:$jme3_version",
+            jme3_lwjgl             : "org.jmonkeyengine:jme3-lwjgl:$jme3_version",
+            jme3_niftygui          : "org.jmonkeyengine:jme3-niftygui:$jme3_version",
+            jme3_desktop           : "org.jmonkeyengine:jme3-desktop:$jme3_version",
+            nifty                  : "com.github.nifty-gui:nifty:$nifty_version",
+            
+            junit                  : "junit:junit:4.12",
+            
+            jackson_databind       : "com.fasterxml.jackson.core:jackson-databind:2.9.7"
+    ]
+}
