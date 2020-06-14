@@ -5,10 +5,12 @@
 dependencies {
     implementation commonDependencies.jme3_core
     implementation commonDependencies.jme3_lwjgl
-    implementation commonDependencies.jme3_niftygui
-    implementation commonDependencies.nifty
     
     runtimeOnly commonDependencies.jme3_desktop
+    
+    compile commonDependencies.lemur
+    compile commonDependencies.lemur_proto
+    compile commonDependencies.groovy_all
     
     compile project(':core')
 }

@@ -1,7 +1,6 @@
 package org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.view3d;
 
 import java.beans.PropertyChangeEvent;
-import java.util.Properties;
 
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.controller.DefaultController;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.GridElement;
@@ -21,13 +20,12 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
-import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Quad;
 import com.jme3.system.AppSettings;
-
-import de.lessvoid.nifty.Nifty;
+import com.simsilica.lemur.GuiGlobals;
+import com.simsilica.lemur.style.BaseStyles;
 
 /**
  * Very simple application to test / learn / show path finding.
@@ -79,6 +77,22 @@ public class MainApplication extends SimpleApplication implements AbstractViewPa
 
   @Override
   public void simpleInitApp() {
+
+    GuiGlobals.initialize(this);
+    BaseStyles.loadGlassStyle();
+    GuiGlobals.getInstance().getStyles().setDefaultStyle("glass");
+
+    guiController.init();
+
+//    BitmapText hudText = new BitmapText(guiFont, false);
+//    hudText.setSize(guiFont.getCharSet().getRenderedSize());
+//    hudText.setColor(ColorRGBA.White);
+//    hudText.setText("You can write any string here and here and here and here and here and here and here");
+//    hudText.setLocalTranslation(300, 500, 0);
+//    hudText.setBox(new Rectangle(0, 0, 200, 50));
+//    hudText.setLineWrapMode(LineWrapMode.Clip);
+//    guiNode.attachChild(hudText);
+
 // disable the fly cam
 //    flyCam.setDragToRotate(true);
 //    inputManager.setCursorVisible(true);
@@ -104,29 +118,6 @@ public class MainApplication extends SimpleApplication implements AbstractViewPa
 
     initKeys();
 
-    NiftyJmeDisplay niftyDisplay = NiftyJmeDisplay.newNiftyJmeDisplay(assetManager, inputManager, audioRenderer, guiViewPort);
-    Nifty nifty = niftyDisplay.getNifty();
-    try {
-      nifty.validateXml("GUI/Nifty/HelloJme.xml");
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    nifty.fromXml("GUI/Nifty/HelloJme.xml", "start", guiController);
-
-    nifty.setIgnoreKeyboardEvents(true);
-
-    // disable double clicks
-    Properties data = nifty.getGlobalProperties();
-    if (null == data) {
-      data = new Properties();
-      nifty.setGlobalProperties(data);
-    }
-    data.setProperty("MULTI_CLICK_TIME", "0");
-
-//    nifty.setDebugOptionPanelColors(true);
-
-    // attach the nifty display to the gui view port as a processor
-    guiViewPort.addProcessor(niftyDisplay);
   }
 
   @Override

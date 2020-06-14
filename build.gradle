@@ -17,11 +17,15 @@ subprojects {
     repositories {
         mavenLocal()
         maven {
-            url = uri('http://jcenter.bintray.com')
+            url = uri('https://jcenter.bintray.com/')
         }
 
         maven {
             url = uri('http://repo.maven.apache.org/maven2')
+        }
+        
+        maven {
+            url = uri('https://dl.bintray.com/jmonkeyengine/org.jmonkeyengine/')
         }
     }
 

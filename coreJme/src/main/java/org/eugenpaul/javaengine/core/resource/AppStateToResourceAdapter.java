@@ -72,4 +72,10 @@ public class AppStateToResourceAdapter implements AppState {
     initialized = false;
     resource.unload();
   }
+
+  @Override
+  public String getId() {
+    // TODO Auto-generated method stub
+    return null;
+  }
 }

@@ -8,18 +8,13 @@ import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.Pa
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.AbstractViewPanel;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.MapElements;
 
-import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.NiftyEventSubscriber;
-import de.lessvoid.nifty.controls.Button;
-import de.lessvoid.nifty.controls.CheckBox;
-import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
-import de.lessvoid.nifty.controls.DropDown;
-import de.lessvoid.nifty.controls.DropDownSelectionChangedEvent;
-import de.lessvoid.nifty.controls.TextField;
-import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.render.TextRenderer;
-import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.nifty.screen.ScreenController;
+import com.simsilica.lemur.Button;
+import com.simsilica.lemur.Checkbox;
+import com.simsilica.lemur.Command;
+import com.simsilica.lemur.Container;
+import com.simsilica.lemur.Label;
+import com.simsilica.lemur.ListBox;
+import com.simsilica.lemur.TextField;
 
 /**
  * GUI
@@ -27,25 +22,31 @@ import de.lessvoid.nifty.screen.ScreenController;
  * @author Eugen Paul
  *
  */
-public class GuiController implements ScreenController, AbstractViewPanel {
+public class GuiController implements AbstractViewPanel {
 
   private final MainApplication app;
   private final DefaultController controller;
 
-  private Element debugText = null;
-  private CheckBox autoSearchElem = null;
+  private DropDown<MoverTyp> moverList;
+  private DropDown<PathfindingAlgo> algoList;
 
-  private Button stepBtn = null;
-  private boolean stepBtnState = false;
+  private Label debugText = null;
 
-  private Button startBtn = null;
-  private boolean startBtnState = false;
+  private Button doStep;
+  private boolean doStepStatus;
 
-  private Button stopBtn = null;
-  private boolean stopBtnState = false;
+  private Button startSearch;
+  private boolean startSearchStatus;
 
-  private Button resetBtn = null;
-  private boolean resetBtnState = false;
+  private Button stopSearch;
+  private boolean stopSearchStatus;
+
+  private Button resetSearch;
+  private boolean resetSearchStatus;
+
+  private TextField msTextField;
+
+  private Checkbox autoPathfinding;
 
   /**
    * C'tor. Element will be added to controller.
@@ -59,90 +60,149 @@ public class GuiController implements ScreenController, AbstractViewPanel {
     this.controller.addView(this);
   }
 
-  @Override
-  public void bind(Nifty nifty, Screen screen) {
-//    System.out.println("bind( " + screen.getScreenId() + ")");
-    if (null == screen) {
-      return;
-    }
+  public void init() {
+    // Create a simple container for our elements
+    Container myWindow = new Container();
+    app.getGuiNode().attachChild(myWindow);
 
-    @SuppressWarnings("unchecked")
-    DropDown<MoverTyp> dropDownMoverElem = (DropDown<MoverTyp>) screen.findNiftyControl("moverSelector", DropDown.class);
+    debugText = new Label("");
+
+    // Put it somewhere that we will see it.
+    // Note: Lemur GUI elements grow down from the upper left corner.
+    myWindow.setLocalTranslation(0, app.getContext().getSettings().getHeight(), 0);
+
+    // Add some elements
+    Button startButton = myWindow.addChild(new Button("Set Start"));
+    startButton.addClickCommands(new Command<Button>() {
+      @Override
+      public void execute(Button source) {
+        startButtonClick();
+      }
+    });
+
+    Button stopButton = myWindow.addChild(new Button("Set Stop"));
+    stopButton.addClickCommands(new Command<Button>() {
+      @Override
+      public void execute(Button source) {
+        stopButtonClick();
+      }
+    });
+
+    Button wallButton = myWindow.addChild(new Button("Set Wall"));
+    wallButton.addClickCommands(new Command<Button>() {
+      @Override
+      public void execute(Button source) {
+        wallButtonClick();
+      }
+    });
+
+    Button pitButton = myWindow.addChild(new Button("Set Pit"));
+    pitButton.addClickCommands(new Command<Button>() {
+      @Override
+      public void execute(Button source) {
+        pitButtonClick();
+      }
+    });
+
+    Button clearButton = myWindow.addChild(new Button("Clear point"));
+    clearButton.addClickCommands(new Command<Button>() {
+      @Override
+      public void execute(Button source) {
+        clearButtonClick();
+      }
+    });
+
+    Label moverLabel = new Label("Walker");
+    myWindow.addChild(moverLabel);
+
+    moverList = new DropDown<>();
     for (MoverTyp typ : MoverTyp.values()) {
-      dropDownMoverElem.addItem(typ);
+      moverList.getModel().add(typ);
     }
-    dropDownMoverElem.selectItemByIndex(0);
+    moverList.getSelectionModel().setSelection(0);
+    myWindow.addChild(moverList);
 
-    @SuppressWarnings("unchecked")
-    DropDown<PathfindingAlgo> dropDownAlgoElem = (DropDown<PathfindingAlgo>) screen.findNiftyControl("algoSelector", DropDown.class);
+    moverList.addClickCommands(new Command<ListBox>() {
+      @Override
+      public void execute(ListBox source) {
+        moverChange();
+      }
+    });
+
+    Label algoLabel = new Label("Algorithm");
+    myWindow.addChild(algoLabel);
+
+    algoList = new DropDown<>();
     for (PathfindingAlgo typ : PathfindingAlgo.values()) {
-      dropDownAlgoElem.addItem(typ);
+      algoList.getModel().add(typ);
     }
-    dropDownAlgoElem.selectItemByIndex(0);
+    algoList.getSelectionModel().setSelection(0);
+    myWindow.addChild(algoList);
 
-    autoSearchElem = screen.findNiftyControl("autoSearchCheckBox", CheckBox.class);
-    autoSearchElem.setChecked(true);
+    algoList.addClickCommands(new Command<ListBox>() {
+      @Override
+      public void execute(ListBox source) {
+        algoChange();
+      }
+    });
 
-    stepBtn = screen.findNiftyControl("doStepButton", Button.class);
-    stepBtn.setEnabled(false);
-    stepBtnState = false;
+    autoPathfinding = myWindow.addChild(new Checkbox("Auto Searching"));
+    autoPathfinding.setChecked(true);
+    autoPathfinding.addClickCommands(new Command<Button>() {
+      @Override
+      public void execute(Button button) {
+        Checkbox check = (Checkbox) button;
+        setAutoPathfinding(check.isChecked());
+      }
+    });
 
-    startBtn = screen.findNiftyControl("doStartButton", Button.class);
-    startBtn.setEnabled(false);
-    startBtnState = false;
+    doStep = myWindow.addChild(new Button("do step"));
+    doStep.setEnabled(false);
+    doStepStatus = false;
+    doStep.addClickCommands(new Command<Button>() {
+      @Override
+      public void execute(Button source) {
+        doStepButtonClick();
+      }
+    });
 
-    stopBtn = screen.findNiftyControl("doStopButton", Button.class);
-    stopBtn.setEnabled(false);
-    stopBtnState = false;
+    startSearch = myWindow.addChild(new Button("Start search"));
+    startSearch.setEnabled(false);
+    startSearchStatus = false;
+    startSearch.addClickCommands(new Command<Button>() {
+      @Override
+      public void execute(Button source) {
+        doStartButtonClick();
+      }
+    });
 
-    resetBtn = screen.findNiftyControl("doRestetButton", Button.class);
-    resetBtn.setEnabled(false);
-    resetBtnState = false;
+    stopSearch = myWindow.addChild(new Button("Stop search"));
+    stopSearch.setEnabled(false);
+    stopSearchStatus = false;
+    stopSearch.addClickCommands(new Command<Button>() {
+      @Override
+      public void execute(Button source) {
+        doStopButtonClick();
+      }
+    });
 
-    TextField msProFrameField = screen.findNiftyControl("msProStepFeld", TextField.class);
-    msProFrameField.getElement().setIgnoreKeyboardEvents(false);
+    Label msPerStep = new Label("Milliseconds per step");
+    myWindow.addChild(msPerStep);
 
-    debugText = nifty.getCurrentScreen().findElementById("debugText");
-  }
+    msTextField = new TextField("");
+    msTextField.setPreferredLineCount(1);
+    msTextField.setPreferredWidth(150);
+    msTextField.setText("100");
+    myWindow.addChild(msTextField);
 
-  /**
-   * update gui
-   */
-  public void update() {
-    if (stepBtnState) {
-      stepBtn.enable();
-    } else {
-      stepBtn.disable();
-    }
-
-    if (startBtnState) {
-      startBtn.enable();
-    } else {
-      startBtn.disable();
-    }
-
-    if (stopBtnState) {
-      stopBtn.enable();
-    } else {
-      stopBtn.disable();
-    }
-
-    if (resetBtnState) {
-      resetBtn.enable();
-    } else {
-      resetBtn.disable();
-    }
-
-  }
-
-  @Override
-  public void onStartScreen() {
-//    System.out.println("onStartScreen");
-  }
-
-  @Override
-  public void onEndScreen() {
-//    System.out.println("onEndScreen");
+    resetSearch = myWindow.addChild(new Button("Reset search"));
+    resetSearch.setEnabled(false);
+    resetSearch.addClickCommands(new Command<Button>() {
+      @Override
+      public void execute(Button source) {
+        doResetButtonClick();
+      }
+    });
   }
 
   public void startButtonClick() {
@@ -165,73 +225,71 @@ public class GuiController implements ScreenController, AbstractViewPanel {
     app.clickElement = MapElements.NOPE;
   }
 
-  @NiftyEventSubscriber(id = "moverSelector")
-  public void moverSelectorChange(String id, DropDownSelectionChangedEvent<?> event) {
-    Object selectedItem = event.getSelection();
-    if (selectedItem instanceof MoverTyp) {
-      controller.setMover((MoverTyp) selectedItem);
+  public void moverSelectorChange(MoverTyp mover) {
+    if (null != mover) {
+      controller.setMover(mover);
     }
   }
 
-  @NiftyEventSubscriber(id = "algoSelector")
-  public void algoSelectorChange(String id, DropDownSelectionChangedEvent<?> event) {
-    Object selectedItem = event.getSelection();
-    if (selectedItem instanceof PathfindingAlgo) {
-      controller.setPathfindingAlgo((PathfindingAlgo) selectedItem);
+  public void update() {
+    doStep.setEnabled(doStepStatus);
+    startSearch.setEnabled(startSearchStatus);
+    stopSearch.setEnabled(stopSearchStatus);
+    resetSearch.setEnabled(resetSearchStatus);
+  }
+
+  private void moverChange() {
+    Integer selection = moverList.getSelectionModel().getSelection();
+    if (selection != null) {
+      MoverTyp mover = moverList.getModel().get(selection);
+      controller.setMover(mover);
     }
   }
 
-//  @NiftyEventSubscriber(pattern = ".*Selector")
-//  public void selectorChange(String id, DropDownSelectionChangedEvent<?> event) {
-//
-//    Object selectedItem = event.getSelection();
-//    switch (id) {
-//    case "moverSelector":
-//      if (selectedItem instanceof MoverTyp) {
-//        app.setMoverTyp((MoverTyp) selectedItem);
-//      }
-//      break;
-//    case "algoSelector":
-//      if (selectedItem instanceof PathfindingAlgo) {
-//        app.setAlgo((PathfindingAlgo) selectedItem);
-//      }
-//      break;
-//    default:
-//      break;
-//    }
-//  }
+  private void algoChange() {
+    Integer selection = algoList.getSelectionModel().getSelection();
+    if (selection != null) {
+      PathfindingAlgo algo = algoList.getModel().get(selection);
+      controller.setPathfindingAlgo(algo);
+    }
+  }
 
-  @NiftyEventSubscriber(id = "autoSearchCheckBox")
-  public void onRememberMeCheck(String id, CheckBoxStateChangedEvent event) {
-    boolean checked = event.isChecked();
+  private void setAutoPathfinding(boolean checked) {
     controller.setAutoPathfinding(checked);
 
     if (checked) {
-      stepBtnState = false;
-      startBtnState = false;
-      stopBtnState = false;
-      resetBtnState = false;
+      doStepStatus = false;
+      startSearchStatus = false;
+      stopSearchStatus = false;
+      resetSearchStatus = false;
     } else {
-      stepBtnState = true;
-      startBtnState = true;
-      stopBtnState = true;
-      resetBtnState = true;
+      doStepStatus = true;
+      startSearchStatus = true;
+      stopSearchStatus = true;
+      resetSearchStatus = true;
     }
   }
 
-  public void doStepButtonClick() {
+  private void doStepButtonClick() {
     controller.doPathfindingStep();
   }
 
-  public void doStartButtonClick() {
-    controller.startPathfinding(20);
+  private void doStartButtonClick() {
+
+    try {
+      Integer ms = Integer.parseInt(msTextField.getText());
+      controller.startPathfinding(ms.intValue());
+    } catch (NumberFormatException e) {
+      controller.startPathfinding(20);
+    }
+
   }
 
-  public void doStopButtonClick() {
+  private void doStopButtonClick() {
     controller.stopPathfinding();
   }
 
-  public void doResetButtonClick() {
+  private void doResetButtonClick() {
     controller.resetPathfinding();
   }
 
@@ -244,21 +302,21 @@ public class GuiController implements ScreenController, AbstractViewPanel {
     if (evt.getPropertyName().equals(DefaultController.ELEMENT_DEBUG_INFO)) {
       if (null != debugText) {
         String debugInfo = (String) evt.getNewValue();
-        debugText.getRenderer(TextRenderer.class).setText(debugInfo);
+        debugText.setText(debugInfo);
       }
     } else if (evt.getPropertyName().equals(DefaultController.ELEMENT_PATHWAYFINDING_RUNNING)) {
-      if (!autoSearchElem.isChecked()) {
+      if (!autoPathfinding.isChecked()) {
         Boolean runnung = (Boolean) evt.getNewValue();
         if (runnung.booleanValue()) {
-          startBtnState = false;
-          stopBtnState = true;
+          startSearchStatus = false;
+          stopSearchStatus = true;
         } else {
-          startBtnState = true;
-          stopBtnState = false;
+          startSearchStatus = true;
+          stopSearchStatus = false;
         }
       } else {
-        startBtnState = false;
-        stopBtnState = false;
+        startSearchStatus = false;
+        stopSearchStatus = false;
       }
     }
   }
