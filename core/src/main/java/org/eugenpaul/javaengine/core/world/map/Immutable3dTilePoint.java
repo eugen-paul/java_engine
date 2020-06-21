@@ -7,16 +7,16 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 /**
- * Immutable point in 3D.
+ * Immutable point in 3D Tile Based Map.
  * 
  * @author Eugen Paul
  *
  */
 @AllArgsConstructor
 @EqualsAndHashCode
-public class Immutable3dPoint {
+public class Immutable3dTilePoint {
 
-  public static final Immutable3dPoint NULL_POINT = new Immutable3dPoint(0, 0, 0);
+  public static final Immutable3dTilePoint NULL_POINT = new Immutable3dTilePoint(0, 0, 0);
 
   @Getter
   private int x;
@@ -25,13 +25,13 @@ public class Immutable3dPoint {
   @Getter
   private int z;
 
-  public Immutable3dPoint(Immutable3dPoint point) {
+  public Immutable3dTilePoint(Immutable3dTilePoint point) {
     x = point.getX();
     y = point.getY();
     z = point.getZ();
   }
 
-  public Immutable3dPoint(Position point) {
+  public Immutable3dTilePoint(Position point) {
     x = (int) point.getX();
     y = (int) point.getY();
     z = (int) point.getZ();
@@ -45,12 +45,12 @@ public class Immutable3dPoint {
     ;
   }
 
-  public Immutable3dPoint minus(Immutable3dPoint point) {
-    return new Immutable3dPoint(x - point.getX(), y - point.getY(), z - point.getZ());
+  public Immutable3dTilePoint minus(Immutable3dTilePoint point) {
+    return new Immutable3dTilePoint(x - point.getX(), y - point.getY(), z - point.getZ());
   }
 
-  public Immutable3dPoint add(Immutable3dPoint point) {
-    return new Immutable3dPoint(x + point.getX(), y + point.getY(), z + point.getZ());
+  public Immutable3dTilePoint add(Immutable3dTilePoint point) {
+    return new Immutable3dTilePoint(x + point.getX(), y + point.getY(), z + point.getZ());
   }
 
 }

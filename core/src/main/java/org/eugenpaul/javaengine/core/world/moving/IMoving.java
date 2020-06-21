@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.eugenpaul.javaengine.core.world.entity.Step;
 import org.eugenpaul.javaengine.core.world.map.ITileBasedMap;
-import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
+import org.eugenpaul.javaengine.core.world.map.Immutable3dTilePoint;
 
 /**
  * Interface to test if the step is on the map possible.
@@ -22,7 +22,7 @@ public interface IMoving<T extends Step> {
    * @param map
    * @return allowed steps
    */
-  public abstract List<T> checkPossibleSteps(List<T> steps, Immutable3dPoint position, ITileBasedMap map);
+  public abstract List<T> checkPossibleSteps(List<T> steps, Immutable3dTilePoint position, ITileBasedMap map);
 
   /**
    * Check possibility of steps.

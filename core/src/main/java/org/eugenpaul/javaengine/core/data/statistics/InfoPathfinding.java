@@ -2,7 +2,7 @@ package org.eugenpaul.javaengine.core.data.statistics;
 
 import java.util.Arrays;
 
-import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
+import org.eugenpaul.javaengine.core.world.map.Immutable3dTilePoint;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -29,7 +29,7 @@ public class InfoPathfinding {
    * 
    * @param mapSize size of map
    */
-  public InfoPathfinding(Immutable3dPoint mapSize) {
+  public InfoPathfinding(Immutable3dTilePoint mapSize) {
     this(mapSize.getX(), mapSize.getY(), mapSize.getZ());
   }
 
@@ -82,7 +82,7 @@ public class InfoPathfinding {
    * @param coordinates
    * @param info
    */
-  public void setPoint(Immutable3dPoint coordinates, InfoPathfindingMapStatus info) {
+  public void setPoint(Immutable3dTilePoint coordinates, InfoPathfindingMapStatus info) {
     setPoint(coordinates.getX(), coordinates.getY(), coordinates.getZ(), info);
   }
 

@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.eugenpaul.javaengine.core.world.entity.collision.ICollisionCondition;
 import org.eugenpaul.javaengine.core.world.map.ITileBasedMap;
-import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
+import org.eugenpaul.javaengine.core.world.map.Immutable3dTilePoint;
 
 /**
  * Implementation of 2D-TileBasedMap.
@@ -27,8 +27,8 @@ public class SimpleTileBased2dMap implements ITileBasedMap {
   }
 
   @Override
-  public Immutable3dPoint getPathfinderSize() {
-    return new Immutable3dPoint(sizeX, sizeY, 1);
+  public Immutable3dTilePoint getPathfinderSize() {
+    return new Immutable3dTilePoint(sizeX, sizeY, 1);
   }
 
   /**
@@ -48,7 +48,7 @@ public class SimpleTileBased2dMap implements ITileBasedMap {
   }
 
   @Override
-  public List<ICollisionCondition> getCollisionCondition(Immutable3dPoint position) {
+  public List<ICollisionCondition> getCollisionCondition(Immutable3dTilePoint position) {
     return getCollisionCondition(position.getX(), position.getY(), position.getZ());
   }
 

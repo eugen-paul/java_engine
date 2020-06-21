@@ -4,18 +4,21 @@ import java.util.Set;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
+import com.jme3.texture.Texture;
 import com.simsilica.lemur.Axis;
 import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Command;
 import com.simsilica.lemur.FillMode;
 import com.simsilica.lemur.GuiGlobals;
 import com.simsilica.lemur.HAlignment;
+import com.simsilica.lemur.Insets3f;
 import com.simsilica.lemur.Label;
 import com.simsilica.lemur.ListBox;
 import com.simsilica.lemur.Panel;
 import com.simsilica.lemur.VAlignment;
-import com.simsilica.lemur.component.BoxLayout;
 import com.simsilica.lemur.component.QuadBackgroundComponent;
+import com.simsilica.lemur.component.SpringGridLayout;
+import com.simsilica.lemur.component.TbtQuadBackgroundComponent;
 import com.simsilica.lemur.core.GuiControl;
 import com.simsilica.lemur.core.VersionedList;
 import com.simsilica.lemur.core.VersionedReference;
@@ -24,6 +27,12 @@ import com.simsilica.lemur.event.PopupState.ClickMode;
 import com.simsilica.lemur.list.SelectionModel;
 import com.simsilica.lemur.style.ElementId;
 
+/**
+ * TODO move this class to My-Lemur-Gui-common-Library
+ * @author Eugen Paul
+ *
+ * @param <T>
+ */
 public class DropDown<T> extends Panel {
 
   public static final String ELEMENT_ID = "dropdown";
@@ -58,20 +67,33 @@ public class DropDown<T> extends Panel {
 
   protected DropDown(boolean applyStyles, ElementId elementId, String style) {
     super(false, elementId, style);
-    BoxLayout layout = new BoxLayout(Axis.X, FillMode.None);
+//    BoxLayout layout = new BoxLayout(Axis.X, FillMode.None);
+//    getControl(GuiControl.class).setLayout(layout);
+    SpringGridLayout layout = new SpringGridLayout(Axis.X, Axis.Y, FillMode.First, FillMode.None);
     getControl(GuiControl.class).setLayout(layout);
     this.collapseButton = new Button("V", elementId.child("button"), style);
     this.chosenElement = new Label("", elementId.child("selection"), style);
+
     layout.addChild(chosenElement);
     layout.addChild(collapseButton);
     collapseButton.setTextVAlignment(VAlignment.Center);
     collapseButton.addClickCommands((s) -> {
       resetOpen();
     });
-    chosenElement.setTextHAlignment(HAlignment.Center);
+    chosenElement.setTextHAlignment(HAlignment.Left);
     chosenElement.setTextVAlignment(VAlignment.Center);
-//    listBox = new ListBox<>(new VersionedList<>(), elementId.child("popup"), style);
+
+    //TODO remove this dirty Background Initialisation
+    chosenElement.setInsets(new Insets3f(2, 2, 2, 2));
+    Texture texture = GuiGlobals.getInstance().loadTexture("/com/simsilica/lemur/icons/bordered-gradient.png", true, false);
+    TbtQuadBackgroundComponent bg = TbtQuadBackgroundComponent.create(texture, 1, 1, 1, 126, 126, 1f, false);
+    chosenElement.setBackground(bg);
+    bg.setColor(new ColorRGBA(0f, 0.75f, 0.75f, 0.5f));
+    
     listBox = new ListBox<>();
+
+    listBox.setBackground(new QuadBackgroundComponent(ColorRGBA.Black));
+    listBox.setAlpha(1, true);
 
     this.selectionRef = listBox.getSelectionModel().createReference();
     if (applyStyles) {
@@ -102,8 +124,7 @@ public class DropDown<T> extends Panel {
       listBox.setPreferredSize(preferredSize);
       Vector3f localTranslation = getWorldTranslation();
       listBox.setLocalTranslation(localTranslation.x, localTranslation.y - getSize().y, localTranslation.z);
-      listBox.setBackground(new QuadBackgroundComponent(ColorRGBA.Black));
-      listBox.setAlpha(1, true);
+
       popupState.showPopup(listBox, ClickMode.ConsumeAndClose, (source) -> {
         Integer selection = listBox.getSelectionModel().getSelection();
         if (selection != null) {

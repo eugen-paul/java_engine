@@ -19,7 +19,7 @@ import org.eugenpaul.javaengine.core.world.entity.AMover;
 import org.eugenpaul.javaengine.core.world.entity.Step;
 import org.eugenpaul.javaengine.core.world.entity.collision.ICollisionCondition;
 import org.eugenpaul.javaengine.core.world.map.ITileBasedMap;
-import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
+import org.eugenpaul.javaengine.core.world.map.Immutable3dTilePoint;
 import org.eugenpaul.javaengine.core.world.moving.IMoving;
 
 /**
@@ -45,13 +45,13 @@ public abstract class AWave implements Pathfinding<Step>, PathfindingDebug {
 
   private AMover debugMover = null;
   private IMotionState debugTo = null;
-  private Immutable3dPoint debugToPoint = null;
+  private Immutable3dTilePoint debugToPoint = null;
 
   private boolean doDynamicCost = false;
 
   @Override
   public boolean init(ITileBasedMap map, IMoving<Step> movingTester, boolean doDynamicCost) {
-    Immutable3dPoint mapSize = map.getPathfinderSize();
+    Immutable3dTilePoint mapSize = map.getPathfinderSize();
     nodes = new MapBuffer(mapSize.getX(), mapSize.getY(), mapSize.getZ());
 
     this.mapCopy = map;
@@ -63,7 +63,7 @@ public abstract class AWave implements Pathfinding<Step>, PathfindingDebug {
   }
 
   @Override
-  public List<Step> getPath(AMover mover, IMotionState from, Immutable3dPoint fromPoint, IMotionState to, Immutable3dPoint toPoint) {
+  public List<Step> getPath(AMover mover, IMotionState from, Immutable3dTilePoint fromPoint, IMotionState to, Immutable3dTilePoint toPoint) {
 
     // add Startpoint to nodesToCheck
     push(from, 0, null, fromPoint, toPoint, mover.getSimpleStepHeuristicsCost());
@@ -88,7 +88,7 @@ public abstract class AWave implements Pathfinding<Step>, PathfindingDebug {
    * @param simpleStepCost
    * @return
    */
-  protected abstract long getHeuristicsCost(long wayCost, Immutable3dPoint a, Immutable3dPoint b, int simpleStepCost);
+  protected abstract long getHeuristicsCost(long wayCost, Immutable3dTilePoint a, Immutable3dTilePoint b, int simpleStepCost);
 
   /**
    * One step of Pathfinding.
@@ -96,7 +96,7 @@ public abstract class AWave implements Pathfinding<Step>, PathfindingDebug {
    * @return true - found<br>
    *         false - try more
    */
-  private boolean oneStep(SearchStep checkNode, AMover mover, IMotionState to, Immutable3dPoint toPoint) {
+  private boolean oneStep(SearchStep checkNode, AMover mover, IMotionState to, Immutable3dTilePoint toPoint) {
     checkNode.setChecked();
 
     if (checkNode.getX() == toPoint.getX()//
@@ -121,7 +121,7 @@ public abstract class AWave implements Pathfinding<Step>, PathfindingDebug {
           step.getLastState(), //
           checkNode.getStepscost() + singleStepCost, //
           step, //
-          new Immutable3dPoint(xLastPonit, yLastPonit, zLastPonit), //
+          new Immutable3dTilePoint(xLastPonit, yLastPonit, zLastPonit), //
           toPoint, //
           mover.getSimpleStepHeuristicsCost() //
       )) {
@@ -134,7 +134,7 @@ public abstract class AWave implements Pathfinding<Step>, PathfindingDebug {
         }
 
         if (debugMode && null != debugData) {
-          Immutable3dPoint stepPoint = step.getMovingWay().get(step.getMovingWay().size() - 1);
+          Immutable3dTilePoint stepPoint = step.getMovingWay().get(step.getMovingWay().size() - 1);
           debugData.setPoint(checkNode.getX() + stepPoint.getX(), //
               checkNode.getY() + stepPoint.getY(), //
               checkNode.getZ() + stepPoint.getZ(), //
@@ -152,7 +152,7 @@ public abstract class AWave implements Pathfinding<Step>, PathfindingDebug {
     long singleStepCost;
     if (doDynamicCost && null != step.getCostWay()) {
       List<List<ICollisionCondition>> listCollision = new ArrayList<>();
-      for (Immutable3dPoint costPoint : step.getCostWay()) {
+      for (Immutable3dTilePoint costPoint : step.getCostWay()) {
         listCollision.add(mapCopy.getCollisionCondition(costPoint.getX() + x, costPoint.getY() + y, costPoint.getZ() + z));
       }
       singleStepCost = step.getDynamicMultiCost(listCollision);
@@ -167,10 +167,10 @@ public abstract class AWave implements Pathfinding<Step>, PathfindingDebug {
    * 
    * @return
    */
-  private List<Step> getPath(IMotionState to, Immutable3dPoint toPoint) {
+  private List<Step> getPath(IMotionState to, Immutable3dTilePoint toPoint) {
     LinkedList<Step> response = new LinkedList<>();
 
-    Immutable3dPoint pointToTest = toPoint;
+    Immutable3dTilePoint pointToTest = toPoint;
     Node lastNode = nodes.getNode(toPoint);
     if (null == lastNode) {
       return Collections.emptyList();
@@ -203,7 +203,7 @@ public abstract class AWave implements Pathfinding<Step>, PathfindingDebug {
    * @return true - added<br>
    *         false - old node
    */
-  private boolean push(IMotionState state, long cost, Step stepFrom, Immutable3dPoint fromPoint, Immutable3dPoint toPoint, int heuristicsStepCost) {
+  private boolean push(IMotionState state, long cost, Step stepFrom, Immutable3dTilePoint fromPoint, Immutable3dTilePoint toPoint, int heuristicsStepCost) {
     SearchStep step = nodes.addStepToNode(state, cost, stepFrom, fromPoint);
     if (step != null) {
       step.setHeuristicscost(getHeuristicsCost(step.getStepscost(), fromPoint, toPoint, heuristicsStepCost));
@@ -246,7 +246,7 @@ public abstract class AWave implements Pathfinding<Step>, PathfindingDebug {
   }
 
   @Override
-  public boolean restartPathfinding(AMover mover, IMotionState from, Immutable3dPoint fromPoint, IMotionState to, Immutable3dPoint toPoint) {
+  public boolean restartPathfinding(AMover mover, IMotionState from, Immutable3dTilePoint fromPoint, IMotionState to, Immutable3dTilePoint toPoint) {
     // reset all old data
     if (debugMode && null != debugData) {
       debugData.resetInfo();

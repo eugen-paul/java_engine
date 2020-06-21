@@ -1,7 +1,7 @@
 package org.eugenpaul.javaengine.core.world.entity;
 
 import org.eugenpaul.javaengine.core.world.entity.collision.ICollisionCondition;
-import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
+import org.eugenpaul.javaengine.core.world.map.Immutable3dTilePoint;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +15,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class CollisionPoint {
-  private Immutable3dPoint point;
+  private Immutable3dTilePoint point;
   private ICollisionCondition collisionCondition;
 
   @Override

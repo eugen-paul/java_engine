@@ -16,7 +16,7 @@ public interface ITileBasedMap {
    * 
    * @return
    */
-  public Immutable3dPoint getPathfinderSize();
+  public Immutable3dTilePoint getPathfinderSize();
 
   /**
    * Get list of collisions in map.
@@ -34,7 +34,7 @@ public interface ITileBasedMap {
    * @param position
    * @return
    */
-  public List<ICollisionCondition> getCollisionCondition(Immutable3dPoint position);
+  public List<ICollisionCondition> getCollisionCondition(Immutable3dTilePoint position);
 
   /**
    * Check, if the collision condition is at map point. <br>

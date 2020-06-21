@@ -1,13 +1,18 @@
 package org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eugenpaul.javaengine.core.clock.Clock;
 import org.eugenpaul.javaengine.core.scheduler.job.JobSchedulerThreaded;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.MoverTyp;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.PathfinderJob;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.PathfindingAlgo;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.WorldElements;
-import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.IMapRepresentation;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.MapElements;
+import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.view2d.AlgoFactory;
+import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.view2d.ClearanceBasedFactory;
+import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.view2d.TileBasedFactory;
 
 /**
  * Controller for path finding.
@@ -20,10 +25,14 @@ public class DefaultController extends AbstractController {
   public static final String ELEMENT_MAP = "MAP";
   public static final String ELEMENT_DEBUG_INFO = "DEBUG_INFO";
   public static final String ELEMENT_PATHWAYFINDING_RUNNING = "PATHWAYFINDING_RUNNING";
+  public static final String ELEMENT_REBUILD = "REBUILD";
 
   private JobSchedulerThreaded scheduler;
-  
+
   private final Clock clock;
+
+  private List<AlgoFactory> factories2d;
+  private AlgoFactory current2dFactory;
 
   /**
    * C*tor
@@ -32,6 +41,11 @@ public class DefaultController extends AbstractController {
     super();
     scheduler = new JobSchedulerThreaded(clock);
     this.clock = clock;
+    factories2d = new ArrayList<>();
+    factories2d.add(new TileBasedFactory(this));
+    factories2d.add(new ClearanceBasedFactory(this));
+    
+    current2dFactory = factories2d.get(0);
   }
 
   /**
@@ -71,15 +85,6 @@ public class DefaultController extends AbstractController {
    */
   public void setMover(MoverTyp mover) {
     world.setMover(mover);
-  }
-  
-  /**
-   * set map
-   * 
-   * @param map
-   */
-  public void setMap(IMapRepresentation map) {
-    world.setMapRepresentation(map);
   }
 
   /**
@@ -138,4 +143,21 @@ public class DefaultController extends AbstractController {
     scheduler.stopScheduler();
   }
 
+  public List<AlgoFactory> get2dFactories() {
+    return factories2d;
+  }
+
+  public AlgoFactory getCurrent2dFactory() {
+    return current2dFactory;
+  }
+
+  public void set2dFactory(String name) {
+    for (AlgoFactory factory : factories2d) {
+      if (name.equals(factory.getName())) {
+        current2dFactory = factory;
+        world.setMapRepresentation(factory.getMap());
+        return;
+      }
+    }
+  }
 }

@@ -8,7 +8,7 @@ import org.eugenpaul.javaengine.core.world.entity.AMover;
 import org.eugenpaul.javaengine.core.world.entity.CollisionPoint;
 import org.eugenpaul.javaengine.core.world.entity.Step;
 import org.eugenpaul.javaengine.core.world.entity.collision.ICollisionCondition;
-import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
+import org.eugenpaul.javaengine.core.world.map.Immutable3dTilePoint;
 
 /**
  * Mover on 2d Tile Map.<br>
@@ -61,7 +61,7 @@ public class Simple2dMover implements AMover {
   }
 
   private Step createStep(int x, int y) {
-    List<Immutable3dPoint> movingWay = new ArrayList<>();
+    List<Immutable3dTilePoint> movingWay = new ArrayList<>();
     IMotionState lastPoint = new SimpleMotionState();
     long cost = 10L;
 
@@ -69,20 +69,20 @@ public class Simple2dMover implements AMover {
       cost = 13L;
     }
 
-    movingWay.add(new Immutable3dPoint(0, 0, 0));
-    movingWay.add(new Immutable3dPoint(x, y, 0));
+    movingWay.add(new Immutable3dTilePoint(0, 0, 0));
+    movingWay.add(new Immutable3dTilePoint(x, y, 0));
 
     ArrayList<CollisionPoint> collisionList = new ArrayList<>();
 
-    CollisionPoint cPointStart = new CollisionPoint(new Immutable3dPoint(0, 0, 0), stdCondition);
+    CollisionPoint cPointStart = new CollisionPoint(new Immutable3dTilePoint(0, 0, 0), stdCondition);
     collisionList.add(cPointStart);
     if (!slim && x != 0 && y != 0) {
-      CollisionPoint middle1 = new CollisionPoint(new Immutable3dPoint(x, 0, 0), stdCondition);
+      CollisionPoint middle1 = new CollisionPoint(new Immutable3dTilePoint(x, 0, 0), stdCondition);
       collisionList.add(middle1);
-      CollisionPoint middle2 = new CollisionPoint(new Immutable3dPoint(0, y, 0), stdCondition);
+      CollisionPoint middle2 = new CollisionPoint(new Immutable3dTilePoint(0, y, 0), stdCondition);
       collisionList.add(middle2);
     }
-    CollisionPoint cPointEnd = new CollisionPoint(new Immutable3dPoint(x, y, 0), stdCondition);
+    CollisionPoint cPointEnd = new CollisionPoint(new Immutable3dTilePoint(x, y, 0), stdCondition);
     collisionList.add(cPointEnd);
 
     return new Step(movingWay, lastPoint, lastPoint, collisionList, cost);

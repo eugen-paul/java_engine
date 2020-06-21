@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eugenpaul.javaengine.core.world.entity.collision.ICollisionCondition;
-import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
+import org.eugenpaul.javaengine.core.world.map.Immutable3dTilePoint;
 
 import lombok.Getter;
 
@@ -16,7 +16,7 @@ import lombok.Getter;
  */
 public class Step {
   @Getter
-  private List<Immutable3dPoint> movingWay = null;
+  private List<Immutable3dTilePoint> movingWay = null;
 
   @Getter
   private IMotionState fromState = null;
@@ -31,11 +31,11 @@ public class Step {
   private long cost = 0L;
 
   @Getter
-  private Immutable3dPoint lastPosition = null;
+  private Immutable3dTilePoint lastPosition = null;
 
   @Getter
   /** The Point can be checked to compute a new (real) step cost if not all points on the map a equal */
-  private List<Immutable3dPoint> costWay = null;
+  private List<Immutable3dTilePoint> costWay = null;
 
   /** Interface to compute dynamic step cost */
   private StepCostModifier costModifier = null;
@@ -47,7 +47,7 @@ public class Step {
    * @param collisionBox
    * @param cost
    */
-  public Step(List<Immutable3dPoint> movingWay, IMotionState fromState, IMotionState lastState, List<CollisionPoint> collisionBox, long cost) {
+  public Step(List<Immutable3dTilePoint> movingWay, IMotionState fromState, IMotionState lastState, List<CollisionPoint> collisionBox, long cost) {
     this.movingWay = Collections.unmodifiableList(List.copyOf(movingWay));
     this.collisionBox = Collections.unmodifiableList(List.copyOf(collisionBox));
     this.fromState = fromState;
@@ -58,7 +58,7 @@ public class Step {
     lastPosition = movingWay.get(size - 1);
   }
 
-  public Step(List<Immutable3dPoint> movingWay, IMotionState fromState, IMotionState lastState, List<CollisionPoint> collisionBox, long cost, List<Immutable3dPoint> costWay,
+  public Step(List<Immutable3dTilePoint> movingWay, IMotionState fromState, IMotionState lastState, List<CollisionPoint> collisionBox, long cost, List<Immutable3dTilePoint> costWay,
       StepCostModifier costModifier) {
     this(movingWay, fromState, lastState, collisionBox, cost);
     this.costWay = costWay;
@@ -68,7 +68,7 @@ public class Step {
   @Override
   public String toString() {
     StringBuilder steps = new StringBuilder();
-    for (Immutable3dPoint step : movingWay) {
+    for (Immutable3dTilePoint step : movingWay) {
       steps.append(step.toString());
       steps.append("; \n");
     }

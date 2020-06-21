@@ -6,7 +6,7 @@ import org.eugenpaul.javaengine.core.world.entity.IMotionState;
 import org.eugenpaul.javaengine.core.world.entity.AMover;
 import org.eugenpaul.javaengine.core.world.entity.Step;
 import org.eugenpaul.javaengine.core.world.map.ITileBasedMap;
-import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
+import org.eugenpaul.javaengine.core.world.map.Immutable3dTilePoint;
 import org.eugenpaul.javaengine.core.world.moving.IMoving;
 
 /**
@@ -38,7 +38,7 @@ public interface Pathfinding<T extends Step> {
    * @param toPoint
    * @return
    */
-  public List<Step> getPath(AMover mover, IMotionState from, Immutable3dPoint fromPoint, IMotionState to, Immutable3dPoint toPoint);
+  public List<Step> getPath(AMover mover, IMotionState from, Immutable3dTilePoint fromPoint, IMotionState to, Immutable3dTilePoint toPoint);
 
   /**
    * Get DebugInfo, if possible

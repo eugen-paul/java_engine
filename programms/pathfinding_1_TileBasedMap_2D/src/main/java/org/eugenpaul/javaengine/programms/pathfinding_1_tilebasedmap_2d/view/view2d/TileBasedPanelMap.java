@@ -2,21 +2,24 @@ package org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.vi
 
 import java.awt.Color;
 import java.awt.Graphics;
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import org.eugenpaul.javaengine.core.world.map.Immutable3dTilePoint;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.GridElement;
 
 /**
  * Panel to print map
  */
-public class PanelMap extends JPanel {
+public class TileBasedPanelMap extends APaintPanel {
 
   private static final long serialVersionUID = 3518239133683265379L;
+
+  public static final String PARAM_PRINT_VALUE = "PRINT_VALUE";
 
   private GridElement[][] grid = null;
   private boolean visibleValue = false;
 
+  @Override
   public void setGrid(GridElement[][] grid) {
     SwingUtilities.invokeLater(() -> {
       setDataToPain(grid);
@@ -25,12 +28,58 @@ public class PanelMap extends JPanel {
     });
   }
 
-  public void setPrintValue(boolean visible) {
-    SwingUtilities.invokeLater(() -> {
-      visibleValue = visible;
-      revalidate();
-      repaint();
-    });
+  @Override
+  public void setParam(String key, String value) {
+    // NIX
+  }
+
+  @Override
+  public void setParam(String key, boolean value) {
+    if (key.equals(PARAM_PRINT_VALUE)) {
+      SwingUtilities.invokeLater(() -> {
+        visibleValue = value;
+        revalidate();
+        repaint();
+      });
+    }
+  }
+
+  @Override
+  public void setParam(String key, int value) {
+    // NIX
+  }
+
+  @Override
+  public Immutable3dTilePoint mouseToWorld(int panelX, int panelY) {
+    if (null == grid) {
+      return null;
+    }
+
+    int mapSizeX = grid.length;
+    int mapSizeY = grid[0].length;
+
+    int blockWidth = getWidth() / mapSizeX;
+    int blockHeight = getHeight() / mapSizeY;
+
+    int blockX = panelX / blockWidth;
+    int blockY = panelY / blockHeight;
+
+    if (blockX < 0) {
+      blockX = 0;
+    }
+
+    if (blockY < 0) {
+      blockY = 0;
+    }
+
+    if (blockX >= mapSizeX) {
+      blockX = mapSizeX - 1;
+    }
+    if (blockY >= mapSizeY) {
+      blockY = mapSizeY - 1;
+    }
+
+    return new Immutable3dTilePoint(blockX, blockY, 0);
   }
 
   private void setDataToPain(GridElement[][] grid) {
@@ -89,7 +138,7 @@ public class PanelMap extends JPanel {
         g.fillRect(x * blockWidth, y * blockHeight, blockWidth, blockHeight);
         g.setColor(Color.BLACK);
         if (visibleValue) {
-          g.drawString(Integer.toString(grid[x][y].getClearanceValue()), x * blockWidth, (y+1) * blockHeight);
+          g.drawString(Integer.toString(grid[x][y].getClearanceValue()), x * blockWidth, (y + 1) * blockHeight);
         }
       }
     }

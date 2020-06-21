@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import org.eugenpaul.javaengine.core.world.entity.IMotionState;
 import org.eugenpaul.javaengine.core.world.entity.Step;
-import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
+import org.eugenpaul.javaengine.core.world.map.Immutable3dTilePoint;
 
 import lombok.Getter;
 
@@ -67,7 +67,7 @@ public class MapBuffer {
    * @param point position of the node
    * @return node
    */
-  public Node getNode(Immutable3dPoint point) {
+  public Node getNode(Immutable3dTilePoint point) {
     return getNode(point.getX(), point.getY(), point.getZ());
   }
 
@@ -95,7 +95,7 @@ public class MapBuffer {
    * @return not null - new state - new state is better or not in the node<br>
    *         null - new state is worse
    */
-  public SearchStep addStepToNode(IMotionState state, long cost, Step stepFrom, Immutable3dPoint position) {
+  public SearchStep addStepToNode(IMotionState state, long cost, Step stepFrom, Immutable3dTilePoint position) {
     Node checkNode = getOrCreateNode(position.getX(), position.getY(), position.getZ());
 
     return checkNode.chechAndAddNode(state, cost, stepFrom, position.getX(), position.getY(), position.getZ());

@@ -23,7 +23,7 @@ public class Starter {
     World model = new World(maxSizeX, maxSizeY);
     controller.setWorld(model);
 
-    MainFrame mFrame = new MainFrame(controller, maxSizeX, maxSizeY);
+    MainFrame mFrame = new MainFrame(controller);
 
     controller.addView(mFrame);
     model.fireCurrentMap();

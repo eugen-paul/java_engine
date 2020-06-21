@@ -12,7 +12,7 @@ import org.eugenpaul.javaengine.core.data.statistics.InfoPathfinding;
 import org.eugenpaul.javaengine.core.data.statistics.InfoPathfindingMapStatus;
 import org.eugenpaul.javaengine.core.world.entity.IMotionState;
 import org.eugenpaul.javaengine.core.world.entity.Step;
-import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
+import org.eugenpaul.javaengine.core.world.map.Immutable3dTilePoint;
 import org.eugenpaul.javaengine.core.world.moving.IMoving;
 import org.eugenpaul.javaengine.core.world.moving.sample.SimpleMoving;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.controller.DefaultController;
@@ -29,8 +29,8 @@ import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.Map
  */
 public class World implements AbstractModel {
 
-  private Immutable3dPoint start = null;
-  private Immutable3dPoint end = null;
+  private Immutable3dTilePoint start = null;
+  private Immutable3dTilePoint end = null;
   private PropertyChangeSupport propertyChangeSupport;
   private IMoving<Step> mapMoving = null;
 
@@ -51,8 +51,8 @@ public class World implements AbstractModel {
   public World(int sizeX, int sizeY) {
     map = new TileMap(sizeX, sizeY);
 
-    start = new Immutable3dPoint(0, 0, 0);
-    end = new Immutable3dPoint(0, 5, 0);
+    start = new Immutable3dTilePoint(0, 0, 0);
+    end = new Immutable3dTilePoint(0, 5, 0);
     propertyChangeSupport = new PropertyChangeSupport(this);
     mapMoving = new SimpleMoving();
 
@@ -63,20 +63,20 @@ public class World implements AbstractModel {
   public synchronized void setMapRepresentation(IMapRepresentation map) {
     this.map = map;
 
-    start = new Immutable3dPoint(0, 0, 0);
-    end = new Immutable3dPoint(0, 5, 0);
+    start = new Immutable3dTilePoint(0, 0, 0);
+    end = new Immutable3dTilePoint(0, 5, 0);
     
     pathfinding.init(map, mapMoving, true);
     reset();
 
-    propertyChangeSupport.firePropertyChange(DefaultController.ELEMENT_MAP, null, getMap());
+    propertyChangeSupport.firePropertyChange(DefaultController.ELEMENT_REBUILD, null, getMap());
   }
 
   public synchronized WorldElements getPosition(int x, int y) {
     return (WorldElements) map.getPosition(x, y);
   }
 
-  public WorldElements getPosition(Immutable3dPoint point) {
+  public WorldElements getPosition(Immutable3dTilePoint point) {
     return getPosition(point.getX(), point.getY());
   }
 
@@ -90,7 +90,7 @@ public class World implements AbstractModel {
     return true;
   }
 
-  public boolean setPosition(Immutable3dPoint point, WorldElements element) {
+  public boolean setPosition(Immutable3dTilePoint point, WorldElements element) {
     return setPosition(point.getX(), point.getY(), element);
   }
 
@@ -100,7 +100,7 @@ public class World implements AbstractModel {
     if (!autoPathfinding) {
       addDebugInfo(result);
     } else {
-      List<Immutable3dPoint> way = doPathfinding();
+      List<Immutable3dTilePoint> way = doPathfinding();
       if (null != way) {
         addWaypointsToMap(result, way);
       }
@@ -159,10 +159,10 @@ public class World implements AbstractModel {
     return result;
   }
 
-  private void addWaypointsToMap(final GridElement[][] map, List<Immutable3dPoint> way) {
-    Iterator<Immutable3dPoint> iterator = way.iterator();
+  private void addWaypointsToMap(final GridElement[][] map, List<Immutable3dTilePoint> way) {
+    Iterator<Immutable3dTilePoint> iterator = way.iterator();
     while (iterator.hasNext()) {
-      Immutable3dPoint step = iterator.next();
+      Immutable3dTilePoint step = iterator.next();
       map[step.getX()][step.getY()].setMapElement(MapElements.WAY);
     }
   }
@@ -198,13 +198,13 @@ public class World implements AbstractModel {
 
     if (debugWayFound) {
       List<Step> way = pathfinding.getDebugInfo().getStepsResult();
-      LinkedList<Immutable3dPoint> waypoints = convertWayToPoints(way);
+      LinkedList<Immutable3dTilePoint> waypoints = convertWayToPoints(way);
       addWaypointsToMap(result, waypoints);
     }
   }
 
   public synchronized boolean setStart(int x, int y) {
-    start = new Immutable3dPoint(x, y, 0);
+    start = new Immutable3dTilePoint(x, y, 0);
 
     reset();
 
@@ -213,7 +213,7 @@ public class World implements AbstractModel {
   }
 
   public synchronized boolean setEnd(int x, int y) {
-    end = new Immutable3dPoint(x, y, 0);
+    end = new Immutable3dTilePoint(x, y, 0);
 
     reset();
 
@@ -235,7 +235,7 @@ public class World implements AbstractModel {
     propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
   }
 
-  private List<Immutable3dPoint> doPathfinding() {
+  private List<Immutable3dTilePoint> doPathfinding() {
     if (null == start || null == end) {
       return Collections.emptyList();
     }
@@ -247,16 +247,16 @@ public class World implements AbstractModel {
     pathfinding.init(map, mapMoving, true);
 
     IMotionState fromStep = mover.getStartState();
-    Immutable3dPoint fromPoint = new Immutable3dPoint(start);
+    Immutable3dTilePoint fromPoint = new Immutable3dTilePoint(start);
 
     IMotionState toStep = mover.getEndState();
-    Immutable3dPoint toPoint = new Immutable3dPoint(end);
+    Immutable3dTilePoint toPoint = new Immutable3dTilePoint(end);
 
     // do path finding
     List<Step> way = pathfinding.getPath(mover.getMover(), fromStep, fromPoint, toStep, toPoint);
 
     // Initial variables for path finding
-    LinkedList<Immutable3dPoint> respose = null;
+    LinkedList<Immutable3dTilePoint> respose = null;
     // convert way to map points
     if (way != null) {
       respose = convertWayToPoints(way);
@@ -265,15 +265,15 @@ public class World implements AbstractModel {
     return respose;
   }
 
-  private LinkedList<Immutable3dPoint> convertWayToPoints(List<Step> way) {
+  private LinkedList<Immutable3dTilePoint> convertWayToPoints(List<Step> way) {
     // Initial variables for path finding
-    LinkedList<Immutable3dPoint> respose = new LinkedList<>();
+    LinkedList<Immutable3dTilePoint> respose = new LinkedList<>();
 
-    Immutable3dPoint lastPoint = start;
+    Immutable3dTilePoint lastPoint = start;
     for (Step stepWay : way) {
       // add all Points from StepWay to response.
-      for (Immutable3dPoint step : stepWay.getMovingWay()) {
-        Immutable3dPoint point = new Immutable3dPoint(//
+      for (Immutable3dTilePoint step : stepWay.getMovingWay()) {
+        Immutable3dTilePoint point = new Immutable3dTilePoint(//
             lastPoint.getX() + step.getX(), //
             lastPoint.getY() + step.getY(), //
             lastPoint.getZ() + step.getZ() //
@@ -333,10 +333,10 @@ public class World implements AbstractModel {
       pathfinding.getDebugInfo().setDebugMode(true);
 
       IMotionState fromStep = mover.getStartState();
-      Immutable3dPoint fromPoint = new Immutable3dPoint(start);
+      Immutable3dTilePoint fromPoint = new Immutable3dTilePoint(start);
 
       IMotionState toStep = mover.getEndState();
-      Immutable3dPoint toPoint = new Immutable3dPoint(end);
+      Immutable3dTilePoint toPoint = new Immutable3dTilePoint(end);
 
       pathfinding.getDebugInfo().restartPathfinding(mover.getMover(), fromStep, fromPoint, toStep, toPoint);
     }

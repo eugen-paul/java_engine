@@ -10,7 +10,7 @@ import org.eugenpaul.javaengine.core.world.entity.CollisionPoint;
 import org.eugenpaul.javaengine.core.world.entity.MoveDirection;
 import org.eugenpaul.javaengine.core.world.entity.Step;
 import org.eugenpaul.javaengine.core.world.entity.collision.ICollisionCondition;
-import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
+import org.eugenpaul.javaengine.core.world.map.Immutable3dTilePoint;
 
 /**
  * Sample implementation of a vector mover. Each state of move has a direction (like a car, train, ...). He can not turn on the spot. To turn, he has to take a step forward and
@@ -90,15 +90,15 @@ public class SimpleVector2dMover implements AMover {
       throw new IllegalArgumentException();
     }
 
-    List<Immutable3dPoint> movingWay = new ArrayList<>();
-    movingWay.add(new Immutable3dPoint(0, 0, 0));
-    movingWay.add(new Immutable3dPoint(x, y, 0));
+    List<Immutable3dTilePoint> movingWay = new ArrayList<>();
+    movingWay.add(new Immutable3dTilePoint(0, 0, 0));
+    movingWay.add(new Immutable3dTilePoint(x, y, 0));
 
     ArrayList<CollisionPoint> collisionList = new ArrayList<>();
 
-    CollisionPoint cPointStart = new CollisionPoint(new Immutable3dPoint(0, 0, 0), stdCondition);
+    CollisionPoint cPointStart = new CollisionPoint(new Immutable3dTilePoint(0, 0, 0), stdCondition);
     collisionList.add(cPointStart);
-    CollisionPoint cPointEnd = new CollisionPoint(new Immutable3dPoint(x, y, 0), stdCondition);
+    CollisionPoint cPointEnd = new CollisionPoint(new Immutable3dTilePoint(x, y, 0), stdCondition);
     collisionList.add(cPointEnd);
 
     long cost = 10L;
@@ -112,39 +112,39 @@ public class SimpleVector2dMover implements AMover {
     IMotionState firstPoint;
     IMotionState lastPoint;
 
-    Immutable3dPoint stepMiddle;
+    Immutable3dTilePoint stepMiddle;
     CollisionPoint cPointMiddle;
 
     switch (startDirection) {
     case X_POSITIVE:
       x = 1;
       y = 1;
-      stepMiddle = new Immutable3dPoint(1, 0, 0);
-      cPointMiddle = new CollisionPoint(new Immutable3dPoint(1, 0, 0), stdCondition);
+      stepMiddle = new Immutable3dTilePoint(1, 0, 0);
+      cPointMiddle = new CollisionPoint(new Immutable3dTilePoint(1, 0, 0), stdCondition);
       firstPoint = new SimpleVectorMotionState(MoveDirection.X_POSITIVE);
       lastPoint = new SimpleVectorMotionState(MoveDirection.Y_POSITIVE);
       break;
     case X_NEGATIVE:
       x = -1;
       y = -1;
-      stepMiddle = new Immutable3dPoint(-1, 0, 0);
-      cPointMiddle = new CollisionPoint(new Immutable3dPoint(-1, 0, 0), stdCondition);
+      stepMiddle = new Immutable3dTilePoint(-1, 0, 0);
+      cPointMiddle = new CollisionPoint(new Immutable3dTilePoint(-1, 0, 0), stdCondition);
       firstPoint = new SimpleVectorMotionState(MoveDirection.X_NEGATIVE);
       lastPoint = new SimpleVectorMotionState(MoveDirection.Y_NEGATIVE);
       break;
     case Y_POSITIVE:
       x = -1;
       y = 1;
-      stepMiddle = new Immutable3dPoint(0, 1, 0);
-      cPointMiddle = new CollisionPoint(new Immutable3dPoint(0, 1, 0), stdCondition);
+      stepMiddle = new Immutable3dTilePoint(0, 1, 0);
+      cPointMiddle = new CollisionPoint(new Immutable3dTilePoint(0, 1, 0), stdCondition);
       firstPoint = new SimpleVectorMotionState(MoveDirection.Y_POSITIVE);
       lastPoint = new SimpleVectorMotionState(MoveDirection.X_NEGATIVE);
       break;
     case Y_NEGATIVE:
       x = 1;
       y = -1;
-      stepMiddle = new Immutable3dPoint(0, -1, 0);
-      cPointMiddle = new CollisionPoint(new Immutable3dPoint(0, -1, 0), stdCondition);
+      stepMiddle = new Immutable3dTilePoint(0, -1, 0);
+      cPointMiddle = new CollisionPoint(new Immutable3dTilePoint(0, -1, 0), stdCondition);
       firstPoint = new SimpleVectorMotionState(MoveDirection.Y_NEGATIVE);
       lastPoint = new SimpleVectorMotionState(MoveDirection.X_POSITIVE);
       break;
@@ -152,19 +152,19 @@ public class SimpleVector2dMover implements AMover {
       throw new IllegalArgumentException();
     }
 
-    List<Immutable3dPoint> movingWay = new ArrayList<>();
-    movingWay.add(new Immutable3dPoint(0, 0, 0));
+    List<Immutable3dTilePoint> movingWay = new ArrayList<>();
+    movingWay.add(new Immutable3dTilePoint(0, 0, 0));
     movingWay.add(stepMiddle);
-    movingWay.add(new Immutable3dPoint(x, y, 0));
+    movingWay.add(new Immutable3dTilePoint(x, y, 0));
 
     ArrayList<CollisionPoint> collisionList = new ArrayList<>();
 
-    CollisionPoint cPointStart = new CollisionPoint(new Immutable3dPoint(0, 0, 0), stdCondition);
+    CollisionPoint cPointStart = new CollisionPoint(new Immutable3dTilePoint(0, 0, 0), stdCondition);
     collisionList.add(cPointStart);
 
     collisionList.add(cPointMiddle);
 
-    CollisionPoint cPointEnd = new CollisionPoint(new Immutable3dPoint(x, y, 0), stdCondition);
+    CollisionPoint cPointEnd = new CollisionPoint(new Immutable3dTilePoint(x, y, 0), stdCondition);
     collisionList.add(cPointEnd);
 
     long cost = 15L;
@@ -178,39 +178,39 @@ public class SimpleVector2dMover implements AMover {
     IMotionState firstPoint;
     IMotionState lastPoint;
 
-    Immutable3dPoint stepMiddle;
+    Immutable3dTilePoint stepMiddle;
     CollisionPoint cPointMiddle;
 
     switch (startDirection) {
     case X_POSITIVE:
       x = 1;
       y = -1;
-      stepMiddle = new Immutable3dPoint(1, 0, 0);
-      cPointMiddle = new CollisionPoint(new Immutable3dPoint(1, 0, 0), stdCondition);
+      stepMiddle = new Immutable3dTilePoint(1, 0, 0);
+      cPointMiddle = new CollisionPoint(new Immutable3dTilePoint(1, 0, 0), stdCondition);
       firstPoint = new SimpleVectorMotionState(MoveDirection.X_POSITIVE);
       lastPoint = new SimpleVectorMotionState(MoveDirection.Y_NEGATIVE);
       break;
     case X_NEGATIVE:
       x = -1;
       y = 1;
-      stepMiddle = new Immutable3dPoint(-1, 0, 0);
-      cPointMiddle = new CollisionPoint(new Immutable3dPoint(-1, 0, 0), stdCondition);
+      stepMiddle = new Immutable3dTilePoint(-1, 0, 0);
+      cPointMiddle = new CollisionPoint(new Immutable3dTilePoint(-1, 0, 0), stdCondition);
       firstPoint = new SimpleVectorMotionState(MoveDirection.X_NEGATIVE);
       lastPoint = new SimpleVectorMotionState(MoveDirection.Y_POSITIVE);
       break;
     case Y_POSITIVE:
       x = 1;
       y = 1;
-      stepMiddle = new Immutable3dPoint(0, 1, 0);
-      cPointMiddle = new CollisionPoint(new Immutable3dPoint(0, 1, 0), stdCondition);
+      stepMiddle = new Immutable3dTilePoint(0, 1, 0);
+      cPointMiddle = new CollisionPoint(new Immutable3dTilePoint(0, 1, 0), stdCondition);
       firstPoint = new SimpleVectorMotionState(MoveDirection.Y_POSITIVE);
       lastPoint = new SimpleVectorMotionState(MoveDirection.X_POSITIVE);
       break;
     case Y_NEGATIVE:
       x = -1;
       y = -1;
-      stepMiddle = new Immutable3dPoint(0, -1, 0);
-      cPointMiddle = new CollisionPoint(new Immutable3dPoint(0, -1, 0), stdCondition);
+      stepMiddle = new Immutable3dTilePoint(0, -1, 0);
+      cPointMiddle = new CollisionPoint(new Immutable3dTilePoint(0, -1, 0), stdCondition);
       firstPoint = new SimpleVectorMotionState(MoveDirection.Y_NEGATIVE);
       lastPoint = new SimpleVectorMotionState(MoveDirection.X_NEGATIVE);
       break;
@@ -218,19 +218,19 @@ public class SimpleVector2dMover implements AMover {
       throw new IllegalArgumentException();
     }
 
-    List<Immutable3dPoint> movingWay = new ArrayList<>();
-    movingWay.add(new Immutable3dPoint(0, 0, 0));
+    List<Immutable3dTilePoint> movingWay = new ArrayList<>();
+    movingWay.add(new Immutable3dTilePoint(0, 0, 0));
     movingWay.add(stepMiddle);
-    movingWay.add(new Immutable3dPoint(x, y, 0));
+    movingWay.add(new Immutable3dTilePoint(x, y, 0));
 
     ArrayList<CollisionPoint> collisionList = new ArrayList<>();
 
-    CollisionPoint cPointStart = new CollisionPoint(new Immutable3dPoint(0, 0, 0), stdCondition);
+    CollisionPoint cPointStart = new CollisionPoint(new Immutable3dTilePoint(0, 0, 0), stdCondition);
     collisionList.add(cPointStart);
 
     collisionList.add(cPointMiddle);
 
-    CollisionPoint cPointEnd = new CollisionPoint(new Immutable3dPoint(x, y, 0), stdCondition);
+    CollisionPoint cPointEnd = new CollisionPoint(new Immutable3dTilePoint(x, y, 0), stdCondition);
     collisionList.add(cPointEnd);
 
     long cost = 15L;

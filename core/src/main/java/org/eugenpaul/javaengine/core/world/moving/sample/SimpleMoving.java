@@ -6,7 +6,7 @@ import java.util.List;
 import org.eugenpaul.javaengine.core.world.entity.CollisionPoint;
 import org.eugenpaul.javaengine.core.world.entity.Step;
 import org.eugenpaul.javaengine.core.world.map.ITileBasedMap;
-import org.eugenpaul.javaengine.core.world.map.Immutable3dPoint;
+import org.eugenpaul.javaengine.core.world.map.Immutable3dTilePoint;
 import org.eugenpaul.javaengine.core.world.moving.IMoving;
 
 /**
@@ -17,7 +17,7 @@ import org.eugenpaul.javaengine.core.world.moving.IMoving;
 public class SimpleMoving implements IMoving<Step> {
 
   @Override
-  public List<Step> checkPossibleSteps(List<Step> steps, Immutable3dPoint position, ITileBasedMap map) {
+  public List<Step> checkPossibleSteps(List<Step> steps, Immutable3dTilePoint position, ITileBasedMap map) {
     return checkPossibleSteps(steps, position.getX(), position.getY(), position.getZ(), map);
   }
 
@@ -43,7 +43,7 @@ public class SimpleMoving implements IMoving<Step> {
     int checkZ;
 
     for (CollisionPoint pointToTest : collisionBox) {
-      Immutable3dPoint coord = pointToTest.getPoint();
+      Immutable3dTilePoint coord = pointToTest.getPoint();
       checkX = x + coord.getX();
       checkY = y + coord.getY();
       checkZ = z + coord.getZ();
