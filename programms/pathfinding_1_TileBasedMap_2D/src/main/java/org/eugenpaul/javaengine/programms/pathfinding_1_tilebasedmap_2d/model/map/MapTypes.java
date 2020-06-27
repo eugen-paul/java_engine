@@ -1,5 +1,8 @@
 package org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map;
 
+import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.clearance.ClearanceMap;
+import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.tile.TileMap;
+
 import lombok.Getter;
 
 /** List of Maptypes */

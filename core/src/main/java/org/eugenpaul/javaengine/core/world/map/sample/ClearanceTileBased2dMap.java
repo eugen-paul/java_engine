@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.eugenpaul.javaengine.core.world.entity.collision.Clearance2dCollisionCondition;
 import org.eugenpaul.javaengine.core.world.entity.collision.ICollisionCondition;
-import org.eugenpaul.javaengine.core.world.entity.collision.Sample2dCollisionCondition;
 import org.eugenpaul.javaengine.core.world.map.ITileBasedMap;
 import org.eugenpaul.javaengine.core.world.map.Immutable3dTilePoint;
 
@@ -53,11 +52,7 @@ public class ClearanceTileBased2dMap implements ITileBasedMap {
 
   @Override
   public List<ICollisionCondition> getCollisionCondition(int x, int y, int z) {
-    if (grid[xyzToElem(x, y)] > 0) {
-      return List.of(Sample2dCollisionCondition.NOT);
-    } else {
-      return List.of(Sample2dCollisionCondition.BARRIER);
-    }
+    return List.of(new Clearance2dCollisionCondition(grid[xyzToElem(x, y)]));
   }
 
   @Override

@@ -1,5 +1,6 @@
 package org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.view2d;
 
+import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.IMapMover;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.IMapRepresentation;
 
 import lombok.Getter;
@@ -26,4 +27,6 @@ public abstract class AlgoFactory {
   public abstract ASettingPanel createSettingsPanel();
   
   public abstract IMapRepresentation getMap();
+  
+  public abstract IMapMover getDefaultMapMover();
 }

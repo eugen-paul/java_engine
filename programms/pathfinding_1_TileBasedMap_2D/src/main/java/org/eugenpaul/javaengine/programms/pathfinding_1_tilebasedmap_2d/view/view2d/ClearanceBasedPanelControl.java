@@ -8,19 +8,19 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.controller.DefaultController;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.IMapMover;
-import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.tile.TileBasedMoverTyp;
+import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.clearance.ClearanceBasedMoverTyp;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.MapElements;
 
-public class TileBasedPanelControl extends AControlPanel {
+public class ClearanceBasedPanelControl extends AControlPanel {
 
   private static final long serialVersionUID = -220053717720994820L;
   private DefaultController controller;
 
   private MapElements selector = MapElements.NOPE;
 
-  private JComboBox<TileBasedMoverTyp> jCbMoverSelector;
+  private JComboBox<ClearanceBasedMoverTyp> jCbMoverSelector;
 
-  public TileBasedPanelControl(DefaultController controller) {
+  public ClearanceBasedPanelControl(DefaultController controller) {
     this.controller = controller;
 
     JButton btnSetStart = new JButton("Set Start");
@@ -31,9 +31,6 @@ public class TileBasedPanelControl extends AControlPanel {
 
     JButton btnSetWall = new JButton("Set Wall");
     btnSetWall.setToolTipText("Set Wall");
-
-    JButton btnSetPit = new JButton("Set Pit");
-    btnSetPit.setToolTipText("Set Pit");
 
     JButton btnClearPoint = new JButton("Clear Point");
     btnClearPoint.setToolTipText("Clear Point");
@@ -46,34 +43,27 @@ public class TileBasedPanelControl extends AControlPanel {
     jCbMoverSelector.setToolTipText("Select Mover");
 
     btnClearPoint.addActionListener(e -> selector = MapElements.NOPE);
-    btnSetPit.addActionListener(e -> selector = MapElements.MUD);
     btnSetWall.addActionListener(e -> selector = MapElements.WALL);
     btnSetEnd.addActionListener(e -> selector = MapElements.END);
     btnSetStart.addActionListener(e -> selector = MapElements.START);
 
-    for (TileBasedMoverTyp typ : TileBasedMoverTyp.values()) {
+    for (ClearanceBasedMoverTyp typ : ClearanceBasedMoverTyp.values()) {
       jCbMoverSelector.addItem(typ);
     }
     jCbMoverSelector.setSelectedIndex(0);
 
     GroupLayout glPanelMoverSettings = new GroupLayout(this);
-    glPanelMoverSettings
-        .setHorizontalGroup(
-            glPanelMoverSettings.createParallelGroup(Alignment.LEADING)
-                .addGroup(glPanelMoverSettings.createSequentialGroup()
-                    .addGroup(glPanelMoverSettings.createParallelGroup(Alignment.LEADING)
-                        .addGroup(glPanelMoverSettings.createSequentialGroup().addGap(16)
-                            .addGroup(glPanelMoverSettings.createParallelGroup(Alignment.LEADING).addComponent(btnSetWall).addComponent(btnSetEnd).addComponent(btnSetStart)))
-                        .addGroup(glPanelMoverSettings.createSequentialGroup().addGap(16)
-                            .addGroup(glPanelMoverSettings.createParallelGroup(Alignment.LEADING).addComponent(btnSetPit).addComponent(btnClearPoint).addComponent(btnClearMap)
-                                .addComponent(jCbMoverSelector, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
-                    .addContainerGap(14, Short.MAX_VALUE)));
+    glPanelMoverSettings.setHorizontalGroup(glPanelMoverSettings.createParallelGroup(Alignment.LEADING)
+        .addGroup(glPanelMoverSettings.createSequentialGroup().addGap(16)
+            .addGroup(glPanelMoverSettings.createParallelGroup(Alignment.LEADING)
+                .addComponent(jCbMoverSelector, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addComponent(btnClearMap)
+                .addComponent(btnClearPoint).addComponent(btnSetWall).addComponent(btnSetEnd).addComponent(btnSetStart))
+            .addContainerGap(347, Short.MAX_VALUE)));
     glPanelMoverSettings.setVerticalGroup(glPanelMoverSettings.createParallelGroup(Alignment.LEADING)
         .addGroup(glPanelMoverSettings.createSequentialGroup().addGap(11).addComponent(btnSetStart).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnSetEnd)
-            .addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnSetWall).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnSetPit)
-            .addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnClearPoint).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnClearMap)
-            .addPreferredGap(ComponentPlacement.UNRELATED).addComponent(jCbMoverSelector, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-            .addGap(12)));
+            .addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnSetWall).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnClearPoint)
+            .addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnClearMap).addPreferredGap(ComponentPlacement.UNRELATED)
+            .addComponent(jCbMoverSelector, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addGap(97)));
     this.setLayout(glPanelMoverSettings);
 
     jCbMoverSelector.addActionListener(e -> editMover());
@@ -92,13 +82,13 @@ public class TileBasedPanelControl extends AControlPanel {
 
   @Override
   public IMapMover getDefaultMover() {
-    return TileBasedMoverTyp.values()[0];
+    return ClearanceBasedMoverTyp.values()[0];
   }
-
+  
   @Override
   protected void reset() {
     super.reset();
-    if (isAktiv()) {
+    if(isAktiv()) {
       jCbMoverSelector.setSelectedIndex(0);
     }
   }

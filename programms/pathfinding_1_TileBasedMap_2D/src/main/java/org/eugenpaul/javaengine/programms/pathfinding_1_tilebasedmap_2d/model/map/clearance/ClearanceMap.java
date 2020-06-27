@@ -1,8 +1,10 @@
-package org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map;
+package org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.clearance;
 
+import org.eugenpaul.javaengine.core.world.entity.collision.Clearance2dCollisionCondition;
 import org.eugenpaul.javaengine.core.world.entity.collision.ICollisionCondition;
 import org.eugenpaul.javaengine.core.world.map.sample.ClearanceTileBased2dMap;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.WorldElements;
+import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.IMapRepresentation;
 
 public class ClearanceMap extends ClearanceTileBased2dMap implements IMapRepresentation {
 
@@ -30,12 +32,13 @@ public class ClearanceMap extends ClearanceTileBased2dMap implements IMapReprese
       return false;
     }
 
-    if (!(condition instanceof WorldElements)) {
+    if (!(condition instanceof Clearance2dCollisionCondition)) {
       return false;
     }
 
-    WorldElements testVar = (WorldElements) condition;
-    return getPosition(x, y).isSame(testVar);
+    Clearance2dCollisionCondition testVar = (Clearance2dCollisionCondition) condition;
+    Clearance2dCollisionCondition worldPos = new Clearance2dCollisionCondition(grid[xyzToElem(x, y)]);
+    return worldPos.isSame(testVar);
   }
 
   @Override

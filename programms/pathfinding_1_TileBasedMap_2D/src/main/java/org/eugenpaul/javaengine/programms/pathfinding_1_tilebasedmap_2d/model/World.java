@@ -16,8 +16,10 @@ import org.eugenpaul.javaengine.core.world.map.Immutable3dTilePoint;
 import org.eugenpaul.javaengine.core.world.moving.IMoving;
 import org.eugenpaul.javaengine.core.world.moving.sample.SimpleMoving;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.controller.DefaultController;
+import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.IMapMover;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.IMapRepresentation;
-import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.TileMap;
+import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.tile.TileBasedMoverTyp;
+import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.tile.TileMap;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.MapElements;
 
 /**
@@ -36,7 +38,7 @@ public class World implements AbstractModel {
 
   private IMapRepresentation map;
 
-  private MoverTyp mover = null;
+  private IMapMover mover = null;
   private Pathfinding<Step> pathfinding = null;
 
   private boolean autoPathfinding = true;
@@ -56,10 +58,15 @@ public class World implements AbstractModel {
     propertyChangeSupport = new PropertyChangeSupport(this);
     mapMoving = new SimpleMoving();
 
-    mover = MoverTyp.SIMPLE_2D_MOVER_SLIM;
+    mover = TileBasedMoverTyp.SIMPLE_2D_MOVER_SLIM;
     pathfinding = PathfindingAlgo.LEE.getNewPathfinding();
   }
 
+  public synchronized void setParams(IMapRepresentation map, IMapMover mover) {
+    this.mover = mover;
+    setMapRepresentation(map);
+  }
+  
   public synchronized void setMapRepresentation(IMapRepresentation map) {
     this.map = map;
 
@@ -286,7 +293,7 @@ public class World implements AbstractModel {
     return respose;
   }
 
-  public synchronized void setMover(MoverTyp mover) {
+  public synchronized void setMover(IMapMover mover) {
     this.mover = mover;
     reset();
 

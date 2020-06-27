@@ -1,4 +1,4 @@
-package org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model;
+package org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.tile;
 
 import org.eugenpaul.javaengine.core.world.entity.IMotionState;
 import org.eugenpaul.javaengine.core.world.entity.AMover;
@@ -7,6 +7,9 @@ import org.eugenpaul.javaengine.core.world.entity.sample.Simple2dMover;
 import org.eugenpaul.javaengine.core.world.entity.sample.SimpleMotionState;
 import org.eugenpaul.javaengine.core.world.entity.sample.SimpleVector2dMover;
 import org.eugenpaul.javaengine.core.world.entity.sample.SimpleVectorMotionState;
+import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.Simple2dMoverDynamic;
+import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.WorldElements;
+import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.IMapMover;
 
 import lombok.Getter;
 
@@ -16,7 +19,7 @@ import lombok.Getter;
  * @author Eugen Paul
  *
  */
-public enum MoverTyp {
+public enum TileBasedMoverTyp implements IMapMover{
   SIMPLE_2D_MOVER_SLIM(new Simple2dMover(WorldElements.NOPE, true), "Slim", new SimpleMotionState(), new SimpleMotionState()), //
   SIMPLE_2D_MOVER_SLIM_DYNAMIC(new Simple2dMoverDynamic(WorldElements.NOPE, true), "SlimDynamic", new SimpleMotionState(), new SimpleMotionState()), //
   SIMPLE_2D_MOVER_FAT(new Simple2dMover(WorldElements.NOPE, false), "Fat", new SimpleMotionState(), new SimpleMotionState()), //
@@ -36,7 +39,7 @@ public enum MoverTyp {
   @Getter
   private IMotionState endState;
 
-  private MoverTyp(AMover mover, String text, IMotionState startState, IMotionState endState) {
+  private TileBasedMoverTyp(AMover mover, String text, IMotionState startState, IMotionState endState) {
     this.mover = mover;
     this.text = text;
     this.startState = startState;

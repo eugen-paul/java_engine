@@ -56,6 +56,7 @@ public class ClearanceMapPanel extends ASettingPanel {
     mapPanel.add(spinnerMapSizeY);
 
     cellValueCheckBox = new JCheckBox("show cell value");
+    cellValueCheckBox.setSelected(true);
     cellValueCheckBox.setBounds(10, 85, 135, 23);
     mapPanel.add(cellValueCheckBox);
 

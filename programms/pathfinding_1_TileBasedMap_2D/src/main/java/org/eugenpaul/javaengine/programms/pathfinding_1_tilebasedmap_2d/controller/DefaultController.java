@@ -5,10 +5,10 @@ import java.util.List;
 
 import org.eugenpaul.javaengine.core.clock.Clock;
 import org.eugenpaul.javaengine.core.scheduler.job.JobSchedulerThreaded;
-import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.MoverTyp;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.PathfinderJob;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.PathfindingAlgo;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.WorldElements;
+import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.IMapMover;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.MapElements;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.view2d.AlgoFactory;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.view2d.ClearanceBasedFactory;
@@ -83,7 +83,7 @@ public class DefaultController extends AbstractController {
    * 
    * @param mover
    */
-  public void setMover(MoverTyp mover) {
+  public void setMover(IMapMover mover) {
     world.setMover(mover);
   }
 
@@ -156,6 +156,7 @@ public class DefaultController extends AbstractController {
       if (name.equals(factory.getName())) {
         current2dFactory = factory;
         world.setMapRepresentation(factory.getMap());
+        world.setParams(factory.getMap(), factory.getDefaultMapMover());
         return;
       }
     }

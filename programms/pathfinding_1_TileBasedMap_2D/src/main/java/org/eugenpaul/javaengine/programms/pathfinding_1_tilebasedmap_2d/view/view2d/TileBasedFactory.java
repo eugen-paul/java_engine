@@ -1,8 +1,9 @@
 package org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.view2d;
 
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.controller.DefaultController;
+import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.IMapMover;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.IMapRepresentation;
-import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.TileMap;
+import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.tile.TileMap;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.view2d.settings.TileBasedPanel;
 
 /**
@@ -62,4 +63,8 @@ public class TileBasedFactory extends AlgoFactory {
     this.y = y;
   }
 
+  @Override
+  public IMapMover getDefaultMapMover() {
+    return controlPanel.getDefaultMover();
+  }
 }

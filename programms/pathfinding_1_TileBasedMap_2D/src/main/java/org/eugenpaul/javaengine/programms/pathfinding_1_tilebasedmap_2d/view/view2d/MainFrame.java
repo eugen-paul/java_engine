@@ -226,10 +226,13 @@ public class MainFrame extends JFrame implements AbstractViewPanel {
   private void rebuild() {
     if (null != panelControl) {
       panelControlPlace.removeAll();
+      panelControl.setAktiv(false);
     }
 
     panelControl = controller.getCurrent2dFactory().createControlPanel();
-    panelControlPlace.add(panelControl);
+    panelControl.setAktiv(true);
+    panelControlPlace.setLayout(new BorderLayout(0, 0));
+    panelControlPlace.add(panelControl, BorderLayout.CENTER);
 
     if (null != panelPaint) {
       panelPaint.removeMouseListener(clickOnPaint);
@@ -246,6 +249,7 @@ public class MainFrame extends JFrame implements AbstractViewPanel {
 
     invalidate();
     validate();
+    repaint();
   }
 
   @Override

@@ -1,7 +1,8 @@
-package org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map;
+package org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.tile;
 
 import org.eugenpaul.javaengine.core.world.map.sample.SimpleTileBased2dMap;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.WorldElements;
+import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.IMapRepresentation;
 
 public class TileMap extends SimpleTileBased2dMap implements IMapRepresentation {
 

@@ -3,8 +3,8 @@ package org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.vi
 import java.beans.PropertyChangeEvent;
 
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.controller.DefaultController;
-import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.MoverTyp;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.PathfindingAlgo;
+import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.tile.TileBasedMoverTyp;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.AbstractViewPanel;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.MapElements;
 
@@ -27,7 +27,7 @@ public class GuiController implements AbstractViewPanel {
   private final MainApplication app;
   private final DefaultController controller;
 
-  private DropDown<MoverTyp> moverList;
+  private DropDown<TileBasedMoverTyp> moverList;
   private DropDown<PathfindingAlgo> algoList;
 
   private Label debugText = null;
@@ -116,7 +116,7 @@ public class GuiController implements AbstractViewPanel {
     myWindow.addChild(moverLabel);
 
     moverList = new DropDown<>();
-    for (MoverTyp typ : MoverTyp.values()) {
+    for (TileBasedMoverTyp typ : TileBasedMoverTyp.values()) {
       moverList.getModel().add(typ);
     }
     moverList.getSelectionModel().setSelection(0);
@@ -225,7 +225,7 @@ public class GuiController implements AbstractViewPanel {
     app.clickElement = MapElements.NOPE;
   }
 
-  public void moverSelectorChange(MoverTyp mover) {
+  public void moverSelectorChange(TileBasedMoverTyp mover) {
     if (null != mover) {
       controller.setMover(mover);
     }
@@ -241,7 +241,7 @@ public class GuiController implements AbstractViewPanel {
   private void moverChange() {
     Integer selection = moverList.getSelectionModel().getSelection();
     if (selection != null) {
-      MoverTyp mover = moverList.getModel().get(selection);
+      TileBasedMoverTyp mover = moverList.getModel().get(selection);
       controller.setMover(mover);
     }
   }

@@ -1,8 +1,9 @@
 package org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.view2d;
 
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.controller.DefaultController;
-import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.ClearanceMap;
+import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.IMapMover;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.IMapRepresentation;
+import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.clearance.ClearanceMap;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.view2d.settings.ClearanceMapPanel;
 
 /**
@@ -17,11 +18,10 @@ public class ClearanceBasedFactory extends AlgoFactory {
 
   private TileBasedPanelMap paintPanel;
 
-  private TileBasedPanelControl controlPanel;
+  private ClearanceBasedPanelControl controlPanel;
 
   private ClearanceMapPanel settingPanel;
 
-  private ClearanceMap map;
   private int x = 50;
   private int y = 50;
 
@@ -33,7 +33,7 @@ public class ClearanceBasedFactory extends AlgoFactory {
     paintPanel = new TileBasedPanelMap();
     paintPanel.setParam(TileBasedPanelMap.PARAM_PRINT_VALUE, paramPrintValue);
 
-    controlPanel = new TileBasedPanelControl(controller);
+    controlPanel = new ClearanceBasedPanelControl(controller);
 
     settingPanel = new ClearanceMapPanel(this);
   }
@@ -55,13 +55,17 @@ public class ClearanceBasedFactory extends AlgoFactory {
 
   @Override
   public IMapRepresentation getMap() {
-    map = new ClearanceMap(x, y);
-    return map;
+    return new ClearanceMap(x, y);
   }
 
   public void setMapParameter(int x, int y, boolean printValue) {
     this.x = x;
     this.y = y;
     paintPanel.setParam(TileBasedPanelMap.PARAM_PRINT_VALUE, printValue);
+  }
+
+  @Override
+  public IMapMover getDefaultMapMover() {
+    return controlPanel.getDefaultMover();
   }
 }
