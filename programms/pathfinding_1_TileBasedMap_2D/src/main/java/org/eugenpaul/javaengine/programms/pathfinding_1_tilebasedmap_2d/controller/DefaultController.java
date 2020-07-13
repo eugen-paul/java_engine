@@ -155,8 +155,8 @@ public class DefaultController extends AbstractController {
     for (AlgoFactory factory : factories2d) {
       if (name.equals(factory.getName())) {
         current2dFactory = factory;
-        world.setMapRepresentation(factory.getMap());
-        world.setParams(factory.getMap(), factory.getDefaultMapMover());
+        world.reinit(factory.getMap(), factory.getDefaultMapMover());
+//        world.init(factory.getMap(), factory.getDefaultMapMover());
         return;
       }
     }

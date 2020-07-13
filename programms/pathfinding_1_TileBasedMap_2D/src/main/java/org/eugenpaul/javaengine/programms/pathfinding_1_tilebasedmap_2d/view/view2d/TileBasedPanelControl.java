@@ -8,7 +8,6 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.controller.DefaultController;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.IMapMover;
-import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.tile.TileBasedMoverTyp;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.MapElements;
 
 public class TileBasedPanelControl extends AControlPanel {
@@ -18,7 +17,7 @@ public class TileBasedPanelControl extends AControlPanel {
 
   private MapElements selector = MapElements.NOPE;
 
-  private JComboBox<TileBasedMoverTyp> jCbMoverSelector;
+  private JComboBox<IMapMover> jCbMoverSelector;
 
   public TileBasedPanelControl(DefaultController controller) {
     this.controller = controller;
@@ -51,11 +50,6 @@ public class TileBasedPanelControl extends AControlPanel {
     btnSetEnd.addActionListener(e -> selector = MapElements.END);
     btnSetStart.addActionListener(e -> selector = MapElements.START);
 
-    for (TileBasedMoverTyp typ : TileBasedMoverTyp.values()) {
-      jCbMoverSelector.addItem(typ);
-    }
-    jCbMoverSelector.setSelectedIndex(0);
-
     GroupLayout glPanelMoverSettings = new GroupLayout(this);
     glPanelMoverSettings
         .setHorizontalGroup(
@@ -78,6 +72,13 @@ public class TileBasedPanelControl extends AControlPanel {
 
     jCbMoverSelector.addActionListener(e -> editMover());
   }
+  
+  public void init(IMapMover[] moverList, int std) {
+    for (IMapMover typ : moverList) {
+      jCbMoverSelector.addItem(typ);
+    }
+    jCbMoverSelector.setSelectedIndex(std);
+  }
 
   private void editMover() {
     if (isAktiv()) {
@@ -88,11 +89,6 @@ public class TileBasedPanelControl extends AControlPanel {
   @Override
   public MapElements getSelector() {
     return selector;
-  }
-
-  @Override
-  public IMapMover getDefaultMover() {
-    return TileBasedMoverTyp.values()[0];
   }
 
   @Override

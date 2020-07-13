@@ -8,7 +8,6 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.controller.DefaultController;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.IMapMover;
-import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.clearance.ClearanceBasedMoverTyp;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.MapElements;
 
 public class ClearanceBasedPanelControl extends AControlPanel {
@@ -18,7 +17,7 @@ public class ClearanceBasedPanelControl extends AControlPanel {
 
   private MapElements selector = MapElements.NOPE;
 
-  private JComboBox<ClearanceBasedMoverTyp> jCbMoverSelector;
+  private JComboBox<IMapMover> jCbMoverSelector;
 
   public ClearanceBasedPanelControl(DefaultController controller) {
     this.controller = controller;
@@ -47,11 +46,6 @@ public class ClearanceBasedPanelControl extends AControlPanel {
     btnSetEnd.addActionListener(e -> selector = MapElements.END);
     btnSetStart.addActionListener(e -> selector = MapElements.START);
 
-    for (ClearanceBasedMoverTyp typ : ClearanceBasedMoverTyp.values()) {
-      jCbMoverSelector.addItem(typ);
-    }
-    jCbMoverSelector.setSelectedIndex(0);
-
     GroupLayout glPanelMoverSettings = new GroupLayout(this);
     glPanelMoverSettings.setHorizontalGroup(glPanelMoverSettings.createParallelGroup(Alignment.LEADING)
         .addGroup(glPanelMoverSettings.createSequentialGroup().addGap(16)
@@ -69,6 +63,13 @@ public class ClearanceBasedPanelControl extends AControlPanel {
     jCbMoverSelector.addActionListener(e -> editMover());
   }
 
+  public void init(IMapMover[] moverList, int std) {
+    for (IMapMover typ : moverList) {
+      jCbMoverSelector.addItem(typ);
+    }
+    jCbMoverSelector.setSelectedIndex(std);
+  }
+
   private void editMover() {
     if (isAktiv()) {
       controller.setMover(jCbMoverSelector.getItemAt(jCbMoverSelector.getSelectedIndex()));
@@ -81,14 +82,9 @@ public class ClearanceBasedPanelControl extends AControlPanel {
   }
 
   @Override
-  public IMapMover getDefaultMover() {
-    return ClearanceBasedMoverTyp.values()[0];
-  }
-  
-  @Override
   protected void reset() {
     super.reset();
-    if(isAktiv()) {
+    if (isAktiv()) {
       jCbMoverSelector.setSelectedIndex(0);
     }
   }

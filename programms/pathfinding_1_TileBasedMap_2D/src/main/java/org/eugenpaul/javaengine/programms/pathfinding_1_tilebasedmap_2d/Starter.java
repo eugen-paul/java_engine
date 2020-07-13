@@ -3,6 +3,7 @@ package org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d;
 import org.eugenpaul.javaengine.core.clock.sample.SysNanoClock;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.controller.DefaultController;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.World;
+import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.view2d.AlgoFactory;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.view2d.MainFrame;
 
 /**
@@ -17,16 +18,15 @@ public class Starter {
 
     DefaultController controller = new DefaultController(new SysNanoClock());
 
-    int maxSizeX = 50;
-    int maxSizeY = 50;
+    World model = new World();
+    AlgoFactory factory = controller.getCurrent2dFactory();
+    model.init(factory.getMap(), factory.getDefaultMapMover());
 
-    World model = new World(maxSizeX, maxSizeY);
     controller.setWorld(model);
 
     MainFrame mFrame = new MainFrame(controller);
 
     controller.addView(mFrame);
-    model.fireCurrentMap();
 
     mFrame.setVisible(true);
   }

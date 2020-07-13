@@ -56,6 +56,7 @@ public abstract class AbstractController implements PropertyChangeListener {
    */
   public void addView(AbstractViewPanel view) {
     registeredViews.add(view);
+    world.fireCurrentMap();
   }
 
   /**

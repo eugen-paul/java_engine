@@ -18,8 +18,6 @@ import org.eugenpaul.javaengine.core.world.moving.sample.SimpleMoving;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.controller.DefaultController;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.IMapMover;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.IMapRepresentation;
-import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.tile.TileBasedMoverTyp;
-import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.tile.TileMap;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.MapElements;
 
 /**
@@ -47,40 +45,41 @@ public class World implements AbstractModel {
   /**
    * C'tor
    * 
-   * @param sizeX
-   * @param sizeY
    */
-  public World(int sizeX, int sizeY) {
-    map = new TileMap(sizeX, sizeY);
-
+  public World() {
     start = new Immutable3dTilePoint(0, 0, 0);
     end = new Immutable3dTilePoint(0, 5, 0);
     propertyChangeSupport = new PropertyChangeSupport(this);
     mapMoving = new SimpleMoving();
 
-    mover = TileBasedMoverTyp.SIMPLE_2D_MOVER_SLIM;
     pathfinding = PathfindingAlgo.LEE.getNewPathfinding();
   }
 
-  public synchronized void setParams(IMapRepresentation map, IMapMover mover) {
+  /**
+   * Initialization of the World. Start-Point will be set to (0,0,0). End-Point will be set to (maxX,maxY,0).
+   * 
+   * @param map   - new map
+   * @param mover - new mover
+   */
+  public void init(IMapRepresentation map, IMapMover mover) {
     this.mover = mover;
-    setMapRepresentation(map);
-  }
-  
-  public synchronized void setMapRepresentation(IMapRepresentation map) {
     this.map = map;
 
     start = new Immutable3dTilePoint(0, 0, 0);
-    end = new Immutable3dTilePoint(0, 5, 0);
+    end = new Immutable3dTilePoint(map.getSiezX() - 1, map.getSiezY() - 1, 0);
     
     pathfinding.init(map, mapMoving, true);
+  }
+
+  public synchronized void reinit(IMapRepresentation map, IMapMover mover) {
+    init(map, mover);
     reset();
 
     propertyChangeSupport.firePropertyChange(DefaultController.ELEMENT_REBUILD, null, getMap());
   }
 
   public synchronized WorldElements getPosition(int x, int y) {
-    return (WorldElements) map.getPosition(x, y);
+    return map.getPosition(x, y);
   }
 
   public WorldElements getPosition(Immutable3dTilePoint point) {

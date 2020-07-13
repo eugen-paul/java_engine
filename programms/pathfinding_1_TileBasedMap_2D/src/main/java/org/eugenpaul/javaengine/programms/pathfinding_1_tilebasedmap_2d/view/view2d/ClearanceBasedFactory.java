@@ -3,6 +3,7 @@ package org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.vi
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.controller.DefaultController;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.IMapMover;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.IMapRepresentation;
+import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.clearance.ClearanceBasedMoverTyp;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.clearance.ClearanceMap;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.view2d.settings.ClearanceMapPanel;
 
@@ -34,7 +35,8 @@ public class ClearanceBasedFactory extends AlgoFactory {
     paintPanel.setParam(TileBasedPanelMap.PARAM_PRINT_VALUE, paramPrintValue);
 
     controlPanel = new ClearanceBasedPanelControl(controller);
-
+    controlPanel.init(ClearanceBasedMoverTyp.values(), 0);
+    
     settingPanel = new ClearanceMapPanel(this);
   }
 
@@ -66,6 +68,7 @@ public class ClearanceBasedFactory extends AlgoFactory {
 
   @Override
   public IMapMover getDefaultMapMover() {
-    return controlPanel.getDefaultMover();
+    return ClearanceBasedMoverTyp.values()[0];
   }
+
 }

@@ -51,6 +51,9 @@ public abstract class AWave implements Pathfinding<Step>, PathfindingDebug {
 
   @Override
   public boolean init(ITileBasedMap map, IMoving<Step> movingTester, boolean doDynamicCost) {
+    if (null == map || null == movingTester) {
+      return false;
+    }
     Immutable3dTilePoint mapSize = map.getPathfinderSize();
     nodes = new MapBuffer(mapSize.getX(), mapSize.getY(), mapSize.getZ());
 

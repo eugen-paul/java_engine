@@ -57,7 +57,6 @@ public class GuiController implements AbstractViewPanel {
   public GuiController(DefaultController controller, MainApplication app) {
     this.app = app;
     this.controller = controller;
-    this.controller.addView(this);
   }
 
   public void init() {

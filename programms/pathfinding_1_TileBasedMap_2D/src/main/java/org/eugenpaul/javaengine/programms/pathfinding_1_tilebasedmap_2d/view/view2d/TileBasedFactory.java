@@ -3,6 +3,7 @@ package org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.vi
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.controller.DefaultController;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.IMapMover;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.IMapRepresentation;
+import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.tile.TileBasedMoverTyp;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.model.map.tile.TileMap;
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.view2d.settings.TileBasedPanel;
 
@@ -33,6 +34,7 @@ public class TileBasedFactory extends AlgoFactory {
     paintPanel.setParam(TileBasedPanelMap.PARAM_PRINT_VALUE, false);
 
     controlPanel = new TileBasedPanelControl(controller);
+    controlPanel.init(TileBasedMoverTyp.values(), 0);
 
     settingPanel = new TileBasedPanel(this);
   }
@@ -65,6 +67,7 @@ public class TileBasedFactory extends AlgoFactory {
 
   @Override
   public IMapMover getDefaultMapMover() {
-    return controlPanel.getDefaultMover();
+    return TileBasedMoverTyp.values()[0];
   }
+
 }

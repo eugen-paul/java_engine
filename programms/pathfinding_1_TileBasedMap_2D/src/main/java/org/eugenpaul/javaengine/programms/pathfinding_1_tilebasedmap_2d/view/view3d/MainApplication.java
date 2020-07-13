@@ -118,6 +118,8 @@ public class MainApplication extends SimpleApplication implements AbstractViewPa
 
     initKeys();
 
+    //now the view can be added to controller
+    controller.addView(this);
   }
 
   @Override
