@@ -28,11 +28,13 @@ import com.simsilica.lemur.list.SelectionModel;
 import com.simsilica.lemur.style.ElementId;
 
 /**
- * TODO move this class to My-Lemur-Gui-common-Library
+ * Very simple Drop-Down Menu. Not the best implementation. Don't use it.
+ * 
  * @author Eugen Paul
  *
  * @param <T>
  */
+@SuppressWarnings("unchecked")
 public class DropDown<T> extends Panel {
 
   public static final String ELEMENT_ID = "dropdown";
@@ -83,13 +85,14 @@ public class DropDown<T> extends Panel {
     chosenElement.setTextHAlignment(HAlignment.Left);
     chosenElement.setTextVAlignment(VAlignment.Center);
 
-    //TODO remove this dirty Background Initialisation
+    // TODO remove this dirty Background Initialisation
     chosenElement.setInsets(new Insets3f(2, 2, 2, 2));
-    Texture texture = GuiGlobals.getInstance().loadTexture("/com/simsilica/lemur/icons/bordered-gradient.png", true, false);
+    Texture texture = GuiGlobals.getInstance().loadTexture("/com/simsilica/lemur/icons/bordered-gradient.png", true,
+        false);
     TbtQuadBackgroundComponent bg = TbtQuadBackgroundComponent.create(texture, 1, 1, 1, 126, 126, 1f, false);
     chosenElement.setBackground(bg);
     bg.setColor(new ColorRGBA(0f, 0.75f, 0.75f, 0.5f));
-    
+
     listBox = new ListBox<>();
 
     listBox.setBackground(new QuadBackgroundComponent(ColorRGBA.Black));
@@ -101,14 +104,10 @@ public class DropDown<T> extends Panel {
     }
   }
 
+  @SuppressWarnings("rawtypes")
   public void addClickCommands(Command<? super ListBox>... commands) {
     listBox.addClickCommands(commands);
-    listBox.addClickCommands(new Command<ListBox>() {
-      @Override
-      public void execute(ListBox source) {
-        resetOpen();
-      }
-    });
+    listBox.addClickCommands(source -> resetOpen());
   }
 
   protected void resetOpen() {
@@ -125,7 +124,7 @@ public class DropDown<T> extends Panel {
       Vector3f localTranslation = getWorldTranslation();
       listBox.setLocalTranslation(localTranslation.x, localTranslation.y - getSize().y, localTranslation.z);
 
-      popupState.showPopup(listBox, ClickMode.ConsumeAndClose, (source) -> {
+      popupState.showPopup(listBox, ClickMode.ConsumeAndClose, source -> {
         Integer selection = listBox.getSelectionModel().getSelection();
         if (selection != null) {
           chosenElement.setText(listBox.getModel().get(selection).toString());

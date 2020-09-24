@@ -8,11 +8,12 @@ dependencies {
     
     runtimeOnly commonDependencies.jme3_desktop
     
-    compile commonDependencies.lemur
-    compile commonDependencies.lemur_proto
     compile commonDependencies.groovy_all
     
     compile project(':core')
+    
+	compile	'com.simsilica:lemur:1.13.0'
+	compile	'com.simsilica:lemur-proto:1.11.0'
 }
 
 group = 'org.eugenpaul.programms'

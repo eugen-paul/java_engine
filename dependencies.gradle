@@ -5,14 +5,9 @@ ext {
     commonDependencies = [
             jme3_core              : "org.jmonkeyengine:jme3-core:$jme3_version",
             jme3_lwjgl             : "org.jmonkeyengine:jme3-lwjgl:$jme3_version",
-            jme3_niftygui          : "org.jmonkeyengine:jme3-niftygui:$jme3_version",
             jme3_desktop           : "org.jmonkeyengine:jme3-desktop:$jme3_version",
-            nifty                  : "com.github.nifty-gui:nifty:$nifty_version",
             
             groovy_all             : 'org.codehaus.groovy:groovy-all:3.0.4',
-            
-            lemur                  : "com.simsilica:lemur:1.13.0",
-            lemur_proto            : "com.simsilica:lemur-proto:1.11.0",
             
             junit                  : "junit:junit:4.12",
             

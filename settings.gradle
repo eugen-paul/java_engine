@@ -9,11 +9,9 @@ include(':coreJme')
 
 include(':programms')
 include(':programms:pathfinding_1_TileBasedMap_2D')
-include(':programms:pathfinding_2_TileBasedMap_3D')
 
 project(':core').projectDir                                    = file('core')
 
 project(':coreJme').projectDir                                 = file('coreJme')
 
 project(':programms:pathfinding_1_TileBasedMap_2D').projectDir = file('programms/pathfinding_1_TileBasedMap_2D')
-project(':programms:pathfinding_2_TileBasedMap_3D').projectDir = file('programms/pathfinding_2_TileBasedMap_3D')

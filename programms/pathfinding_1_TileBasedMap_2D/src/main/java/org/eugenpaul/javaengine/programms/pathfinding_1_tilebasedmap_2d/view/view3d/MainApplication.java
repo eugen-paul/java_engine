@@ -8,12 +8,18 @@ import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.Abs
 import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.MapElements;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.asset.plugins.ClasspathLocator;
+import com.jme3.asset.plugins.FileLocator;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
+import com.jme3.font.BitmapText;
+import com.jme3.font.LineWrapMode;
+import com.jme3.font.Rectangle;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.material.Material;
+import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
@@ -24,6 +30,8 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Quad;
 import com.jme3.system.AppSettings;
+import com.jme3.texture.Texture;
+import com.jme3.ui.Picture;
 import com.simsilica.lemur.GuiGlobals;
 import com.simsilica.lemur.style.BaseStyles;
 
@@ -73,6 +81,7 @@ public class MainApplication extends SimpleApplication implements AbstractViewPa
     this.setSettings(settings);
 
     guiController = new GuiController(this.controller, this);
+
   }
 
   @Override
@@ -118,8 +127,43 @@ public class MainApplication extends SimpleApplication implements AbstractViewPa
 
     initKeys();
 
-    //now the view can be added to controller
+    // now the view can be added to controller
     controller.addView(this);
+
+//    Picture picture = new Picture("IMAGE-WIDGET");
+//
+//    assetManager.registerLocator("/", ClasspathLocator.class);
+//    assetManager.registerLocator(".", FileLocator.class);
+//
+//    Texture texture = getAssetManager().loadTexture("button.png");
+//    texture.setMinFilter(Texture.MinFilter.NearestNoMipMaps);
+//    texture.setMagFilter(Texture.MagFilter.Nearest);
+//
+//    Material material = new Material(getAssetManager(), "Common/MatDefs/Gui/Gui.j3md");
+//    material.setColor("Color", ColorRGBA.White);
+//    material.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+//    material.setTexture("Texture", texture);
+//
+//    picture.setMaterial(material);
+//
+//    picture.setWidth(200);
+//    picture.setHeight(400);
+//    picture.setPosition(300, 300);
+//
+//    picture.getMaterial().setColor("Color", new ColorRGBA(1f, 1f, 1f, 256f));
+//
+//    Picture pic = new Picture("HUD Picture");
+//    pic.setImage(assetManager, "button.png", true);
+//    pic.setWidth(settings.getWidth()/2);
+//    pic.setHeight(settings.getHeight()/2);
+//    pic.setPosition(settings.getWidth()/4, settings.getHeight()/4);
+//    pic.getMaterial().setColor("Color", new ColorRGBA(1f, 0f, 1f, 256f));
+//    guiNode.attachChild(pic);
+//
+//    Node widgetNode = new Node("myNode");
+//    widgetNode.attachChild(picture);
+//
+//    getGuiNode().attachChild(picture);
   }
 
   @Override
@@ -189,7 +233,8 @@ public class MainApplication extends SimpleApplication implements AbstractViewPa
       // Convert screen click to 3d position
       Vector2f click2d = inputManager.getCursorPosition();
       Vector3f click3d = cam.getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
-      Vector3f dir = cam.getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d).normalizeLocal();
+      Vector3f dir = cam.getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d)
+          .normalizeLocal();
       // Aim the ray from the clicked spot forwards.
       Ray ray = new Ray(click3d, dir);
       // Collect intersections between ray and all nodes in results list.

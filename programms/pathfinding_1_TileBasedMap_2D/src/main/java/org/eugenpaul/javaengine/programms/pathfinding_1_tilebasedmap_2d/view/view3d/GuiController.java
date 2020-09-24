@@ -10,10 +10,8 @@ import org.eugenpaul.javaengine.programms.pathfinding_1_tilebasedmap_2d.view.Map
 
 import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Checkbox;
-import com.simsilica.lemur.Command;
 import com.simsilica.lemur.Container;
 import com.simsilica.lemur.Label;
-import com.simsilica.lemur.ListBox;
 import com.simsilica.lemur.TextField;
 
 /**
@@ -59,6 +57,7 @@ public class GuiController implements AbstractViewPanel {
     this.controller = controller;
   }
 
+  @SuppressWarnings({ "unchecked" })
   public void init() {
     // Create a simple container for our elements
     Container myWindow = new Container();
@@ -72,44 +71,19 @@ public class GuiController implements AbstractViewPanel {
 
     // Add some elements
     Button startButton = myWindow.addChild(new Button("Set Start"));
-    startButton.addClickCommands(new Command<Button>() {
-      @Override
-      public void execute(Button source) {
-        startButtonClick();
-      }
-    });
+    startButton.addClickCommands(source -> startButtonClick());
 
     Button stopButton = myWindow.addChild(new Button("Set Stop"));
-    stopButton.addClickCommands(new Command<Button>() {
-      @Override
-      public void execute(Button source) {
-        stopButtonClick();
-      }
-    });
+    stopButton.addClickCommands(source -> stopButtonClick());
 
     Button wallButton = myWindow.addChild(new Button("Set Wall"));
-    wallButton.addClickCommands(new Command<Button>() {
-      @Override
-      public void execute(Button source) {
-        wallButtonClick();
-      }
-    });
+    wallButton.addClickCommands(source -> wallButtonClick());
 
     Button pitButton = myWindow.addChild(new Button("Set Pit"));
-    pitButton.addClickCommands(new Command<Button>() {
-      @Override
-      public void execute(Button source) {
-        pitButtonClick();
-      }
-    });
+    pitButton.addClickCommands(source -> pitButtonClick());
 
     Button clearButton = myWindow.addChild(new Button("Clear point"));
-    clearButton.addClickCommands(new Command<Button>() {
-      @Override
-      public void execute(Button source) {
-        clearButtonClick();
-      }
-    });
+    clearButton.addClickCommands(source -> clearButtonClick());
 
     Label moverLabel = new Label("Walker");
     myWindow.addChild(moverLabel);
@@ -121,12 +95,7 @@ public class GuiController implements AbstractViewPanel {
     moverList.getSelectionModel().setSelection(0);
     myWindow.addChild(moverList);
 
-    moverList.addClickCommands(new Command<ListBox>() {
-      @Override
-      public void execute(ListBox source) {
-        moverChange();
-      }
-    });
+    moverList.addClickCommands(source -> moverChange());
 
     Label algoLabel = new Label("Algorithm");
     myWindow.addChild(algoLabel);
@@ -138,52 +107,30 @@ public class GuiController implements AbstractViewPanel {
     algoList.getSelectionModel().setSelection(0);
     myWindow.addChild(algoList);
 
-    algoList.addClickCommands(new Command<ListBox>() {
-      @Override
-      public void execute(ListBox source) {
-        algoChange();
-      }
-    });
+    algoList.addClickCommands(source -> algoChange());
 
     autoPathfinding = myWindow.addChild(new Checkbox("Auto Searching"));
     autoPathfinding.setChecked(true);
-    autoPathfinding.addClickCommands(new Command<Button>() {
-      @Override
-      public void execute(Button button) {
-        Checkbox check = (Checkbox) button;
-        setAutoPathfinding(check.isChecked());
-      }
+
+    autoPathfinding.addClickCommands(button -> {
+      Checkbox check = (Checkbox) button;
+      setAutoPathfinding(check.isChecked());
     });
 
     doStep = myWindow.addChild(new Button("do step"));
     doStep.setEnabled(false);
     doStepStatus = false;
-    doStep.addClickCommands(new Command<Button>() {
-      @Override
-      public void execute(Button source) {
-        doStepButtonClick();
-      }
-    });
+    doStep.addClickCommands(source -> doStepButtonClick());
 
     startSearch = myWindow.addChild(new Button("Start search"));
     startSearch.setEnabled(false);
     startSearchStatus = false;
-    startSearch.addClickCommands(new Command<Button>() {
-      @Override
-      public void execute(Button source) {
-        doStartButtonClick();
-      }
-    });
+    startSearch.addClickCommands(source -> doStartButtonClick());
 
     stopSearch = myWindow.addChild(new Button("Stop search"));
     stopSearch.setEnabled(false);
     stopSearchStatus = false;
-    stopSearch.addClickCommands(new Command<Button>() {
-      @Override
-      public void execute(Button source) {
-        doStopButtonClick();
-      }
-    });
+    stopSearch.addClickCommands(source -> doStopButtonClick());
 
     Label msPerStep = new Label("Milliseconds per step");
     myWindow.addChild(msPerStep);
@@ -196,12 +143,7 @@ public class GuiController implements AbstractViewPanel {
 
     resetSearch = myWindow.addChild(new Button("Reset search"));
     resetSearch.setEnabled(false);
-    resetSearch.addClickCommands(new Command<Button>() {
-      @Override
-      public void execute(Button source) {
-        doResetButtonClick();
-      }
-    });
+    resetSearch.addClickCommands(source -> doResetButtonClick());
   }
 
   public void startButtonClick() {
@@ -293,7 +235,7 @@ public class GuiController implements AbstractViewPanel {
   }
 
   public void textFieldFocus(String text) {
-    System.out.println(text);
+//    System.out.println(text);
   }
 
   @Override
